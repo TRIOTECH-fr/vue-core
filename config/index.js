@@ -36,10 +36,10 @@ module.exports = {
   },
   build: {
     // Template for index.html
-    index: path.resolve(process.cwd(), 'web/index.html'),
+    index: path.resolve(process.cwd(), 'tmp/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(process.cwd(), 'web'),
+    assetsRoot: path.resolve(process.cwd(), 'tmp'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 
