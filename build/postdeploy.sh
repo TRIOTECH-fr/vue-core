@@ -4,7 +4,7 @@ echo "Starting Postdeploy Script :"
 echo "- Building app..."
 node node_modules/@triotech/vue-core/build/build.js
 echo "- Copying .web in tmp..."
-cp -R .web tmp
+cp -R .web/ tmp
 echo "- Moving web to old..."
 mv web old
 echo "- Moving tmp to web..."
