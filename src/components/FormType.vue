@@ -166,6 +166,7 @@
         let index = active + 1;
 
         if (current) {
+          // TODO iterates of all active parts instead of the current for isSimplified
           if (current.required && this.contact[current.name] === '') {
             this.$refs.error.innerHTML = this.$t('errors.form');
             this.hasError = true;
@@ -191,7 +192,7 @@
           this.send();
           this.$parent.$parent.close();
           _.each(this.contact, (value, key) => this.$set(this.contact, key, ''));
-          this.$set(this.button.next, 'text', 'actions.next');
+          this.button && this.$set(this.button.next, 'text', 'actions.next');
           index = 0;
           _.each(parts, (part, idx) => {
             part.isActive = idx === 0;
