@@ -139,12 +139,12 @@
           contact: _.clone(this.contact),
         }).then((data) => {
           if (data.status) {
-            this.$notify({ title: 'title', text: this.$t('flashes.contact.sent'), type: 'success' });
+            this.$notify({ title: this.$t('flashes.contact.sent_title'), text: this.$t('flashes.contact.sent'), type: 'success' });
           } else {
-            this.$notify({ title: 'title', text: this.$t('flashes.contact.not_sent'), type: 'error' });
+            this.$notify({ title: this.$t('flashes.contact.not_sent_title'), text: this.$t('flashes.contact.not_sent'), type: 'error' });
           }
         }, () => {
-          this.$notify({ title: 'title', text: this.$t('flashes.contact.server_error'), type: 'error' });
+          this.$notify({ title: this.$t('flashes.contact.server_error_title'), text: this.$t('flashes.contact.server_error'), type: 'error' });
         });
       },
       prevForm() {
