@@ -42,7 +42,7 @@
       <form>
         <div class="group-container">
           <template v-for="part in parts">
-            <div class="form-group" :class="{ active: part.isActive, 'is-inline': isLastStep, simplify: isSimplify }">
+            <div class="form-group" :class="{ active: part.isActive, 'is-inline': isLastStep, simplified: isSimplified }">
               <label :for="part.name">
                 {{ $t(part.label) }} {{ part.required ? '*' : '' }}:
               </label>
@@ -59,8 +59,8 @@
           <div ref="error" class="errors" :class="{ display : hasError }"></div>
         </div>
         <b-row>
-          <template v-if="isSimplify">
-            <b-button type="button" class="round-btn" @click="nextForm()">
+          <template v-if="isSimplified">
+            <b-button type="submit" class="round-btn" @click="nextForm()">
               <span class="d-none d-sm-block float-right">{{ $t('actions.send') }}</span>
             </b-button>
           </template>
@@ -105,7 +105,7 @@
       text: {
         type: Object,
       },
-      isSimplify: {
+      isSimplified: {
         type: Boolean,
         default: true,
       },
@@ -187,7 +187,7 @@
             part.isActive = true;
           });
           this.$set(this.button.next, 'text', 'actions.send');
-        } else if (index > parts.length) {
+        } else if (index > parts.length || this.isSimplified) {
           this.send();
           this.$parent.$parent.close();
           _.each(this.contact, (value, key) => this.$set(this.contact, key, ''));
@@ -353,7 +353,7 @@
           @include transition(left 0.5s, opacity 0.5s);
         }
 
-        &.simplify {
+        &.simplified {
           visibility: visible;
           opacity: 1;
           position: static;
