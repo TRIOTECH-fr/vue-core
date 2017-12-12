@@ -25,7 +25,7 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src')
-    }
+    },
   },
   module: {
     rules: [
@@ -51,6 +51,7 @@ module.exports = {
         include: [
           resolve('src'),
           resolve('test'),
+          resolve('node_modules/@triotech/vue-core/src'),
           resolve('node_modules/sweet-modal-vue'),
         ]
       },
