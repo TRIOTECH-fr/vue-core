@@ -8128,6 +8128,10 @@ vue-cleave@^1.2.2:
   dependencies:
     cleave.js "^0.7.15"
 
+vue-cookie-law@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/vue-cookie-law/-/vue-cookie-law-1.4.0.tgz#dfa278ff8242f77660b25b73190d0514ca11915f"
+
 vue-cordova@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/vue-cordova/-/vue-cordova-0.1.2.tgz#f3ca208b51f1523a8f571447e76a480aa89c081b"

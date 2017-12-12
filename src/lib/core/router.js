@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import routes from '@/../config/routes.js';
+import routes from '@/../config/routing.js';
 
 Vue.use(VueRouter);
 

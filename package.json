@@ -88,6 +88,7 @@
     "vue-awesome": "^2.3.4",
     "vue-axios": "^2.0.2",
     "vue-cleave": "^1.2.2",
+    "vue-cookie-law": "^1.4.0",
     "vue-cordova": "^0.1.2",
     "vue-i18n": "^7.3.2",
     "vue-loader": "^13.3.0",
