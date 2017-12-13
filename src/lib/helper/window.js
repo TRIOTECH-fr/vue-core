@@ -3,6 +3,7 @@ import Env from '@triotech/vue-core/src/lib/core/env';
 import App from '@triotech/vue-core/src/lib/core/app';
 import Store from '@triotech/vue-core/src/lib/core/store';
 import Api from '@triotech/vue-core/src/lib/http/api';
+import Voca from 'voca';
 
 /* eslint-disable no-console */
 window.addEventListener('message', (event) => {
@@ -32,6 +33,7 @@ if (Env.dev) {
   window.store = Store;
   window.api = Api;
   window.win = Window;
+  window.voca = Voca;
 }
 
 export default Window;

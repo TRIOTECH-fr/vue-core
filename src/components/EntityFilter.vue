@@ -12,7 +12,8 @@
     :multiple="multiple"
     selectLabel=""
     selectedLabel=""
-    deselectLabel="" />
+    deselectLabel=""
+    trackBy="value" />
     <!-- :v-model="filter.value" -->
     <!-- :hide-selected="true" -->
     <!-- :clear-on-select="false" -->
@@ -22,7 +23,7 @@
 <script>
   import Multiselect from 'vue-multiselect';
   import { mapActions } from 'vuex';
-  import voca from 'voca';
+  import Voca from 'voca';
   import Enum from '@triotech/vue-core/src/lib/http/enum';
 
   export default {
@@ -54,7 +55,7 @@
         }
         return this.$store.state.filters[this.name];
       },
-      enum() { return voca(this.name).camelCase().capitalize() + this.enum_suffix; },
+      enum() { return Voca(this.name).camelCase().capitalize().value() + this.enum_suffix; },
       value() {
         const value = _.extend(this.data, this.stored);
         return value && value.value;
@@ -74,11 +75,16 @@
 
         this.options = this.$set(this.stored, this.options_key, _.each(choices, (choice) => {
           choice.name = this.name;
-          if (this.enumeration) {
-            const enumeration = this.enumeration === true ? this.enum : this.enumeration;
-            choice.label = Enum.trans(choice.value, enumeration);
-          }
         }));
+
+        if (this.enumeration) {
+          this.$bus.$once('enums', () => {
+            this.options = this.$set(this.stored, this.options_key, _.each(choices, (choice) => {
+              const enumeration = this.enumeration === true ? this.enum : this.enumeration;
+              choice.label = Enum.trans(choice.value, enumeration);
+            }));
+          });
+        }
       },
       remove(data) {
         // TODO workaround for @input null value on @remove
@@ -94,7 +100,8 @@
       ...mapActions(['updateFilterAction']),
     },
     mounted() {
-      const filters = this.$store.state.projectFilters;
+      const state = this.$store.state[this.$parent.entity];
+      const filters = state && state.filters
       if (!_.isEmpty(filters)) {
         this.sync(filters);
       } else {

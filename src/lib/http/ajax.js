@@ -20,26 +20,26 @@ const Ajax = new Vue({
       this.wait = true;
       return this;
     },
-    extend(url, data, method) {
-      return _.extend({ url, data, method });
+    build(url, data, method, config = {}) {
+      return _.extend(config, { url, data, method });
     },
     get(url, data, config) {
-      return this.request(this.extend(url, data, 'GET'), config);
+      return this.request(this.build(url, data, 'GET', config));
     },
     post(url, data, config) {
-      return this.request(this.extend(url, data, 'POST'), config);
+      return this.request(this.build(url, data, 'POST', config));
     },
     put(url, data, config) {
-      return this.request(this.extend(url, data, 'PUT'), config);
+      return this.request(this.build(url, data, 'PUT', config));
     },
     patch(url, data, config) {
-      return this.request(this.extend(url, data, 'PATCH'), config);
+      return this.request(this.build(url, data, 'PATCH', config));
     },
     delete(url, data, config) {
-      return this.request(this.extend(url, data, 'DELETE'), config);
+      return this.request(this.build(url, data, 'DELETE', config));
     },
     head(url, data, config) {
-      return this.request(this.extend(url, data, 'HEAD'), config);
+      return this.request(this.build(url, data, 'HEAD', config));
     },
     request(config = {}) {
       const promise = this.wait ? this.sync_request(config) : this.async_request(config);

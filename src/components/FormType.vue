@@ -60,9 +60,13 @@
         </div>
         <b-row>
           <template v-if="isSimplified">
-            <b-button type="submit" class="round-btn" @click="nextForm()">
-              <span class="d-none d-sm-block float-right">{{ $t('actions.send') }}</span>
-            </b-button>
+            <div class="text-left">
+              <b-button type="submit" class="round-btn" @click="nextForm()">
+                <span class="d-none d-sm-block float-left">{{ $t('actions.send') }}</span>
+                <!-- <i class="fa fa-paper-plane"></i> -->
+                <icon name="paper-plane"></icon>
+              </b-button>
+            </div>
           </template>
           <template v-else>
             <b-col v-if="!isFirstStep" :cols="6">
@@ -398,6 +402,14 @@
         select:-webkit-autofill {
           -webkit-box-shadow: 0 0 0 30px $orange inset;
         }
+      }
+    }
+  }
+
+  @include editable-min-width(576px) {
+    button.round-btn {
+      svg.fa-icon {
+        margin-left: 10px;
       }
     }
   }

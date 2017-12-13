@@ -8238,8 +8238,8 @@ vue2-google-maps@^0.8.4:
     marker-clusterer-plus "^2.1.4"
 
 vue@^2.5.2:
-  version "2.5.9"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.9.tgz#b2380cd040915dca69881dafd121d760952e65f7"
+  version "2.5.10"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.10.tgz#dcd772e2594ba994145f2f09522149d9a1e7841a"
 
 vuex-cache@^1.0.0:
   version "1.0.1"

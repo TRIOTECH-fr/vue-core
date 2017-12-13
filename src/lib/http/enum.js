@@ -14,6 +14,7 @@ const Enum = new Vue({
     Api
       .get('public/enum/').then((data) => {
         this.enums = data;
+        this.$bus.$emit('enums', data);
       })
     ;
   },

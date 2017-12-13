@@ -3,3 +3,9 @@
     @content
   }
 }
+
+@mixin editable-min-width($width) {
+  @media (min-width: $width) {
+    @content
+  }
+}

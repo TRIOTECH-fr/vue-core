@@ -34,11 +34,18 @@
       event(name) { return [this.entity, name].join('.'); },
       fetch() {
         const state = this.$store.state;
-        this.$set(state, 'projectFilters', true);
-        Api
+        const entity = this.entity;
+        if (!state[entity]) {
+            state[entity] = {};
+        }
+        if (state[entity].filters === true) {
+            return Promise.resolve();
+        }
+        this.$set(state[entity], this.uri_suffix, true);
+        return Api
           .get(this.uri)
           .then((data) => {
-            this.$set(state, 'projectFilters', data);
+            this.$set(state[entity], this.uri_suffix, data);
             this.$bus.$emit(this.event('filters.data'), data);
           })
         ;
@@ -51,12 +58,13 @@
           return carry;
         }, {});
       },
+      update() {
+        this.$bus.$emit(this.event('fetch'), _.param(this.filters()));
+      },
     },
     mounted() {
-      this.fetch();
-      this.$on(this.event('update'), () => {
-        this.$bus.$emit(this.event('fetch'), _.param(this.filters()));
-      });
+      this.fetch().then(this.update);
+      this.$on(this.event('update'), this.update);
     },
   };
 </script>
