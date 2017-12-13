@@ -63,10 +63,13 @@ const Ajax = new Vue({
           Store[config.url] = data;
           return data;
         })
-        .catch((err) => {
-          /* eslint-disable no-console */
-          console.error(err);
-          return err;
+        .catch((error) => {
+          throw new Error(JSON.stringify({
+            response: error.response,
+            request: error.request,
+            message: error.message,
+            config: error.config,
+          }));
         })
       ;
     },
