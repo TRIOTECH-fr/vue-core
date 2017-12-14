@@ -36,10 +36,10 @@
         const state = this.$store.state;
         const entity = this.entity;
         if (!state[entity]) {
-            state[entity] = {};
+          state[entity] = {};
         }
         if (state[entity].filters === true) {
-            return Promise.resolve();
+          return Promise.resolve();
         }
         this.$set(state[entity], this.uri_suffix, true);
         return Api
