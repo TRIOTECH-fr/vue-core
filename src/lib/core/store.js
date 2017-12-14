@@ -38,6 +38,8 @@ const Store = new Vuex.Store({
         return console.warn('setKeyValueAction data object needs a key named "key"');
       } else if (!data.value) {
         return console.warn('setKeyValueAction data object needs a key named "value"');
+      } else if (data.commit === false) {
+        this._mutations.setKeyValue[0](data);
       } else {
         commit('setKeyValue', data);
       }
