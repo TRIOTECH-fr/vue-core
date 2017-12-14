@@ -9,7 +9,7 @@ Raven.addPlugin(RavenVue, Vue).install();
 const Watchdog = () => {};
 
 Watchdog.watch = (config) => {
-  Raven.config(Config.parameter('sentry'));
+  Raven.config(Config.get('sentry'));
   Raven.context(_.bind(App.run, App, config));
 };
 

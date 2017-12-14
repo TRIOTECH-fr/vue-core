@@ -4,7 +4,7 @@ import Config from '../../lib/helper/config';
 
 Vue.use(VueGoogleMaps, {
   load: (window.google && window.google.maps) || {
-    key: Config.parameter('google_maps').api_key,
+    key: Config.get('google_maps').api_key,
   },
 });
 

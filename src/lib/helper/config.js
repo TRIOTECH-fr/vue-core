@@ -6,11 +6,11 @@ import parameters from 'json-loader!yaml-loader!@/../config/parameters.yml';
 
 const Config = new Vue({
   computed: {
-    parameters: () => parameters,
     host: () => (localStorage.getItem('host') || parameters.host).replace(/\/$/, '').concat('/'),
   },
   methods: {
-    parameter: key => '' || parameters[key],
+    get: key => '' || parameters[key],
+    all: () => parameters,
   },
 });
 
