@@ -33,7 +33,7 @@
     },
     props: {
       name: { type: String, required: true },
-      data: { type: Object, default: () => {} },
+      data: { type: Object, default: () => ({}) },
       multiple: { type: Boolean, default: false },
       persistant: { type: Boolean, default: true },
       enumeration: { type: [Boolean, String], default: false },

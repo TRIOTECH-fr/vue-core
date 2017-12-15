@@ -4,7 +4,6 @@ import I18n from '@triotech/vue-core/src/lib/core/i18n';
 import Router from '@triotech/vue-core/src/lib/core/router';
 import Store from '@triotech/vue-core/src/lib/core/store';
 import Env from '@triotech/vue-core/src/lib/core/env';
-import Config from '@triotech/vue-core/src/lib/helper/config';
 import App from '@/App';
 
 Vue.config.productionTip = true;
@@ -26,18 +25,6 @@ Vue.mixin({
       };
     }
     return metaInfo;
-  },
-  // https://router.vuejs.org/en/advanced/navigation-guards.html
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      _.each(Config.get('firewall'), (data, path) => {
-        const state = _.isObject(data) ? data.state : data;
-        const redirect = _.isObject(data) ? data.redirect : '/';
-        if (to.path.match(path) && !vm.$store.state[state]) {
-          vm.$router.push(redirect);
-        }
-      });
-    });
   },
 });
 

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Env from '@triotech/vue-core/src/lib/core/env';
 import App from '@triotech/vue-core/src/lib/core/app';
 import Store from '@triotech/vue-core/src/lib/core/store';
+import Router from '@triotech/vue-core/src/lib/core/router';
 import Api from '@triotech/vue-core/src/lib/http/api';
 import Voca from 'voca';
 
@@ -31,6 +32,7 @@ if (Env.dev) {
   window.env = Env;
   window.app = App;
   window.store = Store;
+  window.router = Router;
   window.api = Api;
   window.win = Window;
   window.voca = Voca;

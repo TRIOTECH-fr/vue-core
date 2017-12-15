@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Config from '@triotech/vue-core/src/lib/helper/config';
 import routes from '@/../config/routing';
 
 Vue.use(VueRouter);
@@ -16,6 +17,20 @@ const Router = new VueRouter({
     }
     return scroll;
   },
+});
+
+// https://router.vuejs.org/en/advanced/navigation-guards.html
+
+Router.beforeEach((to, from, next) => {
+  const vm = this.a.app;
+  _.each(Config.get('firewall'), (data, path) => {
+    const state = _.isObject(data) ? data.state : data;
+    const redirect = _.isObject(data) ? data.redirect : '/';
+    if (to.path.match(path) && !vm.$store.state[state]) {
+      vm.$router.push(redirect);
+    }
+  });
+  next();
 });
 
 Router.beforeEach((to, from, next) => {
