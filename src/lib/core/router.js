@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Config from '@triotech/vue-core/src/lib/helper/config';
 import routes from '@/../config/routing';
+import _ from '@triotech/vue-core/src/vendor/lodash';
 
 Vue.use(VueRouter);
 
