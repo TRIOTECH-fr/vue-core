@@ -9,6 +9,7 @@ const Config = new Vue({
     host: () => (localStorage.getItem('host') || parameters.host).replace(/\/$/, '').concat('/'),
   },
   methods: {
+    // TODO handle dot notation
     get: key => '' || parameters[key],
     all: () => parameters,
   },

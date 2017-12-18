@@ -42,9 +42,10 @@ const Ajax = new Vue({
       return this.request(this.build(url, 'HEAD', data, config));
     },
     login(model) {
+      const oauth = Config.get('oauth');
       return this.request(this.build('oauth/v2/token', 'POST', _.extend({
-        client_id: Config.get('client_id'),
-        client_secret: Config.get('client_secret'),
+        client_id: oauth.client_id,
+        client_secret: oauth.client_secret,
         grant_type: 'password',
       }, model)));
     },
