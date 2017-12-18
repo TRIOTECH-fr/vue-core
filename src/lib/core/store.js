@@ -34,10 +34,10 @@ const Store = new Vuex.Store({
     setKeyValueAction({ commit }, data) {
       if (!_.isObject(data)) {
         console.warn('setKeyValueAction needs a data object as argument');
-      } else if (!data.key) {
-        console.warn('setKeyValueAction data object needs a key named "key"');
-      } else if (!data.value) {
-        console.warn('setKeyValueAction data object needs a key named "value"');
+      } else if (!_.isString(data.key)) {
+        console.warn('setKeyValueAction data object needs a string key named "key"');
+      } else if (_.isUndefined(data.value)) {
+        console.warn('setKeyValueAction data object needs a defined key named "value"');
       } else if (data.commit === false) {
         this._mutations.setKeyValue[0](data);
       } else {
@@ -47,8 +47,8 @@ const Store = new Vuex.Store({
     updateFilterAction({ commit }, filter) {
       if (!_.isObject(filter)) {
         console.warn('updateFilterAction needs a filter object as argument');
-      } else if (!filter.name) {
-        console.warn('updateFilterAction filter object needs a key named "name"');
+      } else if (!_.isString(filter.name)) {
+        console.warn('updateFilterAction filter object needs a string key named "name"');
       } else {
         commit('updateFilter', filter);
       }
