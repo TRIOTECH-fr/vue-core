@@ -20,26 +20,33 @@ const Ajax = new Vue({
       this.wait = true;
       return this;
     },
-    build(url, data, method, config = {}) {
-      return _.extend(config, { url, data, method });
+    build(url, method, data = {}, config = {}) {
+      return _.extend(config, { url, method, data });
     },
     get(url, data, config) {
-      return this.request(this.build(url, data, 'GET', config));
+      return this.request(this.build(url, 'GET', data, config));
     },
     post(url, data, config) {
-      return this.request(this.build(url, data, 'POST', config));
+      return this.request(this.build(url, 'POST', data, config));
     },
     put(url, data, config) {
-      return this.request(this.build(url, data, 'PUT', config));
+      return this.request(this.build(url, 'PUT', data, config));
     },
     patch(url, data, config) {
-      return this.request(this.build(url, data, 'PATCH', config));
+      return this.request(this.build(url, 'PATCH', data, config));
     },
     delete(url, data, config) {
-      return this.request(this.build(url, data, 'DELETE', config));
+      return this.request(this.build(url, 'DELETE', data, config));
     },
     head(url, data, config) {
-      return this.request(this.build(url, data, 'HEAD', config));
+      return this.request(this.build(url, 'HEAD', data, config));
+    },
+    login(model) {
+      return this.request(this.build('oauth/v2/token', 'POST', _.extend({
+        client_id: Config.get('client_id'),
+        client_secret: Config.get('client_secret'),
+        grant_type: 'password',
+      }, model)));
     },
     request(config = {}) {
       const promise = this.wait ? this.sync_request(config) : this.async_request(config);
