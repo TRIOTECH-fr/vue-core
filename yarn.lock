@@ -1169,14 +1169,14 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-bootstrap-vue@~1.3:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/bootstrap-vue/-/bootstrap-vue-1.3.0.tgz#48545238035644aed1652b905f925ef1c82ec314"
+bootstrap-vue@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/bootstrap-vue/-/bootstrap-vue-1.4.0.tgz#25a98116df76bda7bbae18ff3bc9cc33158b5986"
   dependencies:
     lodash.startcase "^4.4.0"
     opencollective "^1.0.3"
     popper.js "^1.12.9"
-    vue-functional-data-merge "^1.0.6"
+    vue-functional-data-merge "^2.0.3"
 
 bootstrap@^4.0.0-beta.2:
   version "4.0.0-beta.2"
@@ -8140,9 +8140,9 @@ vue-form-generator@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/vue-form-generator/-/vue-form-generator-2.1.1.tgz#0f57452005c2d310fbe545ca2bf30153562f4f28"
 
-vue-functional-data-merge@^1.0.6:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/vue-functional-data-merge/-/vue-functional-data-merge-1.0.7.tgz#0c8876c91bc5968882dff3f7ef91f62619e1fdfe"
+vue-functional-data-merge@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/vue-functional-data-merge/-/vue-functional-data-merge-2.0.3.tgz#fe79c9f6fab13e047f1e6dcaa4a0fde63fe15587"
 
 vue-hot-reload-api@^2.2.0:
   version "2.2.4"
