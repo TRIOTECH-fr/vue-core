@@ -71,7 +71,7 @@ const Ajax = new Vue({
             message: error.message,
             config: error.config,
           });
-          throw new Error(error.response);
+          throw error;
         })
       ;
     },
