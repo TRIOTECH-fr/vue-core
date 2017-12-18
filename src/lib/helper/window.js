@@ -3,7 +3,7 @@ import Env from '@triotech/vue-core/src/lib/core/env';
 import App from '@triotech/vue-core/src/lib/core/app';
 import Store from '@triotech/vue-core/src/lib/core/store';
 import Router from '@triotech/vue-core/src/lib/core/router';
-import Api from '@triotech/vue-core/src/lib/http/api';
+import Ajax from '@triotech/vue-core/src/lib/http/ajax';
 import Voca from 'voca';
 
 /* eslint-disable no-console */
@@ -33,7 +33,7 @@ if (Env.dev) {
   window.app = App;
   window.store = Store;
   window.router = Router;
-  window.api = Api;
+  window.ajax = Ajax;
   window.win = Window;
   window.voca = Voca;
 }

@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import Api from '@triotech/vue-core/src/lib/http/api';
+  import Ajax from '@triotech/vue-core/src/lib/http/ajax';
   import EntityFilter from '@triotech/vue-core/src/components/EntityFilter';
 
   export default {
@@ -42,7 +42,7 @@
           return Promise.resolve();
         }
         this.$set(state[entity], this.uri_suffix, true);
-        return Api
+        return Ajax
           .get(this.uri)
           .then((data) => {
             this.$set(state[entity], this.uri_suffix, data);

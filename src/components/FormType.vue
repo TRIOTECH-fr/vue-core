@@ -93,7 +93,7 @@
 </template>
 
 <script>
-  import Api from '@triotech/vue-core/src/lib/http/api';
+  import Ajax from '@triotech/vue-core/src/lib/http/ajax';
 
   export default {
     name: 'FormTypeComponent',
@@ -139,7 +139,7 @@
     },
     methods: {
       send() {
-        Api.post('public/contact/', {
+        Ajax.post('public/contact/', {
           contact: _.clone(this.contact),
         }).then((data) => {
           if (data.status) {

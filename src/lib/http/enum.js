@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Api from '@triotech/vue-core/src/lib/http/api';
+import Ajax from '@triotech/vue-core/src/lib/http/ajax';
 import I18n from '@triotech/vue-core/src/lib/core/i18n';
 
 // TODO remove if providing unbound enum choices values in triotech/api-bundle
@@ -11,7 +11,7 @@ const Enum = new Vue({
     };
   },
   created() {
-    Api
+    Ajax
       .get('public/enum/').then((data) => {
         this.enums = data;
         this.$bus.$emit('enums', data);
