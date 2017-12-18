@@ -64,12 +64,14 @@ const Ajax = new Vue({
           return data;
         })
         .catch((error) => {
-          throw new Error(JSON.stringify({
+          /* eslint-disable no-console */
+          console.error({
             response: error.response,
             request: error.request,
             message: error.message,
             config: error.config,
-          }));
+          });
+          throw new Error(error.response);
         })
       ;
     },

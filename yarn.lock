@@ -8136,6 +8136,10 @@ vue-cordova@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/vue-cordova/-/vue-cordova-0.1.2.tgz#f3ca208b51f1523a8f571447e76a480aa89c081b"
 
+vue-form-generator@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/vue-form-generator/-/vue-form-generator-2.1.1.tgz#0f57452005c2d310fbe545ca2bf30153562f4f28"
+
 vue-functional-data-merge@^1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/vue-functional-data-merge/-/vue-functional-data-merge-1.0.7.tgz#0c8876c91bc5968882dff3f7ef91f62619e1fdfe"
