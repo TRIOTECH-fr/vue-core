@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueAxios from 'vue-axios';
 import Axios from 'axios';
-import Config from '@triotech/vue-core/src/lib/helper/config';
+import Config from '@triotech/vue-core/src/lib/core/config';
 import Store from '@triotech/vue-core/src/lib/core/store';
 import _ from '@triotech/vue-core/src/vendor/lodash';
 

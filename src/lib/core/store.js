@@ -6,7 +6,7 @@ import VuexSharedMutations from 'vuex-shared-mutations';
 /* eslint-disable no-unused-vars */
 import { sync } from 'vuex-router-sync';
 import Router from '@triotech/vue-core/src/lib/core/router';
-import Config from '@triotech/vue-core/src/lib/helper/config';
+import Config from '@triotech/vue-core/src/lib/core/config';
 
 Vue.use(Vuex);
 
