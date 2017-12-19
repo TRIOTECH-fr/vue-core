@@ -1,12 +1,16 @@
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import Webpack from '@triotech/vue-core/src/lib/helper/webpack';
+import _ from '@triotech/vue-core/src/vendor/lodash';
 
 Vue.use(VueI18n);
 
 const I18n = new VueI18n({
   locale: 'fr',
-  messages: Webpack.find(require.context('json-loader!@/translations', false, /\.yml$/)),
+  messages: _.merge(
+    Webpack.find(require.context('json-loader!@triotech/vue-core/src/translations', false, /\.yml$/)),
+    Webpack.find(require.context('json-loader!@/translations', false, /\.yml$/)),
+  ),
 });
 
 // TODO replace vue-i18n with vuex-i18n (https://github.com/dkfbasel/vuex-i18n)

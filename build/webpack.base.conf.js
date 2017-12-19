@@ -59,10 +59,10 @@ module.exports = {
         test: /\.yml$/,
         loaders: [
           'yaml-loader',
-          // 'json-loader',
         ],
         include: [
           resolve('src'),
+          resolve('node_modules/@triotech/vue-core/src'),
         ]
       },
       {

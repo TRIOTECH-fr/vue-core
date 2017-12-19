@@ -6,7 +6,8 @@ import Store from '@triotech/vue-core/src/lib/core/store';
 import Env from '@triotech/vue-core/src/lib/core/env';
 import App from '@/App';
 
-Vue.config.productionTip = true;
+Vue.config.performance = true;
+Vue.config.productionTip = false;
 
 Vue.mixin({
   // https://github.com/declandewet/vue-meta

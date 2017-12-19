@@ -3,6 +3,7 @@ import { mapActions } from 'vuex';
 import VueAxios from 'vue-axios';
 import Axios from 'axios';
 import Config from '@triotech/vue-core/src/lib/core/config';
+import Router from '@triotech/vue-core/src/lib/core/router';
 import Store from '@triotech/vue-core/src/lib/core/store';
 import _ from '@triotech/vue-core/src/vendor/lodash';
 
@@ -13,7 +14,8 @@ Axios.defaults.timeout = 10000;
 const Ajax = new Vue({
   store: Store,
   computed: {
-    oauth: () => 'a',
+    oauthConfig: () => Config.get('oauth') || {},
+    oauthStore: () => Store.state.oauth || {},
   },
   methods: {
     url(config) {
@@ -54,17 +56,15 @@ const Ajax = new Vue({
       }, data), !!data.rememberMe);
     },
     refresh() {
-      const oauth = Store.state.oauth;
       return this.oauth({
         grant_type: 'refresh_token',
-        refresh_token: oauth && oauth.refresh_token,
+        refresh_token: this.oauthStore.refresh_token,
       });
     },
     oauth(data, commit = true) {
-      const oauth = Config.get('oauth');
       return this.request(this.build('oauth/v2/token', 'POST', _.extend({
-        client_id: oauth.client_id,
-        client_secret: oauth.client_secret,
+        client_id: this.oauthConfig.client_id,
+        client_secret: this.oauthConfig.client_secret,
       }, data), { commit })).then((value) => {
         value.expires_at = (value.expires_in * 1000) + Number(new Date());
         this.setKeyValueAction({ key: 'oauth', value, commit });
@@ -72,27 +72,26 @@ const Ajax = new Vue({
       });
     },
     request(config = {}) {
-      /* eslint-disable no-underscore-dangle */
-      const promise = this.wait ? this._request(config) : this.__request(config);
+      const promise = this.wait ? this.syncRequest(config) : this.asyncRequest(config);
       this.wait = null;
       return promise;
     },
-    async _request(config) {
-      /* eslint-disable no-underscore-dangle */
-      const response = await this.__request(config);
+    async syncRequest(config) {
+      const response = await this.asyncRequest(config);
       return response;
     },
-    __request(config) {
+    asyncRequest(config) {
+      const boundAsyncRequest = this.asyncRequest.bind(this, config);
+
       config.url = this.url(config);
 
-      const oauth = Store.state.oauth;
-      if (oauth) {
-        if (!config.commit && (Number(new Date()) - oauth.expires_at) / 1000 > 0) {
-          return this.refresh().then(this.__request.bind(this, config));
+      if (!_.isEmpty(this.oauthStore)) {
+        if (!config.commit && (Number(new Date()) - this.oauthStore.expires_at) / 1000 > 0) {
+          return this.refresh().then(boundAsyncRequest);
         }
-        config.headers = _.extend(config.headers, {
-          Authorization: `Bearer ${oauth.access_token}`,
-        });
+        config.headers = _.extend({
+          Authorization: `Bearer ${this.oauthStore.access_token}`,
+        }, config.headers);
       }
 
       return this.$http.request(config)
@@ -109,20 +108,22 @@ const Ajax = new Vue({
         .catch((error) => {
           const data = error.response.data;
           if (data.error === 'invalid_grant') {
-            if (data.error_description.indexOf('refresh') !== -1) {
+            if (data.error_description.match(/expired/i)) {
+              return this.refresh().then(boundAsyncRequest);
+            } else if (data.error_description.match(/invalid/i)) {
               this.setKeyValueAction({ key: 'oauth', value: null });
-              // TODO redirect to /login
-            } else if (data.error_description.indexOf('expired') !== -1) {
-              return this.refresh().then(this.__request.bind(this, config));
+              Router.push('/login');
+              location.reload();
             }
+          } else {
+            /* eslint-disable no-console */
+            console.error({
+              response: error.response,
+              request: error.request,
+              message: error.message,
+              config: error.config,
+            });
           }
-          /* eslint-disable no-console */
-          console.error({
-            response: error.response,
-            request: error.request,
-            message: error.message,
-            config: error.config,
-          });
           throw error;
         })
       ;
