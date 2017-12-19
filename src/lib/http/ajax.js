@@ -106,7 +106,7 @@ const Ajax = new Vue({
           return data;
         })
         .catch((error) => {
-          const data = error.response.data;
+          const data = error.response && error.response.data || {};
           if (data.error === 'invalid_grant') {
             if (data.error_description.match(/expired/i)) {
               return this.refresh().then(boundAsyncRequest);
