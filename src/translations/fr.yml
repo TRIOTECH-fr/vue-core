@@ -1,0 +1,8 @@
+form:
+  login: Nom d'utilisateur
+  password: Mot de passe
+  remember_me: Rester connecté
+actions:
+  go_back: Retour
+  login: Connexion
+  logout: Déconnexion
