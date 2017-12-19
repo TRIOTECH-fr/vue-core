@@ -24,9 +24,14 @@
       data: { type: Object },
       config: { type: Object, default: () => ({}) },
       auth: { type: [String, Boolean] },
-      auth_header: { type: String, default: 'Authorization' },
-      auth_prefix: { type: String, default: 'Bearer' },
+      authHeader: { type: String, default: 'Authorization' },
+      authPrefix: { type: String, default: 'Bearer' },
       loader: { type: Boolean, default: true },
+    },
+    methods: {
+      authValue(path) {
+        return path.split('.').reduce((carry, part) => carry && carry[part], this.$store.state);
+      },
     },
     data() {
       return {
@@ -38,7 +43,7 @@
       const auth = _.isBoolean(this.auth) ? 'access_token' : this.auth;
       if (auth) {
         const header = {};
-        header[this.auth_header] = [this.auth_prefix, this.$store.state[auth]].join(' ').trim();
+        header[this.authHeader] = [this.authPrefix, this.authValue(auth)].join(' ').trim();
         this.config.headers = _.extend(header, this.config.headers);
       }
     },
