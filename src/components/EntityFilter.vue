@@ -14,7 +14,7 @@
     selectedLabel=""
     deselectLabel=""
     trackBy="value" />
-    <!-- :v-model="filter.value" <--></-->
+    <!-- :v-model="filter.value" -->
     <!-- :hide-selected="true" -->
     <!-- :clear-on-select="false" -->
     <!-- :close-on-select="false" -->
