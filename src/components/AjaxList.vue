@@ -28,11 +28,6 @@
       authPrefix: { type: String, default: 'Bearer' },
       loader: { type: Boolean, default: true },
     },
-    methods: {
-      authValue(path) {
-        return path.split('.').reduce((carry, part) => carry && carry[part], this.$store.state);
-      },
-    },
     data() {
       return {
         isLoading: false,
@@ -43,7 +38,7 @@
       const auth = _.isBoolean(this.auth) ? 'access_token' : this.auth;
       if (auth) {
         const header = {};
-        header[this.authHeader] = [this.authPrefix, this.authValue(auth)].join(' ').trim();
+        header[this.authHeader] = [this.authPrefix, _.get(this.$store.state, auth)].join(' ').trim();
         this.config.headers = _.extend(header, this.config.headers);
       }
     },

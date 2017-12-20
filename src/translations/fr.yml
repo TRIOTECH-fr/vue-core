@@ -1,7 +1,9 @@
 form:
-  login: Nom d'utilisateur
+  username: Nom d'utilisateur
+  login: Identifiant
   password: Mot de passe
   remember_me: Rester connecté
+
 actions:
   go_back: Retour
   login: Connexion

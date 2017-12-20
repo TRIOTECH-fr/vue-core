@@ -14,7 +14,7 @@
     selectedLabel=""
     deselectLabel=""
     trackBy="value" />
-    <!-- :v-model="filter.value" -->
+    <!-- :v-model="filter.value" <--></-->
     <!-- :hide-selected="true" -->
     <!-- :clear-on-select="false" -->
     <!-- :close-on-select="false" -->
@@ -78,13 +78,18 @@
         }));
 
         if (this.enumeration) {
-          this.$bus.$once('enums', () => {
-            this.options = this.$set(this.stored, this.options_key, _.each(choices, (choice) => {
-              const enumeration = this.enumeration === true ? this.enum : this.enumeration;
-              choice.label = Enum.trans(choice.value, enumeration);
-            }));
-          });
+          if (Enum.enums.length > 0) {
+            this.update();
+          } else {
+            this.$bus.$once('enums', this.update);
+          }
         }
+      },
+      update() {
+        this.options = this.$set(this.stored, this.options_key, _.each(this.options, (choice) => {
+          const enumeration = this.enumeration === true ? this.enum : this.enumeration;
+          choice.label = Enum.trans(choice.value, enumeration);
+        }));
       },
       remove(data) {
         // TODO workaround for @input null value on @remove

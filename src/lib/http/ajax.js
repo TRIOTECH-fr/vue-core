@@ -81,13 +81,11 @@ const Ajax = new Vue({
       return response;
     },
     asyncRequest(config) {
-      const boundAsyncRequest = this.asyncRequest.bind(this, config);
-
       config.url = this.url(config);
 
       if (!_.isEmpty(this.oauthStore)) {
         if (!config.commit && (Number(new Date()) - this.oauthStore.expires_at) / 1000 > 0) {
-          return this.refresh().then(boundAsyncRequest);
+          return this.refresh().then(this.asyncRequest.bind(this, config));
         }
         config.headers = _.extend({
           Authorization: `Bearer ${this.oauthStore.access_token}`,
@@ -106,10 +104,11 @@ const Ajax = new Vue({
           return data;
         })
         .catch((error) => {
-          const data = error.response && error.response.data || {};
+          const data = (error.response && error.response.data) || {};
           if (data.error === 'invalid_grant') {
             if (data.error_description.match(/expired/i)) {
-              return this.refresh().then(boundAsyncRequest);
+              delete config.headers;
+              return this.refresh().then(this.asyncRequest.bind(this, config));
             } else if (data.error_description.match(/invalid/i)) {
               this.setKeyValueAction({ key: 'oauth', value: null });
               Router.push('/login');
