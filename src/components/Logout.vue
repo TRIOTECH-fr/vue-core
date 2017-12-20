@@ -8,6 +8,8 @@
 </template>
 
 <script>
+  import Ajax from '@triotech/vue-core/src/lib/http/ajax';
+
   export default {
     name: 'LogoutPage',
     props: {
@@ -18,7 +20,7 @@
     },
     methods: {
       logout() {
-        this.$store.replaceState({});
+        this.setKeyValueAction({ key: 'oauth', value: null });
         this.$router.push({ name: this.route });
       },
     },

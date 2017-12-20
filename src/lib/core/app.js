@@ -4,7 +4,9 @@ import I18n from '@triotech/vue-core/src/lib/core/i18n';
 import Router from '@triotech/vue-core/src/lib/core/router';
 import Store from '@triotech/vue-core/src/lib/core/store';
 import Env from '@triotech/vue-core/src/lib/core/env';
+import Ajax from '@triotech/vue-core/src/lib/http/ajax';
 import App from '@/App';
+import { mapActions } from 'vuex';
 
 Vue.config.performance = true;
 Vue.config.productionTip = false;
@@ -27,6 +29,9 @@ Vue.mixin({
     }
     return metaInfo;
   },
+  methods: {
+    ...mapActions(['setKeyValueAction']),
+  },
 });
 
 const app = new Vue({
@@ -34,6 +39,7 @@ const app = new Vue({
   router: Router,
   store: Store,
   env: Env,
+  ajax: Ajax,
   render: h => h(App),
   methods: {
     run(config = {}) {

@@ -3,8 +3,22 @@ form:
   login: Identifiant
   password: Mot de passe
   remember_me: Rester connecté
+  label: Libellé
+  name: Nom
+  address: Adresse
+  street: Adresse
+  street_comp: Adresse (suite)
+  city: Ville
+  postal_code: Code postal
+  country: Pays
 
 actions:
   go_back: Retour
   login: Connexion
   logout: Déconnexion
+  create: Créer
+  edit: Editer
+  delete: Supprimer
+  duplicate: Dupliquer
+  move_up: Monter
+  move_down: Descendre
