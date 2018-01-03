@@ -11,6 +11,14 @@ form:
   city: Ville
   postal_code: Code postal
   country: Pays
+  zip_code: Code postal
+  company: Entreprise
+  iban: IBAN
+  bic: BIC
+  last_name: Nom
+  first_name: Prénom
+  mail: Email
+  phone: Téléphone
 
 actions:
   go_back: Retour
