@@ -5,7 +5,6 @@ import Multiselect from 'vue-multiselect';
 Vue.component('multiselect', {
   functional: true,
   render (h, context) {
-    console.log(context);
     return h( Multiselect, {
       props: {
         options: context.props.options,

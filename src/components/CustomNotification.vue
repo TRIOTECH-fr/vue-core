@@ -1,0 +1,142 @@
+<template>
+  <notifications position="top right" class="my-notification-style" :duration="duration" :width="500" :speed="500"  animation-type="velocity">
+    <template slot="body" slot-scope="props">
+      <div class="custom-template" :class="props.item.type">
+        <div class="custom-template-icon">
+          <i v-if="props.item.type == 'success'" class="ti ti-fw ti-check-circle"></i>
+          <i v-else-if="props.item.type == 'error'" class="ti ti-fw ti-close-circle"></i>
+          <i v-else-if="props.item.type == 'warning'" class="ti ti-fw ti-warning"></i>
+          <i v-else class="ti ti-fw ti-info-circle"></i>
+        </div>
+        <div class="custom-template-content">
+          <div class="custom-template-title">
+            {{props.item.title}}
+          </div>
+          <div class="custom-template-text"
+               v-html="props.item.text"></div>
+        </div>
+        <div class="custom-template-close"
+             @click="props.close">
+          <i class="ti ti-fw ti-close"></i>
+        </div>
+      </div>
+    </template>
+  </notifications>
+</template>
+
+<script>
+
+export default {
+  name: 'CustomNotification',
+  props: {
+    duration: {
+      type: Number,
+      default: -1,
+    }
+  },
+};
+</script>
+
+<style lang="scss">
+  @import '~@/scss/vars';
+
+  .my-notification-style {
+    margin: 10px;
+
+    .custom-template {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      text-align: left;
+      font-size: 13px;
+      margin: 5px;
+      margin-bottom: 0;
+      align-items: center;
+      justify-content: center;
+      background: $extra-light-grey;
+      border: 1px solid $light-grey;
+      padding: 10px;
+      border-radius: 5px;
+
+      &,
+      & > div {
+        box-sizing: border-box;
+      }
+
+      &.success {
+        background-color: $green;
+        border-color: $dark-green;
+
+
+        .custom-template-icon,
+        .custom-template-content {
+          color: $white;
+        }
+
+        .custom-template-close {
+          color: $dark-green;
+          opacity: 1;
+        }
+      }
+
+      &.error {
+        background-color: $red;
+        border-color: $dark-red;
+
+        .custom-template-icon,
+        .custom-template-content {
+          color: $white;
+        }
+
+        .custom-template-close {
+          color: $dark-red;
+          opacity: 1;
+        }
+      }
+
+      &.warning {
+        background-color: $orange;
+        border-color: $dark-orange;
+
+        .custom-template-icon,
+        .custom-template-content {
+          color: $white;
+        }
+
+        .custom-template-close {
+          color: $dark-orange;
+          opacity: 1;
+        }
+      }
+
+      .custom-template-icon {
+        align-self: end;
+        color: $light-grey;
+        font-size: 32px;
+        padding: 0 10px;
+      }
+
+      .custom-template-close {
+        align-self: baseline;
+        font-size: 16px;
+        opacity: 0.2;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+      .custom-template-content {
+        padding: 10px;
+        flex: 1 0 auto;
+
+        .custom-template-title {
+          letter-spacing: 1px;
+          text-transform: uppercase;
+          font-size: 10px;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+</style>
