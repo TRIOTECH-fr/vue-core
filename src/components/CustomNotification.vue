@@ -38,7 +38,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '~@/scss/vars';
+  @import '~@triotech/vue-core/src/scss/vars';
 
   .my-notification-style {
     margin: 10px;
