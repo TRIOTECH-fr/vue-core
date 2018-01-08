@@ -56,6 +56,13 @@ const Ajax = new Vue({
       }, data), !!data.rememberMe);
     },
     refresh() {
+      if (typeof this.oauthStore.refresh_token_expires_at === 'undefined' || (Number(new Date()) - this.oauthStore.refresh_token_expires_at) / 1000 > 0) {
+        // no expiration date for refresh token, or refresh token expired, clear and redirect to /login
+        this.setKeyValueAction({ key: 'oauth', value: null });
+        Router.push('/login');
+        location.reload();
+      }
+
       return this.oauth({
         grant_type: 'refresh_token',
         refresh_token: this.oauthStore.refresh_token,
@@ -67,6 +74,7 @@ const Ajax = new Vue({
         client_secret: this.oauthConfig.client_secret,
       }, data), { commit })).then((value) => {
         value.expires_at = (value.expires_in * 1000) + Number(new Date());
+        value.refresh_token_expires_at = (value.refresh_token_lifetime * 1000) + Number(new Date());
         this.setKeyValueAction({ key: 'oauth', value, commit });
         return value;
       });
@@ -77,8 +85,7 @@ const Ajax = new Vue({
       return promise;
     },
     async syncRequest(config) {
-      const response = await this.asyncRequest(config);
-      return response;
+      return await this.asyncRequest(config);
     },
     asyncRequest(config) {
       config.url = this.url(config);
@@ -106,10 +113,10 @@ const Ajax = new Vue({
         .catch((error) => {
           const data = (error.response && error.response.data) || {};
           if (data.error === 'invalid_grant') {
-            if (data.error_description.match(/expired/i)) {
+            if (data.error_description.match(/expired/i) && error.response.status === 401) {
               delete config.headers;
               return this.refresh().then(this.asyncRequest.bind(this, config));
-            } else if (data.error_description.match(/invalid/i)) {
+            } else if (data.error_description.match(/invalid/i) || ( data.error_description.match(/expired/i) && error.response.status === 400 )) {
               this.setKeyValueAction({ key: 'oauth', value: null });
               Router.push('/login');
               location.reload();
