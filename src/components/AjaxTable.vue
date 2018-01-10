@@ -1,25 +1,28 @@
 <template>
   <b-col cols="12">
-    <div v-if="loader && isLoading" class="text-center">
-      <slot name="loader">
-        <i class="ti ti-2x ti-spin ti-refresh"></i>
-      </slot>
-    </div>
-    <table class="table" v-else>
-      <slot name="header">
-        <tr>
-          <th>{{ $t('table.item') }}</th>
-          <th>{{ $t('table.index') }}</th>
-        </tr>
-      </slot>
-      <slot name="item" v-for="(item, index) in items" :item="item" :index="index">
-        <tr>
-          <td>{{ item }}</td>
-          <td>{{ index }}</td>
-        </tr>
-      </slot>
-      <slot name="footer"></slot>
-    </table>
+    <template v-if="items.length > 0">
+      <div v-if="loader && isLoading" class="text-center">
+        <slot name="loader">
+          <i class="ti ti-2x ti-spin ti-refresh"></i>
+        </slot>
+      </div>
+      <table class="table" v-else>
+        <slot name="header">
+          <tr>
+            <th>{{ $t('table.item') }}</th>
+            <th>{{ $t('table.index') }}</th>
+          </tr>
+        </slot>
+        <slot name="item" v-for="(item, index) in items" :item="item" :index="index">
+          <tr>
+            <td>{{ item }}</td>
+            <td>{{ index }}</td>
+          </tr>
+        </slot>
+        <slot name="footer"></slot>
+      </table>
+    </template>
+    <b-alert v-else show>{{ $t(entityName + '.empty_set') }}</b-alert>
   </b-col>
 </template>
 
@@ -29,6 +32,7 @@
   export default {
     name: 'AjaxTable',
     props: {
+      entityName: { type: String, default: 'item' },
       uri: { type: String, required: true },
       method: { type: String, default: 'get' },
       data: { type: Object },
