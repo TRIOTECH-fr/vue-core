@@ -1,22 +1,16 @@
 import Vue from 'vue';
 import 'vue-multiselect/dist/vue-multiselect.min.css';
 import Multiselect from 'vue-multiselect';
+import VueFormGenerator from 'vue-form-generator';
+
+// delete Multiselect.props.value;
+// TODO fix vue warn
 
 Vue.component('multiselect', {
-  functional: true,
-  render (h, context) {
-    return h( Multiselect, {
-      props: {
-        options: context.props.options,
-        placeholder: context.parent.$t(`placeholders.${context.props.id}.${context.props.multiple ? 'multiple' : 'single'}`),
-        label: context.props.label,
-        // trackBy: context.props.value,
-        multiple: context.props.multiple,
-        selectLabel: '',
-        selectedLabel: '',
-        deselectLabel: '',
-        preserveSearch: true,
-      },
+  ...Multiselect,
+  mounted() {
+    this.$on('input', (value) => {
+      this.value = value;
     });
   },
 });
