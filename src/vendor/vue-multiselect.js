@@ -4,7 +4,7 @@ import Multiselect from 'vue-multiselect';
 import VueFormGenerator from 'vue-form-generator';
 
 Vue.component('fieldDropdown', {
-  template: '<multiselect label="label" track-by="id" v-model="multiselect_model" :options="schema.choices"></multiselect>',
+  template: '<multiselect label="label" track-by="id" v-model="multiselect_model" :multiple="multiple" :options="schema.choices"></multiselect>',
   components: {
     Multiselect,
   },
@@ -22,6 +22,9 @@ Vue.component('fieldDropdown', {
     },
   },
   computed: {
+    multiple() {
+      return this.schema.selectOptions.multiple || false;
+    },
     value: {
       get() {
         return this.multiselect_model !== null ? this.multiselect_model.id : this.multiselect_model;
