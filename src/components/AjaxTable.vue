@@ -1,6 +1,6 @@
 <template>
   <b-col cols="12">
-    <div v-if="loader && isLoading" class="text-center">
+    <div v-if="loader && isLoading" class="text-center mb-3">
       <slot name="loader">
         <i class="ti ti-2x ti-spin ti-refresh"></i>
       </slot>
