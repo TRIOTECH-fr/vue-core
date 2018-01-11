@@ -27,9 +27,18 @@ Vue.component('fieldDropdown', {
     },
     value: {
       get() {
-        return this.multiselect_model !== null ? this.multiselect_model.id : this.multiselect_model;
+        if (this.multiselect_model === null) {
+          return this.multiselect_model;
+        }
+
+        if (this.multiple) {
+          return this.multiselect_model.map(x => parseInt(x.id, 10));
+        }
+
+        return this.multiselect_model.id;
       },
       set(newValue) {
+        // TODO if newValue is array, fix this !
         this.multiselect_model = this.schema.choice.filter(x => x.id === newValue);
       },
     },
