@@ -11,7 +11,12 @@ const I18n = new VueI18n({
     Webpack.find(require.context('json-loader!@triotech/vue-core/src/translations', false, /\.yml$/)),
     Webpack.find(require.context('json-loader!@/translations', false, /\.yml$/)),
   ),
+  silentTranslationWarn: true,
 });
+
+// TODO remove translation doesn't exist alert
+// https://github.com/kazupon/vue-i18n/issues/96
+
 
 // TODO replace vue-i18n with vuex-i18n (https://github.com/dkfbasel/vuex-i18n)
 // import VueI18n from 'vuex-i18n';
