@@ -7,7 +7,7 @@ Vue.component('fieldDatePicker', {
   components: {
     Datepicker,
   },
-  data: function() {
+  data() {
     return {
       datePicker_model: '',
     };
@@ -16,13 +16,29 @@ Vue.component('fieldDatePicker', {
   mounted() {
     this.datePicker_model = this.schema.default;
   },
+  watch: {
+    datePicker_model(newValue, OldValue) {
+      if (this.format(newValue) !== this.format(OldValue)) {
+        this.setModelValueByPath(this.schema.model, this.format(newValue));
+      }
+    },
+  },
+  methods: {
+    format(date) {
+      return this.$moment(date).format('DD-MM-YY');
+    },
+  },
   computed: {
     value: {
-      get: function() {
-        return this.$moment(this.datePicker_model).format('DD-MM-YY')
+      get() {
+        return this.format(this.datePicker_model);
       },
-      set: function(newValue) {
+      set(newValue) {
         // TODO converte and set value ! this.datePucker_model = newValue;
+        throw new function (value) {
+          this.name = 'Todo value set';
+          this.message = `TODO : ${value}`;
+        }(newValue);
       },
     },
   },
