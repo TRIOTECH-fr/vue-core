@@ -15,11 +15,18 @@ Vue.component('fieldDropdown', {
     };
   },
   mounted() {
-    // TODO make this for multiselect multiple
-    if (!this.multiple) {
-      const initialValue = this.modelNameToProperty(this.schema.model);
-      if (initialValue) {
+    const initialValue = this.modelNameToProperty(this.schema.model);
+    if (initialValue) {
+      if (!this.multiple) {
         this.multiselect_model = this.schema.choices.find(x => x.label === initialValue.toString());
+      } else {
+        initialValue.reduce((a, b, i) => {
+          a[i] = b.id;
+          return a;
+        }, []);
+        this.multiselect_model = this.schema.choices.filter(
+          x => initialValue.indexOf(parseInt(x.id, 10)),
+        );
       }
     }
   },
