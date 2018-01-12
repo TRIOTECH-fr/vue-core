@@ -14,7 +14,20 @@ Vue.component('fieldDatePicker', {
   },
   mixins: [VueFormGenerator.abstractField],
   mounted() {
-    this.datePicker_model = this.schema.default;
+    this.datePicker_model = this.modelNameToProperty(this.schema.model);
+  },
+  methods: {
+    modelNameToProperty(modelName) {
+      return modelName
+        .replace(/\[(\w+)\]/g, '.$1')
+        .replace(/^\./, '')
+        .split('.')
+        .map(x => _.snakeCase(x))
+        .reduce((a, b) => (a && a.hasOwnProperty(b) ? a[b] : null), this.model);
+    },
+    format(date) {
+      return this.$moment(date).format('DD-MM-YY');
+    },
   },
   watch: {
     datePicker_model(newValue, OldValue) {
@@ -23,22 +36,10 @@ Vue.component('fieldDatePicker', {
       }
     },
   },
-  methods: {
-    format(date) {
-      return this.$moment(date).format('DD-MM-YY');
-    },
-  },
   computed: {
     value: {
       get() {
         return this.format(this.datePicker_model);
-      },
-      set(newValue) {
-        // TODO converte and set value ! this.datePucker_model = newValue;
-        throw new function (value) {
-          this.name = 'Todo value set';
-          this.message = `TODO : ${value}`;
-        }(newValue);
       },
     },
   },

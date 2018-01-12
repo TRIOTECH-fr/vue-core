@@ -15,11 +15,11 @@ Vue.component('fieldDropdown', {
     };
   },
   mounted() {
+    // TODO make this for multiselect multiple
     if (!this.multiple) {
       const initialValue = this.modelNameToProperty(this.schema.model);
       if (initialValue) {
-        const tmp = this.schema.choices.find(x => x.label === initialValue.toString());
-        this.multiselect_model = tmp;
+        this.multiselect_model = this.schema.choices.find(x => x.label === initialValue.toString());
       }
     }
   },
@@ -29,6 +29,7 @@ Vue.component('fieldDropdown', {
         .replace(/\[(\w+)\]/g, '.$1')
         .replace(/^\./, '')
         .split('.')
+        .map(x => _.snakeCase(x))
         .reduce((a, b) => (a && a.hasOwnProperty(b) ? a[b] : null), this.model);
     },
   },
