@@ -20,10 +20,10 @@
               <td>{{ index }}</td>
             </tr>
           </slot>
-          <slot name="footer"></slot>
         </table>
       </template>
       <b-alert v-else show>{{ $t(entityName + '.empty_set') }}</b-alert>
+      <slot name="footer"></slot>
     </template>
   </b-col>
 </template>
