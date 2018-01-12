@@ -42,6 +42,7 @@ export default {
 
   .my-notification-style {
     margin: 10px;
+    z-index: 1000000 !important;
 
     .custom-template {
       display: flex;
