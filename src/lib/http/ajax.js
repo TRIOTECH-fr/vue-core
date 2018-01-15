@@ -20,7 +20,7 @@ const Ajax = new Vue({
   methods: {
     difference(objectBase, baseBase) {
       const changes = (object, base) => {
-        return _.transform(object, (result, value, key) => {
+        _.transform(object, (result, value, key) => {
           if (!_.isEqual(value, base[key])) {
             result[key] = (_.isObject(value) && _.isObject(base[key]))
               ? changes(value, base[key])
