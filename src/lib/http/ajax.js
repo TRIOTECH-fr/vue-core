@@ -18,6 +18,18 @@ const Ajax = new Vue({
     oauthStore: () => Store.state.oauth || {},
   },
   methods: {
+    difference(objectBase, baseBase) {
+      const changes = (object, base) => {
+        return _.transform(object, (result, value, key) => {
+          if (!_.isEqual(value, base[key])) {
+            result[key] = (_.isObject(value) && _.isObject(base[key]))
+              ? changes(value, base[key])
+              : value;
+          }
+        });
+      };
+      return changes(objectBase, baseBase);
+    },
     url(config) {
       let url = config && config.url;
       if (url && url.indexOf('://') === -1) {
