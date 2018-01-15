@@ -53,7 +53,7 @@
     },
     methods: {
       async submit() {
-        await Ajax.post(`${this.name}/new`, this.model)
+        await Ajax.post(`${this.uri}/new`, this.model)
           .then((data) => {
             if (data.status) {
               this.$notify({
