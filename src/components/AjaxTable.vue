@@ -43,6 +43,7 @@
       authHeader: { type: String, default: 'Authorization' },
       authPrefix: { type: String, default: 'Bearer' },
       loader: { type: Boolean, default: true },
+      initLoad: { type: Boolean, default: true },
     },
     data() {
       return {
@@ -59,13 +60,19 @@
       }
     },
     async mounted() {
-      this.isLoading = true;
-      const fn = Ajax[this.method];
-
-      await fn(this.uri, this.data, this.config).then((items) => {
-        this.items = items;
-        this.isLoading = false;
-      });
+      if (this.initLoad) {
+        await this.load();
+      }
+    },
+    methods: {
+      async load() {
+        this.isLoading = true;
+        const fn = Ajax[this.method];
+        await fn(this.uri, this.data, this.config).then((items) => {
+          this.items = items;
+          this.isLoading = false;
+        });
+      },
     },
   };
 </script>
