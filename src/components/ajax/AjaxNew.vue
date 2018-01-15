@@ -32,6 +32,9 @@
       name: {
         type: String,
       },
+      uri: {
+        type: String,
+      },
     },
     data() {
       return {
@@ -42,7 +45,7 @@
       };
     },
     async mounted() {
-      await Ajax.get(`${this.name}/new`)
+      await Ajax.get(`${this.uri}/new`)
         .then((data) => {
           this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));
         })
