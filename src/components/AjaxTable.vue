@@ -73,6 +73,22 @@
           this.isLoading = false;
         });
       },
+      async refresh() {
+        this.isLoading = true;
+        const fn = Ajax[this.method];
+        await fn(this.uri, this.data, this.config).then((items) => {
+          const updatedData = Ajax.difference(items, this.items, true);
+          updatedData.forEach((data) => {
+            const dataRef = this.items.find(x => x.id === data.id);
+            _.each(data, (value, key) => {
+              if (key !== 'id') {
+                this.$set(dataRef, key, value);
+              }
+            });
+          });
+          this.isLoading = false;
+        });
+      },
     },
   };
 </script>

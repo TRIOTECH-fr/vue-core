@@ -18,10 +18,11 @@ const Ajax = new Vue({
     oauthStore: () => Store.state.oauth || {},
   },
   methods: {
-    difference(objectBase, baseBase) {
+    difference(objectBase = {}, baseBase = {}, keepIdentifier = false, identifier = 'id') {
+      // eslint-disable-next-line arrow-body-style
       const changes = (object, base) => {
-        _.transform(object, (result, value, key) => {
-          if (!_.isEqual(value, base[key])) {
+        return _.transform(object, (result, value, key) => {
+          if (!_.isEqual(value, base[key]) || (keepIdentifier && key === identifier)) {
             result[key] = (_.isObject(value) && _.isObject(base[key]))
               ? changes(value, base[key])
               : value;
