@@ -47,9 +47,11 @@ module.exports = {
     'no-underscore-dangle': ['error', {
       allow: ['_links']
     }],
-    'no-unused-vars': ['error', { vars: 'all', args: {
-      'after-used',
-      'all-except-prefixes': ['_'],
-    }, ignoreRestSiblings: true }],
+    'no-unused-vars': ['error', {
+      vars: 'all',
+      args: 'after-used',
+      ignoreRestSiblings: true,
+      varsIgnorePattern: '^_',
+    }],
   },
 };
