@@ -27,22 +27,32 @@
       uri: {
         type: String,
       },
-      ajaxTableRef: {
-        type: Object,
-        default: null,
-      },
-      refreshAjaxTable: {
+      refreshAjaxIndex: {
         type: Boolean,
         default: false,
       },
+      refAjaxIndex: {
+        type: Object,
+        default: null,
+      },
+      closeModal: {
+        type: Boolean,
+        default: false,
+      },
+      refModal: {
+        type: Object,
+        default: null,
+      },
     },
     async mounted() {
+      if (this.uri === null) {
+        this.uri = this.name;
+      }
       await Ajax.get(`${this.uri}/${this.id}/delete`)
         .then((data) => {
           console.log(data);
           // this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));
-        })
-      ;
+        });
     },
     methods: {
       async submit() {
@@ -54,9 +64,6 @@
                 text: this.$t(`flashes.${name}.delete`),
                 type: 'success',
               });
-              if (this.$parent.$refs.content.className === 'sweet-content') {
-                this.$parent.close();
-              }
             } else {
               this.$notify({
                 title: this.$t(`flashes.${name}.delete_title`),
@@ -64,9 +71,8 @@
                 type: 'error',
               });
             }
-
-            if (this.refreshAjaxTable) {
-              this.ajaxTableRef.refresh();
+            if (this.refreshAjaxIndex) {
+              this.refAjaxIndex.refresh();
             }
           }, (errors) => {
             if (errors.response.status === 400) {
@@ -78,7 +84,9 @@
             }
           })
         ;
-        // todo close modal ? or do something !
+        if (this.closeModal) {
+          this.refModal.close();
+        }
         return false;
       },
     },
