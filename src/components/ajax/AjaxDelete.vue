@@ -23,9 +23,11 @@
       id: null,
       name: {
         type: String,
+        default: null,
       },
       uri: {
         type: String,
+        default: null,
       },
       refreshAjaxIndex: {
         type: Boolean,
@@ -45,18 +47,20 @@
       },
     },
     async mounted() {
-      if (this.uri === null) {
-        this.uri = this.name;
-      }
-      await Ajax.get(`${this.uri}/${this.id}/delete`)
+      await Ajax.get(`${this.getUri}/${this.id}/delete`)
         .then((data) => {
           console.log(data);
           // this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));
         });
     },
+    computed: {
+      getUri() {
+        return this.uri || this.name;
+      },
+    },
     methods: {
       async submit() {
-        await Ajax.delete(`${this.uri}/${this.id}/delete`, this.id)
+        await Ajax.delete(`${this.getUri}/${this.id}/delete`, this.id)
           .then((data) => {
             if (data.status) {
               this.$notify({

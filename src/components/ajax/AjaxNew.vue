@@ -28,9 +28,11 @@
     props: {
       name: {
         type: String,
+        default: null,
       },
       uri: {
         type: String,
+        default: null,
       },
       refreshAjaxIndex: {
         type: Boolean,
@@ -58,18 +60,20 @@
       };
     },
     async mounted() {
-      if (this.uri === null) {
-        this.uri = this.name;
-      }
-      await Ajax.get(`${this.uri}/new`)
+      await Ajax.get(`${this.getUri}/new`)
         .then((data) => {
           this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));
         })
       ;
     },
+    computed: {
+      getUri() {
+        return this.uri || this.name;
+      },
+    },
     methods: {
       async submit() {
-        await Ajax.post(`${this.uri}/new`, this.model)
+        await Ajax.post(`${this.getUri}/new`, this.model)
           .then((data) => {
             if (data.status) {
               this.$notify({

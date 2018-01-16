@@ -62,10 +62,7 @@
       },
     },
     async mounted() {
-      if (this.uri === null) {
-        this.uri = this.name;
-      }
-      await Ajax.get(`${this.uri}/${this.id}/edit`)
+      await Ajax.get(`${this.getUri}/${this.id}/edit`)
         .then((data) => {
           this.schema.fields = this.schema.fields.concat(_.form(this.$t, data.form));
           this.model = data.entity;
@@ -73,11 +70,16 @@
         })
       ;
     },
+    computed: {
+      getUri() {
+        return this.uri || this.name;
+      },
+    },
     methods: {
       async submit() {
         const submitData = Ajax.difference(this.model, this.model_back);
         if (!_.isEmpty(submitData)) {
-          await Ajax.patch(`${this.uri}/${this.id}/edit`, submitData)
+          await Ajax.patch(`${this.getUri}/${this.id}/edit`, submitData)
             .then((data) => {
               if (data.status) {
                 this.$notify({
