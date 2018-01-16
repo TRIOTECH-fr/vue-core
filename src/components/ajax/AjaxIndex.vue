@@ -85,7 +85,7 @@
         const fn = Ajax[this.method];
         await fn(this.uri, this.data, this.config).then((items) => {
           if (items.length < this.items.length) {
-            const deletedData = this.items.filter(x => !items.some(y => x.id === y.id));
+            const deletedData = _.differenceWith(this.items, items, (x, y) => x.id === y.id);
             deletedData.forEach((data) => {
               this.$delete(this.items, _.findIndex(this.items, data));
             });
