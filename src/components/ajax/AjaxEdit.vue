@@ -42,6 +42,9 @@
       name: {
         type: String,
       },
+      uri: {
+        type: String,
+      },
       ajaxTableRef: {
         type: Object,
         default: null,
@@ -52,7 +55,7 @@
       },
     },
     async mounted() {
-      await Ajax.get(`${this.name}/${this.id}/edit`)
+      await Ajax.get(`${this.uri}/${this.id}/edit`)
         .then((data) => {
           this.schema.fields = this.schema.fields.concat(_.form(this.$t, data.form));
           this.model = data.entity;
@@ -64,7 +67,7 @@
       async submit() {
         const submitData = Ajax.difference(this.model, this.model_back);
         if (!_.isEmpty(submitData)) {
-          await Ajax.patch(`${this.name}/${this.id}/edit`, submitData)
+          await Ajax.patch(`${this.uri}/${this.id}/edit`, submitData)
             .then((data) => {
               if (data.status) {
                 this.$notify({
