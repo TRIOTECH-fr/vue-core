@@ -32,6 +32,22 @@
       uri: {
         type: String,
       },
+      refreshAjaxIndex: {
+        type: Boolean,
+        default: false,
+      },
+      refAjaxIndex: {
+        type: Object,
+        default: null,
+      },
+      closeModal: {
+        type: Boolean,
+        default: false,
+      },
+      refModal: {
+        type: Object,
+        default: null,
+      },
     },
     data() {
       return {
@@ -42,6 +58,9 @@
       };
     },
     async mounted() {
+      if (this.uri === null) {
+        this.uri = this.name;
+      }
       await Ajax.get(`${this.uri}/new`)
         .then((data) => {
           this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));
@@ -58,15 +77,15 @@
                 text: this.$t(`flashes.${this.name}.create`),
                 type: 'success',
               });
-              if (this.$parent.$refs.content.className === 'sweet-content') {
-                this.$parent.close();
-              }
             } else {
               this.$notify({
                 title: this.$t(`flashes.${this.name}.create_title`),
                 text: this.$t(`flashes.${this.name}.not_create`),
                 type: 'error',
               });
+            }
+            if (this.refreshAjaxIndex) {
+              this.refAjaxIndex.refresh();
             }
           }, () => {
             this.$notify({
@@ -76,6 +95,9 @@
             });
           })
         ;
+        if (this.closeModal) {
+          this.refModal.close();
+        }
         return false;
       },
     },
