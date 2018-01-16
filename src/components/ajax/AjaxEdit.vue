@@ -38,11 +38,12 @@
       id: null,
       name: {
         type: String,
+        default: null,
       },
       uri: {
         type: String,
+        default: null,
       },
-
       refreshAjaxIndex: {
         type: Boolean,
         default: false,
@@ -61,6 +62,10 @@
       },
     },
     async mounted() {
+      if (this.uri === null) {
+        this.uri = this.name;
+      }
+
       await Ajax.get(`${this.uri}/${this.id}/edit`)
         .then((data) => {
           this.schema.fields = this.schema.fields.concat(_.form(this.$t, data.form));
