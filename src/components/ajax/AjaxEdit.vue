@@ -44,6 +44,10 @@
         type: String,
         default: null,
       },
+      loadOnMount: {
+        type: Boolean,
+        default: true,
+      },
       refreshAjaxIndex: {
         type: Boolean,
         default: false,
@@ -62,13 +66,9 @@
       },
     },
     async mounted() {
-      await Ajax.get(`${this.getUri}/${this.id}/edit`)
-        .then((data) => {
-          this.schema.fields = this.schema.fields.concat(_.form(this.$t, data.form));
-          this.model = data.entity;
-          this.model_back = JSON.parse(JSON.stringify(this.model));
-        })
-      ;
+      if (this.loadOnMount) {
+        this.load();
+      }
     },
     computed: {
       getUri() {
@@ -76,6 +76,15 @@
       },
     },
     methods: {
+      async load() {
+        await Ajax.get(`${this.getUri}/${this.id}/edit`)
+          .then((data) => {
+            this.schema.fields = this.schema.fields.concat(_.form(this.$t, data.form));
+            this.model = data.entity;
+            this.model_back = JSON.parse(JSON.stringify(this.model));
+          })
+        ;
+      },
       async submit() {
         const submitData = Ajax.difference(this.model, this.model_back);
         if (!_.isEmpty(submitData)) {

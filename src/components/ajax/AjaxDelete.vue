@@ -29,6 +29,10 @@
         type: String,
         default: null,
       },
+      loadOnMount: {
+        type: Boolean,
+        default: true,
+      },
       refreshAjaxIndex: {
         type: Boolean,
         default: false,
@@ -47,11 +51,9 @@
       },
     },
     async mounted() {
-      await Ajax.get(`${this.getUri}/${this.id}/delete`)
-        .then((data) => {
-          console.log(data);
-          // this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));
-        });
+      if (this.loadOnMount) {
+        this.load();
+      }
     },
     computed: {
       getUri() {
@@ -59,6 +61,13 @@
       },
     },
     methods: {
+      async load() {
+        await Ajax.get(`${this.getUri}/${this.id}/delete`)
+          .then((data) => {
+            console.log(data);
+            // this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));
+          });
+      },
       async submit() {
         await Ajax.delete(`${this.getUri}/${this.id}/delete`, this.id)
           .then((data) => {
