@@ -5,9 +5,6 @@
         <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" />
         <b-row>
           <b-col>
-            <b-button block :to="goBackRoute">{{ $t('actions.go_back') }}</b-button>
-          </b-col>
-          <b-col>
             <b-button block type="submit" variant="primary">{{ $t('actions.edit') }}</b-button>
           </b-col>
         </b-row>
@@ -46,10 +43,6 @@
         type: String,
       },
       ajaxTableRef: {
-        type: Object,
-        default: null,
-      },
-      goBackRoute: {
         type: Object,
         default: null,
       },
