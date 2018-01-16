@@ -34,18 +34,23 @@ Vue.mixin({
   },
 });
 
-const app = new Vue({
-  i18n: I18n,
-  router: Router,
-  store: Store,
-  env: Env,
-  ajax: Ajax,
-  render: h => h(App),
+export default new Vue({
   methods: {
-    run(config = {}) {
-      this.$mount(config.el || '#app');
+    run(options = {}) {
+      const app = new Vue(_.merge({
+        el: '#app',
+        i18n: I18n,
+        router: Router,
+        store: Store,
+        env: Env,
+        ajax: Ajax,
+        render: h => h(App),
+        routes: Router.options.routes,
+      }, options));
+
+      window.app = app;
+
+      return app;
     },
   },
 });
-
-export default app;
