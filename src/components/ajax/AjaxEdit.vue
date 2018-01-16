@@ -42,13 +42,22 @@
       uri: {
         type: String,
       },
-      ajaxTableRef: {
+
+      refreshAjaxIndex: {
+        type: Boolean,
+        default: false,
+      },
+      refAjaxIndex: {
         type: Object,
         default: null,
       },
-      refreshAjaxTable: {
+      closeModal: {
         type: Boolean,
         default: false,
+      },
+      refModal: {
+        type: Object,
+        default: null,
       },
     },
     async mounted() {
@@ -72,9 +81,6 @@
                   text: this.$t(`flashes.${name}.edit`),
                   type: 'success',
                 });
-                if (this.$parent.$refs.content.className === 'sweet-content') {
-                  this.$parent.close();
-                }
               } else {
                 this.$notify({
                   title: this.$t(`flashes.${name}.edit_title`),
@@ -83,8 +89,8 @@
                 });
               }
 
-              if (this.refreshAjaxTable) {
-                this.ajaxTableRef.refresh();
+              if (this.refreshAjaxIndex) {
+                this.refAjaxIndex.refresh();
               }
             }, (errors) => {
               if (errors.response.status === 400) {
@@ -97,7 +103,9 @@
             })
           ;
         }
-        // todo close modal ? or do something !
+        if (this.closeModal) {
+          this.refModal.close();
+        }
         return false;
       },
     },

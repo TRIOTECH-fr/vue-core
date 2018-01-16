@@ -5,7 +5,7 @@
                 <i class="ti ti-2x ti-spin ti-refresh"></i>
             </slot>
         </div>
-        <template v-else>
+        <template :class="{ hidden: !isLoading }">
             <template v-if="items.length > 0">
                 <table class="table" v-if="renderMode === 'table'">
                     <slot name="header">
@@ -99,3 +99,10 @@
     },
   };
 </script>
+
+<style lang="scss">
+    .hidden {
+        display: none;
+    }
+</style>
+
