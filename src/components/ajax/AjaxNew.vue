@@ -5,7 +5,7 @@
         <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" />
         <b-row>
           <b-col>
-            <b-button :to="{ name: 'parameter.index' }" block>{{ $t('actions.go_back') }}</b-button>
+            <b-button :to="goBackRoute" block>{{ $t('actions.go_back') }}</b-button>
           </b-col>
           <b-col>
             <b-button block type="submit" variant="success">{{ $t('actions.create') }}</b-button>
@@ -34,6 +34,9 @@
       },
       uri: {
         type: String,
+      },
+      goBackRoute: {
+        type: Object,
       },
     },
     data() {
