@@ -1,9 +1,10 @@
 import Vue from 'vue';
-import Voca from 'voca';
 import I18n from '@triotech/vue-core/src/lib/core/i18n';
 import Router from '@triotech/vue-core/src/lib/core/router';
 import Store from '@triotech/vue-core/src/lib/core/store';
 import Env from '@triotech/vue-core/src/lib/core/env';
+import Voca from '@triotech/vue-core/src/lib/core/voca';
+import Bus from '@triotech/vue-core/src/lib/event/bus';
 import Ajax from '@triotech/vue-core/src/lib/http/ajax';
 import App from '@/App';
 import { mapActions } from 'vuex';
@@ -44,6 +45,8 @@ export default new Vue({
         store: Store,
         env: Env,
         ajax: Ajax,
+        voca: Voca,
+        bus: Bus,
         render: h => h(App),
         routes: Router.options.routes,
       }, options));

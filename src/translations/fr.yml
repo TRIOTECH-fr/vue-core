@@ -31,3 +31,4 @@ actions:
   move_up: Monter
   move_down: Descendre
   show: Consulter
+  cancel: Annuler
