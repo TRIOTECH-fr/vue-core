@@ -87,6 +87,7 @@
         await Ajax.get(`${this.getUri}/new`)
           .then((data) => {
             this.schema.fields = _.form(this.$t, data);
+            this.model = {};
           });
       },
       async submit() {

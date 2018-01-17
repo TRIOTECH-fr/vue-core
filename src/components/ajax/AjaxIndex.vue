@@ -28,7 +28,7 @@
                 </b-list-group>
                 <!-- TODO render custom, render slot -->
             </template>
-            <b-alert v-else show>{{ $t(entityName + '.empty_set') }}</b-alert>
+            <b-alert v-else-if="init" show>{{ $t(entityName + '.empty_set') }}</b-alert>
             <slot name="footer"></slot>
         </template>
     </b-col>
@@ -88,6 +88,7 @@
     },
     data() {
       return {
+        init: false,
         isLoading: false,
         items: [],
       };
@@ -122,6 +123,7 @@
         await fn(this.uri, this.data, this.config).then((items) => {
           this.items = items;
           this.isLoading = false;
+          this.init = true;
         });
       },
       async refresh() {
@@ -148,6 +150,7 @@
             }
           });
           this.isLoading = false;
+          this.init = true;
         });
       },
     },
