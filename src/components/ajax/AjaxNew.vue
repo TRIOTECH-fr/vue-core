@@ -54,6 +54,10 @@
         type: String,
         default: null,
       },
+      defaultModelValues: {
+        type: Object,
+        default: null,
+      },
     },
     data() {
       return {
@@ -81,17 +85,24 @@
       getUri() {
         return this.uri || this.name;
       },
+      modelFixed() {
+        // todo remove this dirty fix
+        return _.transform(this.model, (o, v, k) => {
+          const i = parseInt(v, 10);
+          o[k] = _.isNaN(i) || typeof v === 'object' ? v : i;
+        });
+      },
     },
     methods: {
       async load() {
         await Ajax.get(`${this.getUri}/new`)
           .then((data) => {
             this.schema.fields = _.form(this.$t, data);
-            this.model = {};
+            this.model = this.defaultModelValues || {};
           });
       },
       async submit() {
-        await Ajax.post(`${this.getUri}/new`, this.model)
+        await Ajax.post(`${this.getUri}/new`, this.modelFixed)
           .then((data) => {
             if (data.status) {
               this.$notify({

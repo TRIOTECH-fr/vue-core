@@ -6,7 +6,7 @@ const _ = require('lodash');
 
 const defaults = yaml.safeLoad(fs.readFileSync('./config/parameters.yml.dist', 'utf8'));
 const exists = fs.existsSync('./config/parameters.yml');
-let parameters = exists ? yaml.safeLoad(fs.readFileSync('./config/parameters.yml', 'utf8')) : {};
+const parameters = exists ? yaml.safeLoad(fs.readFileSync('./config/parameters.yml', 'utf8')) : {};
 
 // derived from https://gist.github.com/Yimiprod/7ee176597fef230d1451
 const Y = f => (...args) => f(Y(f))(...args);
