@@ -43,7 +43,7 @@
         default: false,
       },
       refAjaxIndex: {
-        type: Object,
+        type: String,
         default: null,
       },
       closeModal: {
@@ -51,7 +51,7 @@
         default: false,
       },
       refModal: {
-        type: Object,
+        type: String,
         default: null,
       },
     },
@@ -67,6 +67,15 @@
       if (this.loadOnMount) {
         this.load();
       }
+
+      if (!this.loadOnMount && this.refModal !== null) {
+        this.$bus.$on(`t-event-t-modal-${this.refModal}-open`, this.load);
+      }
+    },
+    beforeDestroy() {
+      if (!this.loadOnMount && this.refModal !== null) {
+        this.$off(`t-event-t-modal-${this.refModal}-open`);
+      }
     },
     computed: {
       getUri() {
@@ -77,7 +86,7 @@
       async load() {
         await Ajax.get(`${this.getUri}/new`)
           .then((data) => {
-            this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));
+            this.schema.fields = _.form(this.$t, data);
           });
       },
       async submit() {
@@ -97,7 +106,7 @@
               });
             }
             if (this.refreshAjaxIndex) {
-              this.refAjaxIndex.refresh();
+              this.$bus.$emit(`t-event-ajax-index-${this.refAjaxIndex}-refresh`);
             }
           }, () => {
             this.$notify({
@@ -108,7 +117,7 @@
           })
         ;
         if (this.closeModal) {
-          this.refModal.close();
+          this.$bus.$emit(`t-event-t-modal-${this.refModal}-close`);
         }
         return false;
       },

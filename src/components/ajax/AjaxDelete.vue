@@ -20,7 +20,10 @@
       'vue-form-generator': VueFormGenerator.component,
     },
     props: {
-      id: null,
+      id: {
+        type: Number,
+        default: null,
+      },
       name: {
         type: String,
         default: null,
@@ -38,7 +41,7 @@
         default: false,
       },
       refAjaxIndex: {
-        type: Object,
+        type: String,
         default: null,
       },
       closeModal: {
@@ -46,7 +49,7 @@
         default: false,
       },
       refModal: {
-        type: Object,
+        type: String,
         default: null,
       },
     },
@@ -54,10 +57,19 @@
       if (this.loadOnMount) {
         this.load();
       }
+
+      if (!this.loadOnMount && this.refModal !== null) {
+        this.$bus.$on(`t-event-t-modal-${this.refModal}-open`, this.load);
+      }
+    },
+    beforeDestroy() {
+      if (!this.loadOnMount && this.refModal !== null) {
+        this.$off(`t-event-t-modal-${this.refModal}-open`);
+      }
     },
     computed: {
       getUri() {
-        return this.uri || this.name;
+        return this.uri !== null ? this.uri : this.name;
       },
     },
     methods: {
@@ -85,7 +97,7 @@
               });
             }
             if (this.refreshAjaxIndex) {
-              this.refAjaxIndex.refresh();
+              this.$bus.$emit(`t-event-ajax-index-${this.refAjaxIndex}-refresh`);
             }
           }, (errors) => {
             if (errors.response.status === 400) {
@@ -98,7 +110,7 @@
           })
         ;
         if (this.closeModal) {
-          this.refModal.close();
+          this.$bus.$emit(`t-event-t-modal-${this.refModal}-close`);
         }
         return false;
       },

@@ -40,22 +40,56 @@
   export default {
     name: 'AjaxIndex',
     props: {
-      entityName: { type: String, default: 'item' },
-      uri: { type: String, required: true },
-      method: { type: String, default: 'get' },
-      data: { type: Object },
-      config: { type: Object, default: () => ({}) },
-      auth: { type: [String, Boolean] },
-      authHeader: { type: String, default: 'Authorization' },
-      authPrefix: { type: String, default: 'Bearer' },
-      loader: { type: Boolean, default: true },
-      initLoad: { type: Boolean, default: true },
-      renderMode: { type: String, default: 'table' },
+      eventId: {
+        type: String,
+        default: null,
+      },
+      entityName: {
+        type: String,
+        default: 'item',
+      },
+      uri: { type: String,
+        required: true,
+      },
+      method: {
+        type: String,
+        default: 'get',
+      },
+      data: {
+        type: Object,
+      },
+      config: {
+        type: Object,
+        default: () => ({}),
+      },
+      auth: {
+        type: [String, Boolean],
+      },
+      authHeader: {
+        type: String,
+        default: 'Authorization',
+      },
+      authPrefix: {
+        type: String,
+        default: 'Bearer',
+      },
+      loader: {
+        type: Boolean,
+        default: true,
+      },
+      initLoad: {
+        type: Boolean,
+        default: true,
+      },
+      renderMode: {
+        type: String,
+        default: 'table',
+      },
     },
     data() {
       return {
         isLoading: false,
-        items: {},
+        items: [],
       };
     },
     created() {
@@ -70,8 +104,18 @@
       if (this.initLoad) {
         await this.load();
       }
+
+      if (this.eventId !== null) {
+        this.$bus.$on(this.event_name('refresh'), this.refresh);
+      }
+    },
+    beforeDestroy() {
+      this.$bus.$off(this.event_name('refresh'));
     },
     methods: {
+      event_name(action) {
+        return `t-event-ajax-index-${this.eventId}-${action}`;
+      },
       async load() {
         this.isLoading = true;
         const fn = Ajax[this.method];
