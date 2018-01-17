@@ -104,14 +104,14 @@
             .then((data) => {
               if (data.status) {
                 this.$notify({
-                  title: this.$t(`flashes.${name}.edit_title`),
-                  text: this.$t(`flashes.${name}.edit`),
+                  title: this.$t(`flashes.${this.name}.edit_title`),
+                  text: this.$t(`flashes.${this.name}.edit`),
                   type: 'success',
                 });
               } else {
                 this.$notify({
-                  title: this.$t(`flashes.${name}.edit_title`),
-                  text: this.$t(`flashes.${name}.not_edit`),
+                  title: this.$t(`flashes.${this.name}.edit_title`),
+                  text: this.$t(`flashes.${this.name}.not_edit`),
                   type: 'error',
                 });
               }
@@ -122,7 +122,7 @@
             }, (errors) => {
               if (errors.response.status === 400) {
                 this.$notify({
-                  title: this.$t(`flashes.${name}.request_error_title`),
+                  title: this.$t(`flashes.${this.name}.request_error_title`),
                   text: errors.response.data.errors.errors[0],
                   type: 'warning',
                 });

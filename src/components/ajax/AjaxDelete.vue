@@ -85,14 +85,14 @@
           .then((data) => {
             if (data.status) {
               this.$notify({
-                title: this.$t(`flashes.${name}.delete_title`),
-                text: this.$t(`flashes.${name}.delete`),
+                title: this.$t(`flashes.${this.name}.delete_title`),
+                text: this.$t(`flashes.${this.name}.delete`),
                 type: 'success',
               });
             } else {
               this.$notify({
-                title: this.$t(`flashes.${name}.delete_title`),
-                text: this.$t(`flashes.${name}.not_delete`),
+                title: this.$t(`flashes.${this.name}.delete_title`),
+                text: this.$t(`flashes.${this.name}.not_delete`),
                 type: 'error',
               });
             }
@@ -102,7 +102,7 @@
           }, (errors) => {
             if (errors.response.status === 400) {
               this.$notify({
-                title: this.$t(`flashes.${name}.request_error_title`),
+                title: this.$t(`flashes.${this.name}.request_error_title`),
                 text: errors.response.data.errors.errors[0],
                 type: 'warning',
               });
