@@ -61,7 +61,9 @@ Vue.component('fieldDropdown', {
           return this.multiselect_model.map(x => parseInt(x.id, 10));
         }
 
-        return parseInt(this.multiselect_model.id, 10);
+        return _.isNaN(parseInt(this.multiselect_model.id, 10))
+          ? this.multiselect_model.id
+          : parseInt(this.multiselect_model.id, 10);
       },
     },
   },
