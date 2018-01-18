@@ -16,6 +16,7 @@ Vue.component('fieldDropdown', {
   },
   mounted() {
     const initialValue = this.modelNameToProperty(this.schema.model);
+    console.log(initialValue);
     if (initialValue) {
       if (!this.multiple) {
         this.multiselect_model = this.schema.choices.find(x => x.label === initialValue.toString());
@@ -29,6 +30,9 @@ Vue.component('fieldDropdown', {
         );
       }
     }
+  },
+  destroyed() {
+    console.log('multiselect destroy');
   },
   methods: {
     modelNameToProperty(modelName) {
@@ -64,6 +68,9 @@ Vue.component('fieldDropdown', {
         return _.isNaN(parseInt(this.multiselect_model.id, 10))
           ? this.multiselect_model.id
           : parseInt(this.multiselect_model.id, 10);
+      },
+      set(a) {
+        console.log(a);
       },
     },
   },

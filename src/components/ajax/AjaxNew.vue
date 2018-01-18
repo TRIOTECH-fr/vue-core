@@ -74,11 +74,13 @@
 
       if (!this.loadOnMount && this.refModal !== null) {
         this.$bus.$on(`t-event-t-modal-${this.refModal}-open`, this.load);
+        this.$bus.$on(`t-event-t-modal-${this.refModal}-close`, this.destroy);
       }
     },
     beforeDestroy() {
       if (!this.loadOnMount && this.refModal !== null) {
         this.$off(`t-event-t-modal-${this.refModal}-open`);
+        this.$off(`t-event-t-modal-${this.refModal}-close`);
       }
     },
     computed: {
@@ -87,11 +89,18 @@
       },
     },
     methods: {
+      destroy() {
+        console.log('clear form');
+      },
       async load() {
+        const modelTemp = this.defaultModelValues !== null
+          ? this.defaultModelValues
+          : {}
+        ;
+        this.$set(this, 'model', modelTemp);
         await Ajax.get(`${this.getUri}/new`)
           .then((data) => {
-            this.schema.fields = _.form(this.$t, data);
-            this.model = this.defaultModelValues || {};
+            this.$set(this.schema, 'fields', _.form(this.$t, data));
           });
       },
       async submit() {
