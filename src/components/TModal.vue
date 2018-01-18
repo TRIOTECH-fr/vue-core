@@ -44,7 +44,7 @@
       },
       open_modal() {
         this.$refs[this.modal_uid].open();
-        this.$bus.$emit(this.modal_name('opened'));
+        this.$bus.$emit(this.event_name('opened'));
       },
       close_modal() {
         this.$refs[this.modal_uid].close();
