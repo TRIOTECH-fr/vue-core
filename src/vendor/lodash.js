@@ -10,6 +10,12 @@ Lodash.mixin({
       // TODO https://github.com/vue-generators/vue-form-generator/issues/352
       field.label = $t(field.label);
       field.placeholder = $t(field.placeholder);
+
+      if (field.choices !== undefined) {
+        _.each(field.choices, (choice) => {
+          choice.label = $t(choice.label);
+        });
+      }
     });
   },
 });
