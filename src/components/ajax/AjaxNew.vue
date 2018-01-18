@@ -107,6 +107,9 @@
                 text: this.$t(`flashes.${this.name}.create`),
                 type: 'success',
               });
+              if (this.closeModal) {
+                this.$bus.$emit(`t-event-t-modal-${this.refModal}-close`);
+              }
             } else {
               this.$notify({
                 title: this.$t(`flashes.${this.name}.create_title`),
@@ -117,17 +120,34 @@
             if (this.refreshAjaxIndex) {
               this.$bus.$emit(`t-event-ajax-index-${this.refAjaxIndex}-refresh`);
             }
-          }, () => {
-            this.$notify({
-              title: this.$t(`flashes.${this.name}.server_error_title`),
-              text: this.$t(`flashes.${this.name}.server_error`),
-              type: 'warning',
-            });
+          }, (data) => {
+            if (data.response.data.code === 400) {
+              const errors = _.reduce(data.response.data.errors.children, (carry, value, key) => {
+                if (value.errors) {
+                  carry[key] = value.errors;
+                }
+                return carry;
+              }, {});
+
+              let flashTitle = '';
+              let flashText = '';
+
+              _.each(errors, (errorFields, field) => {
+                flashTitle = this.$t(`flashes.${this.name}.error.${field}`);
+
+                _.each(errorFields, (error) => {
+                  flashText = `${error} <br /> ${flashText}`;
+                });
+              });
+
+              this.$notify({
+                title: flashTitle,
+                text: flashText,
+                type: 'warning',
+              });
+            }
           })
         ;
-        if (this.closeModal) {
-          this.$bus.$emit(`t-event-t-modal-${this.refModal}-close`);
-        }
         return false;
       },
     },
