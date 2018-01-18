@@ -126,6 +126,17 @@
           this.init = true;
         });
       },
+      refresh_data(dataRef, data) {
+        _.each(data, (value, key) => {
+          if (key !== 'id') {
+            if (typeof value === 'object') {
+              this.refresh_data(dataRef[key], value);
+            } else {
+              this.$set(dataRef, key, value);
+            }
+          }
+        });
+      },
       async refresh() {
         this.isLoading = true;
         const fn = Ajax[this.method];
@@ -140,11 +151,7 @@
           updatedData.forEach((data) => {
             const dataRef = this.items.find(x => x.id === data.id);
             if (typeof dataRef !== 'undefined') {
-              _.each(data, (value, key) => {
-                if (key !== 'id') {
-                  this.$set(dataRef, key, value);
-                }
-              });
+              this.refresh_data(dataRef, data);
             } else {
               this.$set(this.items, this.items.length, data);
             }
