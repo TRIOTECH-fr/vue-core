@@ -48,7 +48,6 @@ export default new Vue({
         voca: Voca,
         bus: Bus,
         render: h => h(App),
-        routes: Router.options.routes,
       }, options));
 
       window.app = app;
