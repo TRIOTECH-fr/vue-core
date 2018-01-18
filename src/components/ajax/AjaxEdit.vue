@@ -108,6 +108,9 @@
                   text: this.$t(`flashes.${this.name}.edit`),
                   type: 'success',
                 });
+                if (this.closeModal) {
+                  this.$bus.$emit(`t-event-t-modal-${this.refModal}-close`);
+                }
               } else {
                 this.$notify({
                   title: this.$t(`flashes.${this.name}.edit_title`),
@@ -119,19 +122,34 @@
               if (this.refreshAjaxIndex) {
                 this.$bus.$emit(`t-event-ajax-index-${this.refAjaxIndex}-refresh`);
               }
-            }, (errors) => {
-              if (errors.response.status === 400) {
+            }, (data) => {
+              if (data.response.data.code === 400) {
+                const errors = _.reduce(data.response.data.errors.children, (carry, value, key) => {
+                  if (value.errors) {
+                    carry[key] = value.errors;
+                  }
+                  return carry;
+                }, {});
+
+                let flashTitle = '';
+                let flashText = '';
+
+                _.each(errors, (errorFields, field) => {
+                  flashTitle = this.$t(`flashes.${this.name}.error.${field}`);
+
+                  _.each(errorFields, (error) => {
+                    flashText = `${error} <br /> ${flashText}`;
+                  });
+                });
+
                 this.$notify({
-                  title: this.$t(`flashes.${this.name}.request_error_title`),
-                  text: errors.response.data.errors.errors[0],
+                  title: flashTitle,
+                  text: flashText,
                   type: 'warning',
                 });
               }
             })
           ;
-        }
-        if (this.closeModal) {
-          this.$bus.$emit(`t-event-t-modal-${this.refModal}-close`);
         }
         return false;
       },
