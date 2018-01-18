@@ -85,13 +85,6 @@
       getUri() {
         return this.uri || this.name;
       },
-      modelFixed() {
-        // todo remove this dirty fix
-        return _.transform(this.model, (o, v, k) => {
-          const i = parseInt(v, 10);
-          o[k] = _.isNaN(i) || typeof v === 'object' ? v : i;
-        });
-      },
     },
     methods: {
       async load() {
@@ -102,7 +95,7 @@
           });
       },
       async submit() {
-        await Ajax.post(`${this.getUri}/new`, this.modelFixed)
+        await Ajax.post(`${this.getUri}/new`, this.model)
           .then((data) => {
             if (data.status) {
               this.$notify({

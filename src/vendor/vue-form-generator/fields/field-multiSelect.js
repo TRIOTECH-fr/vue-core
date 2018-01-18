@@ -60,7 +60,8 @@ Vue.component('fieldDropdown', {
         if (this.multiple) {
           return this.multiselect_model.map(x => parseInt(x.id, 10));
         }
-        return this.multiselect_model.id;
+
+        return parseInt(this.multiselect_model.id, 10);
       },
     },
   },
