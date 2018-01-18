@@ -16,10 +16,15 @@ Vue.component('fieldDropdown', {
   },
   mounted() {
     const initialValue = this.modelNameToProperty(this.schema.model);
-    console.log(initialValue);
     if (initialValue) {
       if (!this.multiple) {
-        this.multiselect_model = this.schema.choices.find(x => x.label === initialValue.toString());
+        if (typeof initialValue === 'object') {
+          // eslint-disable-next-line max-len
+          this.multiselect_model = this.schema.choices.find(x => x.id.toString() === initialValue.id.toString());
+        } else {
+          // eslint-disable-next-line max-len
+          this.multiselect_model = this.schema.choices.find(x => x.label === initialValue.toString());
+        }
       } else {
         initialValue.reduce((a, b, i) => {
           a[i] = b.id;
@@ -31,9 +36,6 @@ Vue.component('fieldDropdown', {
       }
     }
   },
-  destroyed() {
-    console.log('multiselect destroy');
-  },
   methods: {
     modelNameToProperty(modelName) {
       return modelName
@@ -41,6 +43,7 @@ Vue.component('fieldDropdown', {
         .replace(/^\./, '')
         .split('.')
         .map(x => _.snakeCase(x))
+        // eslint-disable-next-line no-prototype-builtins
         .reduce((a, b) => (a && a.hasOwnProperty(b) ? a[b] : null), this.model);
     },
   },

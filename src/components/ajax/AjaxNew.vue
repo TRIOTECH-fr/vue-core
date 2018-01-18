@@ -73,14 +73,12 @@
       }
 
       if (!this.loadOnMount && this.refModal !== null) {
-        this.$bus.$on(`t-event-t-modal-${this.refModal}-open`, this.load);
-        this.$bus.$on(`t-event-t-modal-${this.refModal}-close`, this.destroy);
+        this.$bus.$on(`t-event-t-modal-${this.refModal}-opened`, this.load);
       }
     },
     beforeDestroy() {
       if (!this.loadOnMount && this.refModal !== null) {
-        this.$off(`t-event-t-modal-${this.refModal}-open`);
-        this.$off(`t-event-t-modal-${this.refModal}-close`);
+        this.$off(`t-event-t-modal-${this.refModal}-opened`);
       }
     },
     computed: {
@@ -89,9 +87,6 @@
       },
     },
     methods: {
-      destroy() {
-        console.log('clear form');
-      },
       async load() {
         const modelTemp = this.defaultModelValues !== null
           ? this.defaultModelValues

@@ -1,5 +1,5 @@
 <template>
-    <sweet-modal :ref="modal_uid" class="modal-form" :title="title">
+    <sweet-modal @open="modal_open" @close="modal_close" :ref="modal_uid" class="modal-form" :title="title">
         <slot>
 
         </slot>
@@ -39,16 +39,20 @@
       },
     },
     methods: {
+      modal_open() {
+        this.$bus.$emit(this.event_name('opened'));
+      },
+      modal_close() {
+        this.$bus.$emit(this.event_name('closed'));
+      },
       event_name(action) {
         return `t-event-t-modal-${this.eventId}-${action}`;
       },
       open_modal() {
         this.$refs[this.modal_uid].open();
-        this.$bus.$emit(this.event_name('opened'));
       },
       close_modal() {
         this.$refs[this.modal_uid].close();
-        this.$bus.$emit(this.event_name('closed'));
       },
     },
   };
