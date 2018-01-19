@@ -4,6 +4,8 @@ import Config from '@triotech/vue-core/src/lib/core/config';
 import routes from '@/../config/routing';
 import _ from '@triotech/vue-core/src/vendor/lodash';
 
+// TODO Fix import loader for : https://forum.vuejs.org/t/router-vue-props-type-number-didnt-cast/25774
+
 Vue.use(VueRouter);
 
 const vueRouterPush = VueRouter.prototype.push;
@@ -54,3 +56,4 @@ Router.beforeEach((to, from, next) => {
 });
 
 export default Router;
+

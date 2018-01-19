@@ -1,20 +1,29 @@
 import Vue from 'vue';
-import Datepicker from 'vuejs-datepicker';
+import DatePicker from 'vuejs-datepicker';
 import VueFormGenerator from 'vue-form-generator';
 
 Vue.component('fieldDatePicker', {
-  template: '<datepicker :placeholder="schema.placeholder" v-model="datePicker_model"></datepicker>',
+  template: '<datepicker :placeholder="schema.placeholder" :language="language" v-model="datePicker_model"></datepicker>',
   components: {
-    Datepicker,
+    DatePicker,
   },
   data() {
     return {
       datePicker_model: '',
     };
   },
+  props: {
+    language: {
+      type: String,
+      default: 'fr',
+    },
+  },
   mixins: [VueFormGenerator.abstractField],
   mounted() {
-    this.datePicker_model = this.modelNameToProperty(this.schema.model);
+    const initialValue = this.modelNameToProperty(this.schema.model);
+    if (!_.isNull(initialValue)) {
+      this.datePicker_model = this.$moment(initialValue).format('YYYY-MM-DD');
+    }
   },
   methods: {
     modelNameToProperty(modelName) {
@@ -23,10 +32,10 @@ Vue.component('fieldDatePicker', {
         .replace(/^\./, '')
         .split('.')
         .map(x => _.snakeCase(x))
-        .reduce((a, b) => (a && a.hasOwnProperty(b) ? a[b] : null), this.model);
+        .reduce((a, b) => (a && {}.hasOwnProperty.call(a, b) ? a[b] : null), this.model);
     },
     format(date) {
-      return this.$moment(date).format('DD-MM-YY');
+      return this.$moment(date).format('YYYY-MM-DD');
     },
   },
   watch: {
