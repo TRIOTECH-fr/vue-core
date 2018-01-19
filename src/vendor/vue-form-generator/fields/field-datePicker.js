@@ -3,7 +3,7 @@ import DatePicker from 'vuejs-datepicker';
 import VueFormGenerator from 'vue-form-generator';
 
 Vue.component('fieldDatePicker', {
-  template: '<datepicker :placeholder="schema.placeholder" :language="language" v-model="datePicker_model"></datepicker>',
+  template: '<date-picker :placeholder="schema.placeholder" :language="language" v-model="datePicker_model"></date-picker>',
   components: {
     DatePicker,
   },

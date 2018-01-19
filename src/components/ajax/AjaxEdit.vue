@@ -1,6 +1,10 @@
 <template>
-  <div>
-    <form @submit.prevent="submit">
+    <div v-if="loading" class="text-center mb-3">
+      <slot name="loader">
+        <i class="ti ti-2x ti-spin ti-refresh"></i>
+      </slot>
+    </div>
+    <form v-else @submit.prevent="submit">
       <template v-if="this.schema.fields.length > 0">
         <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" />
         <b-row>
@@ -13,7 +17,6 @@
         <i class="ti ti-2x ti-spin ti-refresh"></i>
       </div>
     </form>
-  </div>
 </template>
 
 <script>
@@ -27,11 +30,13 @@
     },
     data() {
       return {
+        loading: true,
         model_back: {},
         model: {},
         schema: {
           fields: [],
         },
+        fallback_id: null,
       };
     },
     props: {
@@ -86,21 +91,38 @@
       getUri() {
         return this.uri !== null ? this.uri : this.name;
       },
+      getId() {
+        return this.id || this.fallback_id;
+      }
     },
     methods: {
-      async load() {
-        await Ajax.get(`${this.getUri}/${this.id}/edit`)
+      async load(dataEvent = null) {
+        this.loading = true;
+        if (_.isNull(this.id) && _.isNull(dataEvent)) {
+          throw String('No entity.id know');
+        }
+
+        if (!_.isNull(dataEvent)) {
+          if (_.isNaN(parseInt(dataEvent, 10))) {
+            this.fallback_id = dataEvent.id;
+          } else {
+            this.fallback_id = dataEvent;
+          }
+        }
+        this.$set(this, 'model', {});
+        await Ajax.get(`${this.getUri}/${this.getId}/edit`)
           .then((data) => {
             this.schema.fields = _.form(this.$t, data.form);
             this.$set(this, 'model', data.entity);
             this.model_back = JSON.parse(JSON.stringify(data.entity));
+            this.loading = false;
           })
         ;
       },
       async submit() {
         const submitData = Ajax.difference(this.model, this.model_back);
         if (!_.isEmpty(submitData)) {
-          await Ajax.patch(`${this.getUri}/${this.id}/edit`, submitData)
+          await Ajax.patch(`${this.getUri}/${this.getId}/edit`, submitData)
             .then((data) => {
               if (data.status) {
                 this.$notify({

@@ -19,6 +19,11 @@
     components: {
       'vue-form-generator': VueFormGenerator.component,
     },
+    data() {
+      return {
+        fallback_id: null,
+      };
+    },
     props: {
       id: {
         type: Number,
@@ -69,19 +74,29 @@
     },
     computed: {
       getUri() {
-        return this.uri !== null ? this.uri : this.name;
+        return this.uri || this.name;
+      },
+      getId() {
+        return this.id || this.fallback_id;
       },
     },
     methods: {
-      async load() {
-        await Ajax.get(`${this.getUri}/${this.id}/delete`)
+      async load(dataEvent) {
+        if (_.isNull(this.id) && _.isNull(dataEvent)) {
+          throw String('No entity.id know');
+        }
+
+        if (!_.isNull(dataEvent)) {
+          this.fallback_id = dataEvent.id;
+        }
+        await Ajax.get(`${this.getUri}/${this.getId}/delete`)
           .then((data) => {
             console.log(data);
             // this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));
           });
       },
       async submit() {
-        await Ajax.delete(`${this.getUri}/${this.id}/delete`, this.id)
+        await Ajax.delete(`${this.getUri}/${this.getId}/delete`, this.getId)
           .then((data) => {
             if (data.status) {
               this.$notify({
