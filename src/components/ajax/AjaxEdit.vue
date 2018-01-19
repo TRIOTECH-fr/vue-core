@@ -92,8 +92,8 @@
         await Ajax.get(`${this.getUri}/${this.id}/edit`)
           .then((data) => {
             this.schema.fields = _.form(this.$t, data.form);
-            this.model = data.entity;
-            this.model_back = JSON.parse(JSON.stringify(this.model));
+            this.$set(this, 'model', data.entity);
+            this.model_back = JSON.parse(JSON.stringify(data.entity));
           })
         ;
       },

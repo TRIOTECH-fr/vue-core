@@ -145,6 +145,7 @@
             const deletedData = _.differenceWith(this.items, items, (x, y) => x.id === y.id);
             deletedData.forEach((data) => {
               this.$delete(this.items, _.findIndex(this.items, data));
+              //delete (this.items[_.findIndex(this.items, data)]);
             });
           }
           const updatedData = Ajax.difference(items, this.items, true);

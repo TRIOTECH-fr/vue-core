@@ -26,13 +26,12 @@ Vue.component('fieldDropdown', {
           this.multiselect_model = this.schema.choices.find(x => x.label === initialValue.toString());
         }
       } else {
-        initialValue.reduce((a, b, i) => {
-          a[i] = b.id;
-          return a;
-        }, []);
-        this.multiselect_model = this.schema.choices.filter(
-          x => initialValue.indexOf(parseInt(x.id, 10)),
-        );
+        const data = [];
+        initialValue.forEach((value) => {
+          const temp = this.schema.choices.filter(x => x.id === value.id.toString());
+          data.push(...temp);
+        });
+        this.multiselect_model = data;
       }
     }
   },
