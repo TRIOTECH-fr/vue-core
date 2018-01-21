@@ -1,6 +1,9 @@
-import Lodash from 'lodash';
+import Vue from 'vue';
+import _ from 'lodash';
 
-Lodash.mixin({
+Vue.set(Vue.prototype, '_', _);
+
+_.mixin({
   encode: string => encodeURIComponent(string),
   param(object) {
     return _.reduce(object, (carry, value, key) => `${carry}&${this.encode(key)}=${this.encode(value)}`, '').replace('&', '?');
@@ -20,4 +23,4 @@ Lodash.mixin({
   },
 });
 
-export default window._ = Lodash;
+export default window._ = _;

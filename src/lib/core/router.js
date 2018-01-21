@@ -13,7 +13,7 @@ VueRouter.prototype.push = function push(location, a, b) {
   if (this.app.$f7) {
     const route = this.match(_.clone(location), this.history.current);
     if (route.path) {
-      return this.app.$f7.router.navigate(route.path);
+      return this.app.$f7.router.navigate(route.fullPath, route);
     }
   }
   return vueRouterPush.call(this, location, a, b);
