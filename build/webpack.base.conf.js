@@ -5,8 +5,8 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
-function resolve (dir) {
-  return path.join(process.cwd(), dir)
+function resolve(dir) {
+  return path.join(process.cwd(), dir);
 }
 
 module.exports = {
@@ -24,7 +24,8 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src')
+      '$config': resolve('config'),
+      '@': resolve('src'),
     },
   },
   node: {
@@ -53,6 +54,7 @@ module.exports = {
         loader: 'babel-loader',
         include: [
           resolve('src'),
+          resolve('config'),
           resolve('test'),
           resolve('node_modules/@triotech/vue-core/src'),
           resolve('node_modules/sweet-modal-vue'),
