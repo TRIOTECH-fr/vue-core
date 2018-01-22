@@ -27,7 +27,7 @@ module.exports = {
       }
     }
   },
-  // add your custom rules here
+  // custom rules
   rules: {
     // don't require .vue extension when importing
     'import/extensions': ['error', 'always', {
@@ -52,6 +52,13 @@ module.exports = {
       args: 'after-used',
       ignoreRestSiblings: true,
       varsIgnorePattern: '^_',
+    }],
+    'max-len': ['error', 140, 2, {
+      ignoreUrls: true,
+      ignoreComments: false,
+      ignoreRegExpLiterals: true,
+      ignoreStrings: true,
+      ignoreTemplateLiterals: true,
     }],
   },
 };

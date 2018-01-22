@@ -7,14 +7,14 @@ import _ from '@triotech/vue-core/src/vendor/lodash';
 Vue.use(VueRouter);
 
 const vueRouterPush = VueRouter.prototype.push;
-VueRouter.prototype.push = function push(location, a, b) {
+VueRouter.prototype.push = function push(location, ...args) {
   if (this.app.$f7) {
     const route = this.match(_.clone(location), this.history.current);
     if (route.path) {
       return this.app.$f7.router.navigate(route.fullPath, route);
     }
   }
-  return vueRouterPush.call(this, location, a, b);
+  return vueRouterPush.call(this, location, ...args);
 };
 
 const Router = new VueRouter({
