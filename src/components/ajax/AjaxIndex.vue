@@ -130,15 +130,17 @@
         });
       },
       refresh_data(dataRef, data) {
-        _.each(data, (value, key) => {
-          if (key !== 'id') {
-            if (typeof value === 'object') {
-              this.refresh_data(dataRef[key], value);
-            } else {
-              this.$set(dataRef, key, value);
+        if (typeof dataRef !== 'undefined') {
+          _.each(data, (value, key) => {
+            if (key !== 'id') {
+              if (typeof value === 'object') {
+                this.refresh_data(dataRef[key], value);
+              } else {
+                this.$set(dataRef, key, value);
+              }
             }
-          }
-        });
+          });
+        }
       },
       async refresh() {
         this.isLoading = true;
