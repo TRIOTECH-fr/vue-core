@@ -16,7 +16,12 @@ _.mixin({
 
       if (field.choices !== undefined) {
         _.each(field.choices, (choice) => {
-          choice.label = $t(choice.label);
+          if (choice.label !== undefined) {
+            choice.label = $t(choice.label);
+          }
+          if (choice.name !== undefined) {
+            choice.name = $t(choice.name);
+          }
         });
       }
     });
