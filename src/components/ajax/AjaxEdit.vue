@@ -37,6 +37,7 @@
           fields: [],
         },
         fallback_id: null,
+        editRoute: '',
       };
     },
     props: {
@@ -49,6 +50,10 @@
         default: null,
       },
       uri: {
+        type: String,
+        default: null,
+      },
+      additionnal_route: {
         type: String,
         default: null,
       },
@@ -93,9 +98,17 @@
       },
       getId() {
         return this.id || this.fallback_id;
-      }
+      },
     },
     methods: {
+      editRouteFunc() {
+        this.editRoute = `${this.getUri}/${this.getId}/edit`;
+        if (this.additionnal_route) {
+          this.editRoute = `${this.getUri}/${this.getId}/edit/${this.additionnal_route}`;
+        }
+
+        return this.editRoute;
+      },
       async load(dataEvent = null) {
         this.loading = true;
         if (_.isNull(this.id) && _.isNull(dataEvent)) {
@@ -110,7 +123,8 @@
           }
         }
         this.$set(this, 'model', {});
-        await Ajax.get(`${this.getUri}/${this.getId}/edit`)
+
+        await Ajax.get(this.editRouteFunc())
           .then((data) => {
             this.schema.fields = _.form(this.$t, data.form);
             this.$set(this, 'model', data.entity);
@@ -122,7 +136,7 @@
       async submit() {
         const submitData = Ajax.difference(this.model, this.model_back);
         if (!_.isEmpty(submitData)) {
-          await Ajax.patch(`${this.getUri}/${this.getId}/edit`, submitData)
+          await Ajax.patch(this.editRouteFunc(), submitData)
             .then((data) => {
               if (data.status) {
                 this.$notify({
