@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import Ajax from '@triotech/vue-core/src/lib/http/ajax';
 import Bus from '@triotech/vue-core/src/lib/core/bus';
 import I18n from '@triotech/vue-core/src/lib/core/i18n';
 import Router from '@triotech/vue-core/src/lib/core/router';
@@ -37,6 +38,7 @@ export default new Vue({
     run(options = {}) {
       return window.app = new Vue(_.merge({
         el: '#app',
+        ajax: Ajax,
         bus: Bus,
         i18n: I18n,
         router: Router,
