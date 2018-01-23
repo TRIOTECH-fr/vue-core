@@ -1,11 +1,5 @@
 import Vue from 'vue';
-import Env from '@triotech/vue-core/src/lib/core/env';
-import App from '@triotech/vue-core/src/lib/core/app';
-import Store from '@triotech/vue-core/src/lib/core/store';
-import Router from '@triotech/vue-core/src/lib/core/router';
-import Config from '@triotech/vue-core/src/lib/core/config';
-import Ajax from '@triotech/vue-core/src/lib/http/ajax';
-import Voca from 'voca';
+import Env from '@triotech/vue-core/src/lib/helper/env';
 
 window.addEventListener('message', (event) => {
   if (_.isString(event.data) && event.data.indexOf('webpackHotUpdate') === 0) {
@@ -30,14 +24,13 @@ const Window = new Vue({
 });
 
 if (Env.dev) {
-  window.env = Env;
-  window.app = App;
-  window.config = Config;
-  window.store = Store;
-  window.router = Router;
-  window.ajax = Ajax;
-  window.win = Window;
-  window.voca = Voca;
+  window.components = {};
+
+  Vue.mixin({
+    mounted() {
+      window.components[this._name] = this;
+    },
+  });
 }
 
 export default Window;

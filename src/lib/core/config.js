@@ -15,4 +15,6 @@ const Config = new Vue({
   },
 });
 
+Vue.set(Vue.prototype, '$config', Config);
+
 export default Config;

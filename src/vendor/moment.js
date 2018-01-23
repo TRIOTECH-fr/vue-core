@@ -4,6 +4,8 @@ import moment from 'moment';
 
 import 'moment/locale/fr';
 
-Vue.use(VueMoment, { moment });
+Vue.use(VueMoment, {
+    moment
+});
 
-export default moment;
+export default window.moment = moment;

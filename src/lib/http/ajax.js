@@ -151,4 +151,6 @@ const Ajax = new Vue({
   },
 });
 
+Vue.set(Vue.prototype, '$ajax', Ajax);
+
 export default Ajax;

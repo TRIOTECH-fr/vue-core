@@ -1,12 +1,8 @@
 import Vue from 'vue';
+import Bus from '@triotech/vue-core/src/lib/core/bus';
 import I18n from '@triotech/vue-core/src/lib/core/i18n';
 import Router from '@triotech/vue-core/src/lib/core/router';
 import Store from '@triotech/vue-core/src/lib/core/store';
-import Env from '@triotech/vue-core/src/lib/core/env';
-import Voca from '@triotech/vue-core/src/lib/core/voca';
-import Hash from '@triotech/vue-core/src/lib/core/hash';
-import Bus from '@triotech/vue-core/src/lib/event/bus';
-import Ajax from '@triotech/vue-core/src/lib/http/ajax';
 import App from '@/App';
 import { mapActions } from 'vuex';
 
@@ -39,22 +35,14 @@ Vue.mixin({
 export default new Vue({
   methods: {
     run(options = {}) {
-      const app = new Vue(_.merge({
+      return window.app = new Vue(_.merge({
         el: '#app',
+        bus: Bus,
         i18n: I18n,
         router: Router,
         store: Store,
-        env: Env,
-        ajax: Ajax,
-        voca: Voca,
-        hash: Hash,
-        bus: Bus,
         render: h => h(App),
       }, options));
-
-      window.app = app;
-
-      return app;
     },
   },
 });

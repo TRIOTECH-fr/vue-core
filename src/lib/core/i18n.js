@@ -17,7 +17,6 @@ const I18n = new VueI18n({
 // TODO remove translation doesn't exist alert
 // https://github.com/kazupon/vue-i18n/issues/96
 
-
 // TODO replace vue-i18n with vuex-i18n (https://github.com/dkfbasel/vuex-i18n)
 // import VueI18n from 'vuex-i18n';
 // import Store from '@/lib/core/Store';
