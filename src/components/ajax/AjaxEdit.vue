@@ -6,7 +6,7 @@
     </div>
     <form v-else @submit.prevent="submit">
       <template v-if="this.schema.fields.length > 0">
-        <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" />
+        <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" :class="formClass"/>
         <b-row>
           <b-col>
             <b-button block type="submit" variant="primary">{{ $t('actions.edit') }}</b-button>
@@ -44,6 +44,9 @@
       id: {
         type: Number,
         default: null,
+      },
+      formClass: {
+        type: String,
       },
       name: {
         type: String,
