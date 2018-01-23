@@ -80,6 +80,10 @@
         type: String,
         default: null,
       },
+      defaultModelValues: {
+        type: Object,
+        default: null,
+      },
     },
     async mounted() {
       if (this.loadOnMount) {
@@ -130,7 +134,8 @@
         await Ajax.get(this.editRouteFunc())
           .then((data) => {
             this.schema.fields = _.form(this.$t, data.form);
-            this.$set(this, 'model', data.entity);
+            const modelTemp = this.defaultModelValues !== null ? this.defaultModelValues : {};
+            this.$set(this, 'model', _.merge(modelTemp, data.entity));
             this.model_back = JSON.parse(JSON.stringify(data.entity));
             this.loading = false;
           })
