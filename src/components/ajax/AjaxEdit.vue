@@ -20,7 +20,6 @@
 </template>
 
 <script>
-  import Ajax from '@triotech/vue-core/src/lib/http/ajax';
   import VueFormGenerator from '@triotech/vue-core/src/bind/vue-form-generator';
 
   export default {
@@ -131,7 +130,7 @@
         }
         this.$set(this, 'model', {});
 
-        await Ajax.get(this.editRouteFunc())
+        await this.$ajax.get(this.editRouteFunc())
           .then((data) => {
             this.schema.fields = _.form(this.$t, data.form);
             const modelTemp = this.defaultModelValues !== null ? this.defaultModelValues : {};
@@ -142,9 +141,9 @@
         ;
       },
       async submit() {
-        const submitData = Ajax.difference(this.model, this.model_back);
+        const submitData = this.$ajax.difference(this.model, this.model_back);
         if (!_.isEmpty(submitData)) {
-          await Ajax.patch(this.editRouteFunc(), submitData)
+          await this.$ajax.patch(this.editRouteFunc(), submitData)
             .then((data) => {
               if (data.status) {
                 this.$notify({

@@ -11,7 +11,6 @@
 </template>
 
 <script>
-  import Ajax from '@triotech/vue-core/src/lib/http/ajax';
   import VueFormGenerator from '@triotech/vue-core/src/bind/vue-form-generator';
 
   export default {
@@ -89,14 +88,14 @@
         if (!_.isNull(dataEvent)) {
           this.fallback_id = dataEvent.id;
         }
-        await Ajax.get(`${this.getUri}/${this.getId}/delete`)
+        await this.$ajax.get(`${this.getUri}/${this.getId}/delete`)
           .then((data) => {
             console.log(data);
             // this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));
           });
       },
       async submit() {
-        await Ajax.delete(`${this.getUri}/${this.getId}/delete`, this.getId)
+        await this.$ajax.delete(`${this.getUri}/${this.getId}/delete`, this.getId)
           .then((data) => {
             if (data.status) {
               this.$notify({

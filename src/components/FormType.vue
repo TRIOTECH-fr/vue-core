@@ -93,8 +93,6 @@
 </template>
 
 <script>
-  import Ajax from '@triotech/vue-core/src/lib/http/ajax';
-
   export default {
     name: 'FormTypeComponent',
     props: {
@@ -139,7 +137,7 @@
     },
     methods: {
       send() {
-        Ajax.post('public/contact/', {
+        this.$ajax.post('public/contact/', {
           contact: _.clone(this.contact),
         }).then((data) => {
           if (data.status) {

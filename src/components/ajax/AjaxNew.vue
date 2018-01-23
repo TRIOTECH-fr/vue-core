@@ -17,7 +17,6 @@
 </template>
 
 <script>
-  import Ajax from '@triotech/vue-core/src/lib/http/ajax';
   import VueFormGenerator from '@triotech/vue-core/src/bind/vue-form-generator';
 
   export default {
@@ -93,13 +92,13 @@
           : {}
         ;
         this.$set(this, 'model', modelTemp);
-        await Ajax.get(`${this.getUri}/new`)
+        await this.$ajax.get(`${this.getUri}/new`)
           .then((data) => {
             this.$set(this.schema, 'fields', _.form(this.$t, data));
           });
       },
       async submit() {
-        await Ajax.post(`${this.getUri}/new`, this.model)
+        await this.$ajax.post(`${this.getUri}/new`, this.model)
           .then((data) => {
             if (data.status) {
               this.$notify({

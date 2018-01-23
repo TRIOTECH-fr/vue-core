@@ -153,7 +153,7 @@
               //delete (this.items[_.findIndex(this.items, data)]);
             });
           }
-          const updatedData = Ajax.difference(items, this.items, true);
+          const updatedData = this.$ajax.difference(items, this.items, true);
           updatedData.forEach((data) => {
             const dataRef = this.items.find(x => x.id === data.id);
             if (typeof dataRef !== 'undefined') {
