@@ -147,6 +147,7 @@
                 if (this.closeModal) {
                   this.$bus.$emit(`t-event-t-modal-${this.refModal}-close`);
                 }
+                this.$bus.$emit(`t.event.edit.submit.success.${this.name}`);
               } else {
                 this.$notify({
                   title: this.$t(`flashes.${this.name}.edit_title`),
