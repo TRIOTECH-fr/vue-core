@@ -7,6 +7,7 @@
                 </slot>
             </div>
             <template :class="{ hidden: !isLoading }">
+                <slot name="header"></slot>
                 <template v-if="items.length > 0">
                     <table class="table" v-if="renderMode === 'table'">
                         <slot name="header">
