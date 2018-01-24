@@ -90,12 +90,12 @@
       }
 
       if (!this.loadOnMount && this.refModal !== null) {
-        this.$bus.$on(`t-event-t-modal-${this.refModal}-open`, this.load);
+        this.$bus.$on(`t-event.t-modal.${this.refModal}.open`, this.load);
       }
     },
     beforeDestroy() {
       if (!this.loadOnMount && this.refModal !== null) {
-        this.$off(`t-event-t-modal-${this.refModal}-open`);
+        this.$off(`t-event.t-modal.${this.refModal}.open`);
       }
     },
     computed: {
@@ -152,9 +152,9 @@
                   type: 'success',
                 });
                 if (this.closeModal) {
-                  this.$bus.$emit(`t-event-t-modal-${this.refModal}-close`);
+                  this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
                 }
-                this.$bus.$emit(`t.event.edit.submit.success.${this.name}`);
+                this.$bus.$emit(`t-event.edit-submit.${this.name}.success`);
               } else {
                 this.$notify({
                   title: this.$t(`flashes.${this.name}.edit_title`),
@@ -164,7 +164,7 @@
               }
 
               if (this.refreshAjaxIndex) {
-                this.$bus.$emit(`t-event-ajax-index-${this.refAjaxIndex}-refresh`);
+                this.$bus.$emit(`t-event.ajax-index.${this.refAjaxIndex}.refresh`);
               }
             }, (data) => {
               if (data.response.data.code === 400) {

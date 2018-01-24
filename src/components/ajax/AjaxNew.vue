@@ -72,12 +72,12 @@
       }
 
       if (!this.loadOnMount && this.refModal !== null) {
-        this.$bus.$on(`t-event-t-modal-${this.refModal}-opened`, this.load);
+        this.$bus.$on(`t-event.t-modal.${this.refModal}.opened`, this.load);
       }
     },
     beforeDestroy() {
       if (!this.loadOnMount && this.refModal !== null) {
-        this.$off(`t-event-t-modal-${this.refModal}-opened`);
+        this.$off(`t-event.t-modal.${this.refModal}.opened`);
       }
     },
     computed: {
@@ -107,9 +107,9 @@
                 type: 'success',
               });
               if (this.closeModal) {
-                this.$bus.$emit(`t-event-t-modal-${this.refModal}-close`);
+                this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
               }
-              this.$bus.$emit(`t.event.new.submit.success.${this.name}`);
+              this.$bus.$emit(`t-event.new-submit.success.${this.name}`);
             } else {
               this.$notify({
                 title: this.$t(`flashes.${this.name}.create_title`),
@@ -118,7 +118,7 @@
               });
             }
             if (this.refreshAjaxIndex) {
-              this.$bus.$emit(`t-event-ajax-index-${this.refAjaxIndex}-refresh`);
+              this.$bus.$emit(`t-event.ajax-index.${this.refAjaxIndex}.refresh`);
             }
           }, (data) => {
             if (data.response.data.code === 400) {

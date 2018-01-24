@@ -48,7 +48,7 @@
         this.$bus.$emit(this.event_name('closed'));
       },
       event_name(action) {
-        return `t-event-t-modal-${this.eventId}-${action}`;
+        return `t-event.t-modal.${this.eventId}.${action}`;
       },
       open_modal() {
         this.$refs[this.modal_uid].open();

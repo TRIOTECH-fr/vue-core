@@ -7,7 +7,7 @@
                 </slot>
             </div>
             <template :class="{ hidden: !isLoading }">
-                <slot v-if="!isLoading" name="header"></slot>
+                <slot v-if="!isLoading" name="loading-header"></slot>
                 <template v-if="items.length > 0">
                     <table class="table" v-if="renderMode === 'table'">
                         <slot name="header">
@@ -126,7 +126,7 @@
     },
     methods: {
       event_name(action) {
-        return `t-event-ajax-index-${this.eventId}-${action}`;
+        return `t-event.ajax-index.${this.eventId}.${action}`;
       },
       async load() {
         this.isLoading = true;

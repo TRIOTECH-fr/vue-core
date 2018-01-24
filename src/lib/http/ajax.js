@@ -38,11 +38,27 @@ const Ajax = new Vue({
       }
       return url;
     },
-    dataToFormData(data) {
+    dataToFormData(dataIn) {
+      function getFormData(formData, data, stack = null) {
+        if (data instanceof Object) {
+          _.forOwn(data, (value, key) => {
+            if (value instanceof Object && value instanceof Blob) {
+              formData.append(key, value);
+            } else if (value instanceof Object && Array.isArray(value)) {
+              value.forEach((subValue) => {
+                formData.append(`${key}[]`, subValue);
+              });
+            } else if (value instanceof Object) {
+              getFormData(formData, value, stack ? `${stack}.${value}` : value);
+            } else {
+              formData.append(key, value);
+            }
+          });
+        }
+      }
+
       const dataParam = new FormData();
-      _.forOwn(data, (value, key) => {
-        dataParam.append(key.toString(), value);
-      });
+      getFormData(dataParam, dataIn);
       return dataParam;
     },
     sync() {
