@@ -8,6 +8,9 @@ _.mixin({
   param(object) {
     return _.reduce(object, (carry, value, key) => `${carry}&${this.encode(key)}=${this.encode(value)}`, '').replace('&', '?');
   },
+  args(array) {
+    return _.reduce(array, (carry, arg, index, args) => _.extend(carry, index % 2 === 1 && {[args[index - 1]]: arg}), {});
+  },
   form($t, fields) {
     return _.each(fields, (field) => {
       // TODO https://github.com/vue-generators/vue-form-generator/issues/352
