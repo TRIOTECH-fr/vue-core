@@ -38,6 +38,13 @@ const Ajax = new Vue({
       }
       return url;
     },
+    dataToFormData(data) {
+      const dataParam = new FormData();
+      _.forOwn(data, (value, key) => {
+        dataParam.append(key.toString(), value);
+      });
+      return dataParam;
+    },
     sync() {
       this.wait = true;
       return this;
@@ -49,7 +56,7 @@ const Ajax = new Vue({
       return this.request(this.build(url, 'GET', data, config));
     },
     post(url, data, config) {
-      return this.request(this.build(url, 'POST', data, config));
+      return this.request(this.build(url, 'POST', this.dataToFormData(data), config));
     },
     put(url, data, config) {
       return this.request(this.build(url, 'PUT', data, config));

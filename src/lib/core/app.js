@@ -36,7 +36,7 @@ Vue.mixin({
 export default new Vue({
   methods: {
     run(options = {}) {
-      return window.app = new Vue(_.merge({
+      return window.app = new Vue({
         el: '#app',
         ajax: Ajax,
         bus: Bus,
@@ -44,7 +44,8 @@ export default new Vue({
         router: Router,
         store: Store,
         render: h => h(App),
-      }, options));
+        ...options,
+      });
     },
   },
 });

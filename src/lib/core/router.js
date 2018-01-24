@@ -33,15 +33,17 @@ const Router = new VueRouter({
 
 // https://router.vuejs.org/en/advanced/navigation-guards.html
 Router.beforeEach((to, from, next) => {
-  const vm = this.a.app;
-  _.each(Config.get('firewall'), (data, path) => {
-    const state = _.isObject(data) ? data.state : data;
-    const redirect = _.isObject(data) ? data.redirect : '/';
-    if (to.path.match(path) && !vm.$store.state[state]) {
-      vm.$router.push(redirect);
-    }
+  const vm = this.a.app; // this.a instanceof VueRouter
+  vm.$nextTick(() => {
+    _.each(Config.get('firewall'), (data, path) => {
+      const state = _.isObject(data) ? data.state : data;
+      const redirect = _.isObject(data) ? data.redirect : '/';
+      if (to.path.match(path) && !vm.$store.state[state]) {
+        vm.$router.push(redirect);
+      }
+    });
+    next();
   });
-  next();
 });
 
 Router.beforeEach((to, from, next) => {
@@ -53,4 +55,3 @@ Router.beforeEach((to, from, next) => {
 });
 
 export default Router;
-
