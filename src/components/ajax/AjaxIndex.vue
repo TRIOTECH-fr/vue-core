@@ -172,8 +172,12 @@
 </script>
 
 <style lang="scss">
-    .hidden {
-        display: none;
-    }
+  .hidden {
+    display: none;
+  }
+
+  .alert.alert-info {
+    margin-top: 1rem;
+  }
 </style>
 
