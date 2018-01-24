@@ -1,9 +1,11 @@
 <template>
-    <sweet-modal @open="modal_open" @close="modal_close" :ref="modal_uid" class="modal-form" :title="title">
-        <slot>
+    <div>
+      <sweet-modal @open="modal_open" @close="modal_close" :ref="modal_uid" class="modal-form" :title="title">
+          <slot>
 
-        </slot>
-    </sweet-modal>
+          </slot>
+      </sweet-modal>
+    </div>
 </template>
 
 <script>
@@ -58,6 +60,10 @@
   };
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+  /deep/ .sweet-modal {
+    .sweet-title > h2 {
+      line-height: 64px !important;
+    }
+  }
 </style>
