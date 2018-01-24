@@ -30,7 +30,7 @@
                     </b-list-group>
                     <!-- TODO render custom, render slot -->
                 </template>
-                <b-alert v-else-if="init" show>{{ $t(entityName + '.empty_set') }}</b-alert>
+                <b-alert v-else-if="init" show>{{ $t('pages.' + entityName + '.empty_set') }}</b-alert>
                 <slot v-if="!isLoading" name="footer"/>
             </template>
         </b-col>
