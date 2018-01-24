@@ -22,14 +22,15 @@ form:
   phone: Téléphone
 
 actions:
+  cancel: Annuler
+  create: Créer
+  delete: Supprimer
+  duplicate: Dupliquer
+  edit: Editer
   go_back: Retour
   login: Connexion
   logout: Déconnexion
-  create: Créer
-  edit: Editer
-  delete: Supprimer
-  duplicate: Dupliquer
-  move_up: Monter
   move_down: Descendre
+  move_up: Monter
+  save: Enregistrer
   show: Consulter
-  cancel: Annuler

@@ -9,7 +9,7 @@
         <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" :class="formClass"/>
         <b-row>
           <b-col>
-            <b-button block type="submit" variant="primary">{{ $t('actions.edit') }}</b-button>
+            <b-button block type="submit" variant="primary">{{ $t('actions.save') }}</b-button>
           </b-col>
         </b-row>
       </template>
