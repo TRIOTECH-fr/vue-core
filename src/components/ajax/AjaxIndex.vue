@@ -7,7 +7,7 @@
                 </slot>
             </div>
             <template :class="{ hidden: !isLoading }">
-                <slot name="header"></slot>
+                <slot v-if="!isLoading" name="header"></slot>
                 <template v-if="items.length > 0">
                     <table class="table" v-if="renderMode === 'table'">
                         <slot name="header">
@@ -31,7 +31,7 @@
                     <!-- TODO render custom, render slot -->
                 </template>
                 <b-alert v-else-if="init" show>{{ $t(entityName + '.empty_set') }}</b-alert>
-                <slot name="footer"/>
+                <slot v-if="!isLoading" name="footer"/>
             </template>
         </b-col>
         <slot name="modal"/>
