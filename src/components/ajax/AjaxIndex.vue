@@ -28,6 +28,13 @@
                             <b-list-group-item>{{ item }} - {{ index }}</b-list-group-item>
                         </slot>
                     </b-list-group>
+                    <div class="mosaic" v-else-if="renderMode === 'mosaic'">
+                        <b-row>
+                          <slot name="item" v-for="(item, index) in items" :item="item" :index="index">
+                              <b-col sm="3">{{ item }} - {{ index }}</b-col>
+                          </slot>
+                        </b-row>
+                    </div>
                     <!-- TODO render custom, render slot -->
                 </template>
                 <b-alert v-else-if="init" show>{{ $t('pages.' + entityName + '.empty_set') }}</b-alert>
