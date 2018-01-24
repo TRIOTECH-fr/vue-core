@@ -14,6 +14,10 @@ const Store = new Vuex.Store({
   state: {
     filters: {},
   },
+  getters: {
+    cookie: state => state.cookie,
+    oauth: state => state.oauth,
+  },
   mutations: {
     setKeyValue(state, data) {
       state[data.key] = data.value;

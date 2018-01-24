@@ -34,3 +34,5 @@ actions:
   move_up: Monter
   save: Enregistrer
   show: Consulter
+  cancel: Annuler
+  continue: Continuer

@@ -1,3 +1,1 @@
-import VueX from 'vuex';
-
-export default VueX;
+export * from 'vuex';
