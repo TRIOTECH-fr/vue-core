@@ -11,6 +11,19 @@ _.mixin({
   args(array) {
     return _.reduce(array, (carry, arg, index, args) => _.extend(carry, index % 2 === 1 && {[args[index - 1]]: arg}), {});
   },
+  differenceObj(objectBase = {}, baseBase = {}, keepIdentifier = false, identifier = 'id') {
+    // eslint-disable-next-line arrow-body-style
+    const changes = (object, base) => {
+      return _.transform(object, (result, value, key) => {
+        if (!_.isEqual(value, base[key]) || (keepIdentifier && key === identifier)) {
+          result[key] = (_.isObject(value) && _.isObject(base[key]))
+            ? changes(value, base[key])
+            : value;
+        }
+      });
+    };
+    return changes(objectBase, baseBase);
+  },
   form($t, fields) {
     return _.each(fields, (field) => {
       // TODO https://github.com/vue-generators/vue-form-generator/issues/352

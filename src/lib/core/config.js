@@ -6,7 +6,8 @@ import parameters from 'json-loader!yaml-loader!@/../config/parameters.yml';
 
 const Config = new Vue({
   computed: {
-    host: () => (localStorage.getItem('host') || parameters.host).replace(/\/$/, '').concat('/'),
+    host: () => (localStorage.getItem('host') || parameters.host).replace(/\/$/, ''),
+    endpoint: () => ((localStorage.getItem('endpoint') || parameters.endpoint) || '' ).replace(/\/$/, '').concat('/'),
   },
   methods: {
     // TODO handle dot notation

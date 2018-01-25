@@ -19,22 +19,19 @@ const Ajax = new Vue({
   },
   methods: {
     difference(objectBase = {}, baseBase = {}, keepIdentifier = false, identifier = 'id') {
-      // eslint-disable-next-line arrow-body-style
-      const changes = (object, base) => {
-        return _.transform(object, (result, value, key) => {
-          if (!_.isEqual(value, base[key]) || (keepIdentifier && key === identifier)) {
-            result[key] = (_.isObject(value) && _.isObject(base[key]))
-              ? changes(value, base[key])
-              : value;
-          }
-        });
-      };
-      return changes(objectBase, baseBase);
+      // 25/01/18 deprecated function ...
+      // eslint-disable-next-line no-console
+      console.log('%cthis.$ajax.difference is deprecated, please use _.differenceObj() instead', 'color:orange;background-color:black;padding:3px 10px;');
+      return _.differenceObj(objectBase, baseBase, keepIdentifier, identifier);
     },
-    url(config) {
+    getUploadsUri(location) {
+      return this.url(this.build(location), true);
+    },
+    url(config, withoutEndpoint = false) {
       let url = config && config.url;
+      const endPoint = withoutEndpoint ? '/' : (Config.endpoint || '');
       if (url && url.indexOf('://') === -1) {
-        url = `${Config.host}${url}`;
+        url = `${Config.host}${endPoint}${url}`;
       }
       return url;
     },
@@ -56,7 +53,6 @@ const Ajax = new Vue({
           });
         }
       }
-
       const dataParam = new FormData();
       getFormData(dataParam, dataIn);
       return dataParam;

@@ -141,7 +141,7 @@
         ;
       },
       async submit() {
-        const submitData = this.$ajax.difference(this.model, this.model_back);
+        const submitData = _.differenceObj(this.model, this.model_back);
         if (!_.isEmpty(submitData)) {
           await this.$ajax.patch(this.editRouteFunc(), submitData)
             .then((data) => {
