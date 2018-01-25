@@ -1,6 +1,6 @@
 <template>
     <div>
-      <sweet-modal @open="modal_open" @close="modal_close" :ref="modal_uid" class="modal-form" :title="title">
+      <sweet-modal @open="modal_open" @close="modal_close" :ref="modal_uid" class="modal-form" :title="title" :width="width">
           <slot>
 
           </slot>
@@ -19,6 +19,10 @@
       title: {
         type: String,
         default: null,
+      },
+      width: {
+        type: String,
+        default: 'auto',
       },
     },
     mounted() {
