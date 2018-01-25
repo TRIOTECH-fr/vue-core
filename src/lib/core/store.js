@@ -15,12 +15,14 @@ const Store = new Vuex.Store({
     filters: {},
   },
   getters: {
-    cookie: state => state.cookie,
     oauth: state => state.oauth,
   },
   mutations: {
     setKeyValue(state, data) {
       state[data.key] = data.value;
+    },
+    addKeyValue(state, data) {
+      state[data.key].push(data.value);
     },
     updateFilter(state, filter) {
       const name = filter && filter.name;
@@ -46,6 +48,19 @@ const Store = new Vuex.Store({
         this._mutations.setKeyValue[0](data);
       } else {
         commit('setKeyValue', data);
+      }
+    },
+    addKeyValueAction({ commit }, data) {
+      if (!_.isObject(data)) {
+        console.warn('addKeyValueAction needs a data object as argument');
+      } else if (!_.isString(data.key)) {
+        console.warn('addKeyValueAction data object needs a string key named "key"');
+      } else if (_.isUndefined(data.value)) {
+        console.warn('addKeyValueAction data object needs a defined key named "value"');
+      } else if (data.commit === false) {
+        this._mutations.addKeyValue[0](data);
+      } else {
+        commit('addKeyValue', data);
       }
     },
     updateFilterAction({ commit }, filter) {

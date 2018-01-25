@@ -35,3 +35,4 @@ actions:
   move_up: Monter
   save: Enregistrer
   show: Consulter
+  loading: Chargement...

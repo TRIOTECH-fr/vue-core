@@ -17,7 +17,7 @@ Vue.mixin({
     let metaInfo = {};
     const regex = new RegExp(/(index|show|edit|delete)?page$/i);
     if (name && name.match(regex)) {
-      const page = Voca(name.replace(regex, '')).snakeCase().lowerCase().value();
+      const page = this.$voca(name.replace(regex, '')).snakeCase().lowerCase().value();
       metaInfo = {
         title: this.$t(`pages.${page}.meta.title`),
         meta: [{
@@ -29,7 +29,7 @@ Vue.mixin({
     return metaInfo;
   },
   methods: {
-    ...mapActions(['setKeyValueAction']),
+    ...mapActions(['setKeyValueAction', 'addKeyValueAction']),
   },
 });
 

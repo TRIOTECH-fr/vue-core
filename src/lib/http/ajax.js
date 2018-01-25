@@ -2,10 +2,12 @@ import Vue from 'vue';
 import { mapActions } from 'vuex';
 import VueAxios from 'vue-axios';
 import Axios from 'axios';
+import qs from 'qs';
 import Config from '@triotech/vue-core/src/lib/core/config';
 import Router from '@triotech/vue-core/src/lib/core/router';
 import Store from '@triotech/vue-core/src/lib/core/store';
 import _ from '@triotech/vue-core/src/vendor/lodash';
+import Y from '@triotech/vue-core/src/lib/helper/y';
 
 Vue.use(VueAxios, Axios);
 
@@ -36,7 +38,7 @@ const Ajax = new Vue({
       return url;
     },
     dataToFormData(dataIn) {
-      function getFormData(formData, data, stack = null) {
+      const getFormData = Y(f => (formData, data, stack = null) => {
         if (data instanceof Object) {
           _.forOwn(data, (value, key) => {
             if (value instanceof Object && value instanceof Blob) {
@@ -46,16 +48,15 @@ const Ajax = new Vue({
                 formData.append(`${key}[]`, subValue);
               });
             } else if (value instanceof Object) {
-              getFormData(formData, value, stack ? `${stack}.${value}` : value);
+              f(formData, value, stack ? `${stack}.${value}` : value);
             } else {
               formData.append(key, value);
             }
           });
         }
-      }
-      const dataParam = new FormData();
-      getFormData(dataParam, dataIn);
-      return dataParam;
+        return formData;
+      });
+      return getFormData(new FormData(), _.isString(dataIn) ? qs.parse(dataIn) : dataIn);
     },
     sync() {
       this.wait = true;
@@ -148,7 +149,7 @@ const Ajax = new Vue({
             if (data.error_description.match(/expired/i) && error.response.status === 401) {
               delete config.headers;
               return this.refresh().then(this.asyncRequest.bind(this, config));
-            } else if (data.error_description.match(/invalid/i) || ( data.error_description.match(/expired/i) && error.response.status === 400 )) {
+            } else if (data.error_description.match(/invalid/i) || (data.error_description.match(/expired/i) && error.response.status === 400)) {
               this.setKeyValueAction({ key: 'oauth', value: null });
               Router.push('/login');
               location.reload();
