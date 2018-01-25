@@ -39,6 +39,11 @@ Vue.component('fieldDatePicker', {
     },
   },
   watch: {
+    model(newValue) {
+      if (Object.keys(newValue).length < 1) {
+        this.datePicker_model = '';
+      }
+    },
     datePicker_model(newValue, OldValue) {
       if (this.format(newValue) !== this.format(OldValue)) {
         this.setModelValueByPath(this.schema.model, this.format(newValue));

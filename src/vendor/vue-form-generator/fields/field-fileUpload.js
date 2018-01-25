@@ -12,10 +12,7 @@ Vue.component('fieldFileUpload', {
   },
   mixins: [VueFormGenerator.abstractField],
   mounted() {
-    const initialValue = this.modelNameToProperty(this.schema.model);
-    if (!_.isNull(initialValue)) {
-      console.log(initialValue);
-    }
+    // security issue, input type file is in read-only mode ...
   },
   methods: {
     onValueChange(evt) {
@@ -33,6 +30,11 @@ Vue.component('fieldFileUpload', {
     },
   },
   watch: {
+    model(newValue) {
+      if (Object.keys(newValue).length < 1) {
+        document.getElementById(this.getFieldID(this.schema)).value = '';
+      }
+    },
     data(newValue, OldValue) {
       if (newValue !== OldValue) {
         this.setModelValueByPath(this.schema.model, newValue);

@@ -47,6 +47,11 @@ Vue.component('fieldDropdown', {
     },
   },
   watch: {
+    model(newValue) {
+      if (Object.keys(newValue).length < 1) {
+        this.multiselect_model = null;
+      }
+    },
     multiselect_model(newValue, OldValue) {
       if (this.newValue !== OldValue) {
         this.setModelValueByPath(this.schema.model, this.value);
@@ -70,9 +75,6 @@ Vue.component('fieldDropdown', {
         return _.isNaN(parseInt(this.multiselect_model.id, 10))
           ? this.multiselect_model.id
           : parseInt(this.multiselect_model.id, 10);
-      },
-      set(a) {
-        console.log(a);
       },
     },
   },
