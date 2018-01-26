@@ -17,7 +17,7 @@ Vue.component('fieldFileUpload', {
   methods: {
     onValueChange(evt) {
       if (evt.target.files.length > 0) {
-        if (evt.target.files.length > 1) {
+        if (this.schema.multiple) {
           this.data = evt.target.files;
         } else {
           this.data = evt.target.files[0];
