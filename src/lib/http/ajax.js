@@ -38,19 +38,20 @@ const Ajax = new Vue({
       return url;
     },
     dataToFormData(dataIn) {
+      const formatKey = (stack, key) => (stack ? `${stack}[${key}]` : key);
       const getFormData = Y(f => (formData, data, stack = null) => {
         if (data instanceof Object) {
           _.forOwn(data, (value, key) => {
             if (value instanceof Object && value instanceof Blob) {
-              formData.append(key, value);
+              formData.append(formatKey(stack, key), value);
             } else if (value instanceof Object && Array.isArray(value)) {
               value.forEach((subValue) => {
-                formData.append(`${key}[]`, subValue);
+                formData.append(`${formatKey(stack, key)}[]`, subValue);
               });
             } else if (value instanceof Object) {
-              f(formData, value, stack ? `${stack}.${value}` : value);
+              f(formData, value, formatKey(stack, key));
             } else {
-              formData.append(key, value);
+              formData.append(formatKey(stack, key), value);
             }
           });
         }
