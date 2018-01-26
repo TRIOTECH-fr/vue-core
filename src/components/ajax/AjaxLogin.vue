@@ -94,6 +94,7 @@
               text: this.$t('flashes.login.success'),
               type: 'success',
             });
+            this.forward();
           })
           .catch((err) => {
             if (err.response) {
