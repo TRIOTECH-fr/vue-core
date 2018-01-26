@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueFormGenerator from 'vue-form-generator';
 
 Vue.component('fieldFileUpload', {
-  template: '<input @change="onValueChange" type="file" class="form-control-file" :id="getFieldID(schema)">',
+  template: '<input :multiple="schema.multiple" @change="onValueChange" type="file" class="form-control-file" :id="getFieldID(schema)">',
   components: {
   },
   data() {
@@ -17,7 +17,11 @@ Vue.component('fieldFileUpload', {
   methods: {
     onValueChange(evt) {
       if (evt.target.files.length > 0) {
-        this.data = evt.target.files[0];
+        if (evt.target.files.length > 1) {
+          this.data = evt.target.files;
+        } else {
+          this.data = evt.target.files[0];
+        }
       }
     },
     modelNameToProperty(modelName) {
