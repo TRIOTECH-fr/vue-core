@@ -40,19 +40,46 @@
         type: String,
         default: null,
       },
+      closeModal: {
+        type: Boolean,
+        default: false,
+      },
+      loadOnMount: {
+        type: Boolean,
+        default: true,
+      },
+      defaultModelValues: {
+        type: Object,
+        default: null,
+      },
     },
-    async mounted() {
-      if (this.$store.state.oauth) {
-        this.forward();
-      } else {
-        await Ajax.get(this.uri)
-          .then((data) => {
-            this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));
-          })
-        ;
+    mounted() {
+      if (this.loadOnMount) {
+        this.load();
+      }
+
+      if (!this.loadOnMount && this.refModal !== null) {
+        this.$bus.$on(`t-event.t-modal.${this.refModal}.opened`, this.load);
       }
     },
     methods: {
+      async load() {
+        const modelTemp = this.defaultModelValues !== null
+          ? this.defaultModelValues
+          : this.model
+        ;
+        this.$set(this, 'model', modelTemp);
+
+        if (this.$store.state.oauth) {
+          this.forward();
+        } else {
+          await Ajax.get(this.uri)
+            .then((data) => {
+              this.$set(this.schema, 'fields', _.form(this.$t, data));
+            })
+          ;
+        }
+      },
       successRoute() {
         if (typeof this.success_route === 'function') {
           return this.success_route();
@@ -60,18 +87,30 @@
         return this.success_route;
       },
       async submit() {
-        await Ajax.login(this.model).then(this.forward).catch((err) => {
-          if (err.response) {
+        await Ajax.login(this.model)
+          .then(() => {
             this.$notify({
               title: this.$t('flashes.login.title'),
-              text: this.$t(`flashes.login.${err.response.data.error}`),
-              type: 'error',
+              text: this.$t('flashes.login.success'),
+              type: 'success',
             });
-          }
-        });
+          })
+          .catch((err) => {
+            if (err.response) {
+              this.$notify({
+                title: this.$t('flashes.login.title'),
+                text: this.$t(`flashes.login.${err.response.data.error}`),
+                type: 'error',
+              });
+            }
+          })
+        ;
       },
       forward() {
-        this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
+        if (this.closeModal) {
+          this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
+        }
+        this.$bus.$emit(`t-event.new-submit.${this.name}.success`);
         this.$router.push(this.successRoute());
       },
     },
