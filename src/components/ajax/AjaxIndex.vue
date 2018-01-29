@@ -16,7 +16,7 @@
                                 <th>{{ $t('table.index') }}</th>
                             </tr>
                         </slot>
-                        <slot name="item" v-for="(item, index) in items" :item="item" :index="index">
+                        <slot name="item" v-for="(item, index) in listOverCallBack(items)" :item="item" :index="index">
                             <tr>
                                 <td>{{ item }}</td>
                                 <td>{{ index }}</td>
@@ -24,13 +24,13 @@
                         </slot>
                     </table>
                     <b-list-group v-else-if="renderMode === 'list'">
-                        <slot name="item" v-for="(item, index) in items" :item="item" :index="index">
+                        <slot name="item" v-for="(item, index) in listOverCallBack(items)" :item="item" :index="index">
                             <b-list-group-item>{{ item }} - {{ index }}</b-list-group-item>
                         </slot>
                     </b-list-group>
                     <div class="mosaic" v-else-if="renderMode === 'mosaic'">
                         <b-row>
-                          <slot name="item" v-for="(item, index) in items" :item="item" :index="index">
+                          <slot name="item" v-for="(item, index) in listOverCallBack(items)" :item="item" :index="index">
                               <b-col sm="3">{{ item }} - {{ index }}</b-col>
                           </slot>
                         </b-row>
@@ -96,6 +96,10 @@
         type: String,
         default: 'table',
       },
+      orderCallBack: {
+        type: Function,
+        default: list => list,
+      },
     },
     data() {
       return {
@@ -125,6 +129,9 @@
       this.$bus.$off(this.event_name('refresh'));
     },
     methods: {
+      listOverCallBack(list) {
+        return this.orderCallBack(list);
+      },
       event_name(action) {
         return `t-event.ajax-index.${this.eventId}.${action}`;
       },
