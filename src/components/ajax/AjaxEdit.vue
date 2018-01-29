@@ -134,7 +134,7 @@
           .then((data) => {
             this.schema.fields = _.form(this.$t, data.form);
             const modelTemp = this.defaultModelValues !== null ? this.defaultModelValues : {};
-            this.$set(this, 'model', _.merge(modelTemp, data.entity));
+            this.$set(this, 'model', _.defaultsDeepObj(data.entity, modelTemp));
             this.model_back = JSON.parse(JSON.stringify(data.entity));
             this.loading = false;
           })

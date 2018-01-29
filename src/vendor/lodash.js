@@ -11,7 +11,27 @@ _.mixin({
   args(array) {
     return _.reduce(array, (carry, arg, index, args) => _.extend(carry, index % 2 === 1 && {[args[index - 1]]: arg}), {});
   },
-  differenceObj(objectBase = {}, baseBase = {}, keepIdentifier = false, identifier = 'id') {
+  defaultsDeepObj(baseObject = {}, baseBase = {}) {
+    // eslint-disable-next-line arrow-body-style
+    const addValue = (object = {}, base = {}) => {
+      _.map(base, (currentObj, key) => {
+        if (Object.prototype.hasOwnProperty.call(object, key)) {
+          if (_.isObject(currentObj) && !(currentObj instanceof Blob)) {
+            // Do not simplify by object[key] == object[key] || {} !
+            if (_.isNull(object[key])) {
+              object[key] = {};
+            }
+            addValue(object[key], currentObj);
+          }
+        } else {
+          object[key] = null;
+        }
+      });
+      return object;
+    };
+    return addValue(baseObject, baseBase);
+  },
+  differenceObj(baseObject = {}, baseBase = {}, keepIdentifier = false, identifier = 'id') {
     // eslint-disable-next-line arrow-body-style
     const changes = (object, base) => {
       return _.transform(object, (result, value, key) => {
@@ -22,7 +42,7 @@ _.mixin({
         }
       });
     };
-    return changes(objectBase, baseBase);
+    return changes(baseObject, baseBase);
   },
   form($t, fields) {
     return _.each(fields, (field) => {
