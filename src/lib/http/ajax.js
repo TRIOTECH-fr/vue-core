@@ -76,7 +76,12 @@ const Ajax = new Vue({
       return this.request(this.build(url, 'PUT', data, config));
     },
     patch(url, data, config) {
-      return this.request(this.build(url, 'PATCH', data, config));
+      _.extend(config, {
+        headers: {
+          'X-HTTP-Method-Override': 'PATCH',
+        },
+      });
+      return this.request(this.build(url, 'POST', this.dataToFormData(data), config));
     },
     delete(url, data, config) {
       return this.request(this.build(url, 'DELETE', data, config));
