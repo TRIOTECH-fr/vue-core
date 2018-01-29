@@ -16,7 +16,7 @@ _.mixin({
     const changes = (object, base) => {
       return _.transform(object, (result, value, key) => {
         if (!_.isEqual(value, base[key]) || (keepIdentifier && key === identifier)) {
-          result[key] = (_.isObject(value) && _.isObject(base[key]))
+          result[key] = (_.isObject(value) && _.isObject(base[key] && !(value instanceof Blob)))
             ? changes(value, base[key])
             : value;
         }

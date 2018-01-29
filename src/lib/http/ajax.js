@@ -23,7 +23,7 @@ const Ajax = new Vue({
     difference(objectBase = {}, baseBase = {}, keepIdentifier = false, identifier = 'id') {
       // 25/01/18 deprecated function ...
       // eslint-disable-next-line no-console
-      console.log('%cthis.$ajax.difference is deprecated, please use _.differenceObj() instead', 'color:orange;background-color:black;padding:3px 10px;');
+      console.log('%cthis.$ajax.difference is deprecated, please use _.differenceObj() instead', 'color:orange;background-color:black;padding:3px 10px;font-weight:bolder');
       return _.differenceObj(objectBase, baseBase, keepIdentifier, identifier);
     },
     getUploadsUri(location) {
@@ -42,14 +42,16 @@ const Ajax = new Vue({
       const getFormData = Y(f => (formData, data, stack = null) => {
         if (data instanceof Object) {
           _.forOwn(data, (value, key) => {
-            if (value instanceof Object && value instanceof Blob) {
-              formData.append(formatKey(stack, key), value);
-            } else if (value instanceof Object && Array.isArray(value)) {
-              value.forEach((subValue) => {
-                formData.append(`${formatKey(stack, key)}[]`, subValue);
-              });
-            } else if (value instanceof Object) {
-              f(formData, value, formatKey(stack, key));
+            if (value instanceof Object) {
+              if (value instanceof Blob) {
+                formData.append(formatKey(stack, key), value);
+              } else if (Array.isArray(value)) {
+                value.forEach((subValue) => {
+                  formData.append(`${formatKey(stack, key)}[]`, subValue);
+                });
+              } else {
+                f(formData, value, formatKey(stack, key));
+              }
             } else {
               formData.append(formatKey(stack, key), value);
             }
@@ -73,15 +75,18 @@ const Ajax = new Vue({
       return this.request(this.build(url, 'POST', this.dataToFormData(data), config));
     },
     put(url, data, config) {
-      return this.request(this.build(url, 'PUT', data, config));
+      return this.request(this.build(url, 'POST', this.dataToFormData(data), _.extend({}, {
+        headers: {
+          'X-HTTP-Method-Override': 'PUT',
+        },
+      }, config)));
     },
     patch(url, data, config) {
-      _.extend(config, {
+      return this.request(this.build(url, 'POST', this.dataToFormData(data), _.extend({}, {
         headers: {
           'X-HTTP-Method-Override': 'PATCH',
         },
-      });
-      return this.request(this.build(url, 'POST', this.dataToFormData(data), config));
+      }, config)));
     },
     delete(url, data, config) {
       return this.request(this.build(url, 'DELETE', data, config));
