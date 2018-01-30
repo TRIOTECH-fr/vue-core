@@ -44,6 +44,31 @@ _.mixin({
     };
     return changes(baseObject, baseBase);
   },
+  clearModelForForm(baseModel = {}, BaseSchema = {}, modelTemp = {}, keepId = true, idKey = 'id') {
+    const formatKey = (stack, key) => (stack ? `${stack}[${key}]` : key);
+    let data = _.defaultsDeepObj(baseModel, modelTemp);
+    const formFields = _.reduce(BaseSchema, (carry, field) => {
+      carry.push(field.model);
+      return carry;
+    }, []);
+
+    const clear = (obj, models, stack = '') => {
+      _.map(obj, (value, key) => {
+        const keyName = formatKey(stack, key);
+        if (!formFields.includes(keyName) && (keepId && key !== idKey)) {
+          if (_.isObject(value) && !_.isArray(value)) {
+            clear(value, models, keyName);
+          } else {
+            delete obj[key];
+          }
+        }
+      });
+      return obj;
+    };
+
+    data = clear(data, formFields);
+    return data;
+  },
   form($t, fields) {
     return _.each(fields, (field) => {
       // TODO https://github.com/vue-generators/vue-form-generator/issues/352
