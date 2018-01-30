@@ -50,12 +50,12 @@ _.mixin({
     const formFields = _.reduce(BaseSchema, (carry, field) => {
       carry.push(field.model);
       return carry;
-    }, []);
+    }, ['id']);
 
     const clear = (obj, models, stack = '') => {
       _.map(obj, (value, key) => {
         const keyName = formatKey(stack, key);
-        if (!formFields.includes(keyName) && (keepId && key !== idKey)) {
+        if (!formFields.includes(keyName)) {
           if (_.isObject(value) && !_.isArray(value)) {
             clear(value, models, keyName);
           } else {
