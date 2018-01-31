@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <b-container fluid>
         <b-col cols="12">
             <div v-if="loader && isLoading" class="text-center mb-3">
                 <slot name="loader">
@@ -42,7 +42,7 @@
             </template>
         </b-col>
         <slot name="modal"/>
-    </div>
+    </b-container>
 </template>
 
 <script>
