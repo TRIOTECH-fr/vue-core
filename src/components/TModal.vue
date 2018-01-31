@@ -68,6 +68,7 @@
   /deep/ .sweet-modal {
     .sweet-title > h2 {
       line-height: 64px !important;
+      margin: 0 !important;
     }
   }
 </style>
