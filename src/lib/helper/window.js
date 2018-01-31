@@ -28,8 +28,10 @@ if (Env.dev) {
 
   Vue.mixin({
     mounted() {
+      /* eslint-disable-lint no-underscore-dangle */
       const name = this._name.replace(/[<>]+/g, '');
       window.components[name] = this;
+      window.component = this;
     },
   });
 }

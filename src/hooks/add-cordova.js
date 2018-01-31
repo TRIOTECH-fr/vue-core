@@ -12,14 +12,15 @@ module.exports = (ctx) => {
   fs.readFile(indexPath, 'utf-8', (readError, indexData) => {
     if (readError) {
       deferred.reject(readError);
+    } else {
+      fs.writeFile(indexPath, indexData.replace(/<\/script>/, cordovaScript), 'utf-8', (writeError) => {
+        if (writeError) {
+          deferred.reject(writeError);
+        } else {
+          deferred.resolve();
+        }
+      });
     }
-    fs.writeFile(indexPath, indexData.replace(/<\/script>/, cordovaScript), 'utf-8', (writeError) => {
-      if (writeError) {
-        deferred.reject(writeError);
-      } else {
-        deferred.resolve();
-      }
-    });
   });
 
   return deferred.promise;
