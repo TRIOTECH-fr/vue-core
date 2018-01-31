@@ -34,7 +34,9 @@
       },
       success_route: {
         type: [Object, Function],
-        default: { name: 'dashboard' },
+        default() {
+          return { name: 'dashboard' };
+        },
       },
       refModal: {
         type: String,
@@ -111,7 +113,7 @@
         if (this.closeModal) {
           this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
         }
-        this.$bus.$emit(`t-event.new-submit.${this.name}.success`);
+        this.$bus.$emit(`t-event.new-submit.login.success`);
         this.$router.push(this.successRoute());
       },
     },
