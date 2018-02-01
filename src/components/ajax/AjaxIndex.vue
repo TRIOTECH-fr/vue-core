@@ -1,5 +1,6 @@
 <template>
     <b-container fluid>
+      <b-row>
         <b-col cols="12">
             <div v-if="loader && isLoading" class="text-center mb-3">
                 <slot name="loader">
@@ -20,6 +21,7 @@
                             <tr>
                                 <td>{{ item }}</td>
                                 <td>{{ index }}</td>
+                                <slot name="table-action"></slot>
                             </tr>
                         </slot>
                     </table>
@@ -41,7 +43,8 @@
                 <slot v-if="!isLoading" name="footer"/>
             </template>
         </b-col>
-        <slot name="modal"/>
+      </b-row>
+      <slot name="modal"/>
     </b-container>
 </template>
 
