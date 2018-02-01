@@ -72,21 +72,13 @@ const Ajax = new Vue({
       return this.request(this.build(url, 'GET', data, config));
     },
     post(url, data, config) {
-      return this.request(this.build(url, 'POST', this.dataToFormData(data), config));
+      return this.request(this.build(url, 'POST', data, config));
     },
     put(url, data, config) {
-      return this.request(this.build(url, 'POST', this.dataToFormData(data), _.extend({}, {
-        headers: {
-          'X-HTTP-Method-Override': 'PUT',
-        },
-      }, config)));
+      return this.request(this.build(url, 'PUT', data, config));
     },
     patch(url, data, config) {
-      return this.request(this.build(url, 'POST', this.dataToFormData(data), _.extend({}, {
-        headers: {
-          'X-HTTP-Method-Override': 'PATCH',
-        },
-      }, config)));
+      return this.request(this.build(url, 'PATCH', data, config));
     },
     delete(url, data, config) {
       return this.request(this.build(url, 'DELETE', data, config));
@@ -129,7 +121,8 @@ const Ajax = new Vue({
       return promise;
     },
     async syncRequest(config) {
-      return await this.asyncRequest(config);
+      const result = await this.asyncRequest(config);
+      return result;
     },
     asyncRequest(config) {
       config.url = this.url(config);
@@ -141,6 +134,13 @@ const Ajax = new Vue({
         config.headers = _.extend({
           Authorization: `Bearer ${this.oauthStore.access_token}`,
         }, config.headers);
+      }
+
+      const multiPart = _.some(config.data, value => value instanceof File);
+      if (multiPart) {
+        config.data = this.dataToFormData(config.data);
+        config.headers['X-Http-Method-Override'] = config.method;
+        config.method = 'POST';
       }
 
       return this.$http.request(config)
