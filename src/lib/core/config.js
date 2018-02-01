@@ -1,5 +1,5 @@
 import Vue from 'vue';
-/* eslint-disable import/no-webpack-loader-syntax */
+// eslint-disable-next-line import/no-webpack-loader-syntax
 import parameters from 'json-loader!yaml-loader!@/../config/parameters.yml';
 
 // TODO generate computed fns from parameters keys
@@ -7,7 +7,7 @@ import parameters from 'json-loader!yaml-loader!@/../config/parameters.yml';
 const Config = new Vue({
   computed: {
     host: () => (localStorage.getItem('host') || parameters.host).replace(/\/$/, ''),
-    endpoint: () => ((localStorage.getItem('endpoint') || parameters.endpoint) || '' ).replace(/\/$/, '').concat('/'),
+    endpoint: () => ((localStorage.getItem('endpoint') || parameters.endpoint) || '').replace(/\/$/, '').concat('/'),
   },
   methods: {
     // TODO handle dot notation

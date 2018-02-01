@@ -6,7 +6,7 @@ Vue.mixin({
   methods: {
     imgurl(uri = '', filter = '') {
       if (uri && filter) {
-        /* eslint-disable no-param-reassign */
+        // eslint-disable-next-line no-param-reassign
         uri = `media/cache/resolve/${filter}/${uri.replace('uploads/', '').replace('/app_dev.php/', '')}`;
       }
       return uri ? Config.host.replace('/api', '').concat(uri) : '#';

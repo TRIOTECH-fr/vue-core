@@ -10,7 +10,7 @@ const Window = new Vue({
 
 window.addEventListener('message', (event) => {
   if (_.isString(event.data) && event.data.indexOf('webpackHotUpdate') === 0) {
-    /* eslint-disable no-console */
+    // eslint-disable-next-line no-console
     console.clear();
   }
 });
@@ -28,7 +28,7 @@ if (Env.dev) {
 
   Vue.mixin({
     mounted() {
-      /* eslint-disable-lint no-underscore-dangle */
+      // eslint-disable-next-line no-underscore-dangle
       const name = this._name.replace(/[<>]+/g, '');
       window.components[name] = this;
       window.component = this;

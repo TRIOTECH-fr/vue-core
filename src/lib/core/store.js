@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import VuexPersistedState from 'vuex-persistedstate';
 import VuexCache from 'vuex-cache';
 import VuexSharedMutations from 'vuex-shared-mutations';
-/* eslint-disable no-unused-vars */
+// eslint-disable-next-line no-unused-vars
 import { sync } from 'vuex-router-sync';
 import Router from '@triotech/vue-core/src/lib/core/router';
 import Config from '@triotech/vue-core/src/lib/core/config';
@@ -80,7 +80,7 @@ const Store = new Vuex.Store({
   ],
 });
 
-/* eslint-disable no-unused-vars */
+// eslint-disable-next-line no-unused-vars
 // const unsync = sync(Store, Router);
 
 export default Store;

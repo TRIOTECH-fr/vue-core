@@ -156,7 +156,7 @@ const Ajax = new Vue({
       return this.$http.request(config)
         .then((res) => {
           let data = res.data;
-          /* eslint-disable no-underscore-dangle */
+          // eslint-disable-next-line no-underscore-dangle
           if (data._embedded && data._embedded.items) {
             data = data._embedded.items;
           }
@@ -176,7 +176,7 @@ const Ajax = new Vue({
               location.reload();
             }
           } else {
-            /* eslint-disable no-console */
+            // eslint-disable-next-line no-console
             console.error({
               response: error.response,
               request: error.request,
