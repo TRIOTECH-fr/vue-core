@@ -96,7 +96,7 @@
     "vue-cleave": "^1.2.2",
     "vue-cookie-law": "^1.4.0",
     "vue-cordova": "^0.1.2",
-    "vue-form-generator": "^2.1.1",
+    "vue-form-generator": "https://github.com/TRIOTECH-fr/vue-form-generator.git",
     "vue-i18n": "^7.3.2",
     "vue-js-toggle-button": "^1.2.2",
     "vue-loader": "^13.3.0",

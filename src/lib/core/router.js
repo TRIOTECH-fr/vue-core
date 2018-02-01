@@ -36,9 +36,10 @@ Router.beforeEach((to, from, next) => {
   const vm = this.a.app; // this.a instanceof VueRouter
   vm.$nextTick(() => {
     _.each(Config.get('firewall'), (data, path) => {
+      const store = _.isObject(data) ? data.store : true;
       const state = _.isObject(data) ? data.state : data;
       const redirect = _.isObject(data) ? data.redirect : '/';
-      if (to.path.match(path) && !vm.$store.state[state]) {
+      if (to.path.match(path) && (store && !vm.$store.state[state])) {
         vm.$router.push(redirect);
       }
     });

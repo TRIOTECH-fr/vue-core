@@ -8840,6 +8840,10 @@ vue-form-generator@^2.1.1:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/vue-form-generator/-/vue-form-generator-2.2.0.tgz#240b93c9489b7355ae708f7d8379776686182f2f"
 
+"vue-form-generator@https://github.com/TRIOTECH-fr/vue-form-generator.git":
+  version "2.1.1"
+  resolved "https://github.com/TRIOTECH-fr/vue-form-generator.git#e678a728b3d89afb6888519422bf6b663a3e804d"
+
 vue-functional-data-merge@^2.0.3:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/vue-functional-data-merge/-/vue-functional-data-merge-2.0.4.tgz#b045ca57097f31446db6de15c87642b6e88ca7c2"
