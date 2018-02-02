@@ -60,5 +60,6 @@ module.exports = {
       ignoreStrings: true,
       ignoreTemplateLiterals: true,
     }],
+    'func-names': ['warn', 'as-needed'],
   },
 };
