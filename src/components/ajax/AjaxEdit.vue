@@ -85,7 +85,7 @@
       },
       fieldsFilterList: {
         type: Array,
-        default: [],
+        default: () => [],
       },
       fieldsFilerInverse: {
         type: Boolean,

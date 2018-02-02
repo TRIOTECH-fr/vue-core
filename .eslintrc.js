@@ -18,6 +18,9 @@ module.exports = {
   globals: {
     '$': true,
     '_': true,
+    'moment': true,
+    'moment()': true,
+    'moment\(\)': true,
   },
   // check if imports actually resolve
   settings: {
