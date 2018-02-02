@@ -9,7 +9,29 @@ _.mixin({
     return _.reduce(object, (carry, value, key) => `${carry}&${this.encode(key)}=${this.encode(value)}`, '').replace('&', '?');
   },
   args(array) {
-    return _.reduce(array, (carry, arg, index, args) => _.extend(carry, index % 2 === 1 && {[args[index - 1]]: arg}), {});
+    return _.reduce(array, (carry, arg, index, args) => _.extend(carry, index % 2 === 1 && { [args[index - 1]]: arg }), {});
+  },
+  base64ToBlob(string, type = 'image/jpeg') {
+    const bytes = window.atob(string);
+    const bytesLength = bytes.length;
+    const view = new Uint8Array(new ArrayBuffer(bytesLength));
+
+    for (let i = 0; i < bytesLength; i++) {
+      view[i] = bytes.charCodeAt(i);
+    }
+
+    const header = String.fromCharCode(...view.slice(0, 4));
+    if (!window.header) {
+      window.header = {};
+    }
+    if (!window.header[header]) {
+      window.header[header] = true;
+    }
+
+    return new Blob([view], { type });
+  },
+  base64ToObjectURL(string) {
+    return window.URL.createObjectURL(_.base64ToBlob(string));
   },
   defaultsDeepObj(baseObject = {}, baseBase = {}) {
     // eslint-disable-next-line arrow-body-style

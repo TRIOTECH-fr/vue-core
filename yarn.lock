@@ -8836,10 +8836,6 @@ vue-cordova@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/vue-cordova/-/vue-cordova-0.1.2.tgz#f3ca208b51f1523a8f571447e76a480aa89c081b"
 
-vue-form-generator@^2.1.1:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/vue-form-generator/-/vue-form-generator-2.2.0.tgz#240b93c9489b7355ae708f7d8379776686182f2f"
-
 "vue-form-generator@https://github.com/TRIOTECH-fr/vue-form-generator.git":
   version "2.1.1"
   resolved "https://github.com/TRIOTECH-fr/vue-form-generator.git#e678a728b3d89afb6888519422bf6b663a3e804d"
