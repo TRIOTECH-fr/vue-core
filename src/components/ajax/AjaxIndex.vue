@@ -151,7 +151,7 @@
         if (typeof dataRef !== 'undefined') {
           _.each(data, (value, key) => {
             if (key !== 'id') {
-              if (typeof value === 'object') {
+              if (_.isObject(value)) {
                 this.refresh_data(dataRef[key], value);
               } else {
                 this.$set(dataRef, key, value);
