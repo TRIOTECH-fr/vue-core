@@ -76,8 +76,8 @@
         await Ajax.publicRequest(this.uri, 'POST', this.model)
           .then(() => {
             this.$notify({
-              title: this.$t('flashes.login.title'),
-              text: this.$t('flashes.login.success'),
+              title: this.$t('flashes.reset.title'),
+              text: this.$t('flashes.reset.success'),
               type: 'success',
             });
             this.forward();
@@ -85,8 +85,8 @@
           .catch((err) => {
             if (err.response) {
               this.$notify({
-                title: this.$t('flashes.login.title'),
-                text: this.$t(`flashes.login.${err.response.data.error}`),
+                title: this.$t('flashes.reset.title'),
+                text: this.$t(`flashes.reset.${err.response.data.error}`),
                 type: 'error',
               });
             }
@@ -97,7 +97,7 @@
         if (this.closeModal) {
           this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
         }
-        this.$bus.$emit(`t-event.new-submit.${this.name}.success`);
+        this.$bus.$emit('t-event.new-submit.reset.success');
         this.$router.push(this.successRoute());
       },
     },

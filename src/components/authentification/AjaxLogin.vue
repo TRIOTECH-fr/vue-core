@@ -78,6 +78,7 @@
           await Ajax.get(this.uri)
             .then((data) => {
               this.$set(this.schema, 'fields', _.form(this.$t, data));
+              this.$bus.$emit('t-event.load-form.login.success')
             })
           ;
         }
@@ -113,7 +114,7 @@
         if (this.closeModal) {
           this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
         }
-        this.$bus.$emit(`t-event.new-submit.login.success`);
+        this.$bus.$emit('t-event.new-submit.login.success');
         this.$router.push(this.successRoute());
       },
     },
