@@ -114,7 +114,9 @@
         if (this.closeModal) {
           this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
         }
+        //TODO remove new-submit event.
         this.$bus.$emit('t-event.new-submit.login.success');
+        this.$bus.$emit('t-event.login.success');
         this.$router.push(this.successRoute());
       },
     },
