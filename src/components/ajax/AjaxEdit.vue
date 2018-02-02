@@ -83,6 +83,14 @@
         type: Object,
         default: null,
       },
+      fieldsFilterList: {
+        type: Array,
+        default: [],
+      },
+      fieldsFilerInverse: {
+        type: Boolean,
+        default: false,
+      },
     },
     async mounted() {
       if (this.loadOnMount) {
@@ -107,6 +115,14 @@
       },
     },
     methods: {
+      applyFilterOnSchema() {
+        // todo appli with inverse option
+        if (_.size(this.fieldsFilterList) > 0) {
+          _.forEach(this.fieldsFilterList, (fieldFiltered) => {
+            _.remove(this.schema.fields, s => s.model === fieldFiltered);
+          });
+        }
+      },
       editRouteFunc() {
         this.editRoute = `${this.getUri}/${this.getId}/edit`;
         if (this.additionnal_route) {
@@ -133,6 +149,7 @@
         await this.$ajax.get(this.editRouteFunc())
           .then((data) => {
             this.schema.fields = _.form(this.$t, data.form);
+            this.applyFilterOnSchema();
             const modelTemp = this.defaultModelValues !== null ? this.defaultModelValues : {};
             this.$set(this, 'model', _.clearModelForForm(data.entity, data.form, modelTemp));
             this.model_back = JSON.parse(JSON.stringify(data.entity));

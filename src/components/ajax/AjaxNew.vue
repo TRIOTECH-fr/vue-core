@@ -57,6 +57,14 @@
         type: Object,
         default: null,
       },
+      fieldsFilterList: {
+        type: Array,
+        default: [],
+      },
+      fieldsFilerInverse: {
+        type: Boolean,
+        default: false,
+      },
     },
     data() {
       return {
@@ -86,6 +94,14 @@
       },
     },
     methods: {
+      applyFilterOnSchema() {
+        // todo appli with inverse option
+        if (_.size(this.fieldsFilterList) > 0) {
+          _.forEach(this.fieldsFilterList, (fieldFiltered) => {
+            _.remove(this.schema.fields, s => s.model === fieldFiltered);
+          });
+        }
+      },
       async load() {
         const modelTemp = this.defaultModelValues !== null
           ? this.defaultModelValues
@@ -95,6 +111,7 @@
         await this.$ajax.get(`${this.getUri}/new`)
           .then((data) => {
             this.$set(this.schema, 'fields', _.form(this.$t, data));
+            this.applyFilterOnSchema();
           });
       },
       async submit() {
