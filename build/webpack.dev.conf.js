@@ -8,7 +8,6 @@ const baseWebpackConfig = require('./webpack.base.conf');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const portfinder = require('portfinder');
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -54,7 +53,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         './service-worker-dev.js'), 'utf-8')}</script>`,
     }),
     new FriendlyErrorsPlugin(),
-    new HardSourceWebpackPlugin(),
   ],
 });
 

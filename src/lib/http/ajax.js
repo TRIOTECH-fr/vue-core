@@ -146,6 +146,10 @@ const Ajax = new Vue({
         }, config.headers);
       }
 
+      if (config.stringify) {
+        config.data = qs.stringify(config.data);
+      }
+
       const multiPart = _.some(config.data, value => value instanceof File);
       if (multiPart) {
         config.data = this.dataToFormData(config.data);
