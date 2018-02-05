@@ -23,7 +23,7 @@ Vue.component('fieldDropdown', {
           this.multiselect_model = this.schema.choices.find(x => x.id.toString() === initialValue.id.toString());
         } else {
           // eslint-disable-next-line max-len
-          this.multiselect_model = this.schema.choices.find(x => x.label === initialValue.toString());
+          this.multiselect_model = this.schema.choices.find(x => x.id === initialValue);
         }
       } else {
         const data = [];
