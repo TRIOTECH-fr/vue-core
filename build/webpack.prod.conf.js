@@ -113,10 +113,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     // seo prerending
     new PrerenderSpaPlugin(path.join(process.cwd(), 'web'), config.build.prerender),
     // modules intermediate caching step
-    new webpack.DllPlugin({
-      path: path.join(__dirname, 'js', '[name]-manifest.json'),
-      name: '[name]_[hash]',
-    }),
     new HardSourceWebpackPlugin(),
   ],
 });
