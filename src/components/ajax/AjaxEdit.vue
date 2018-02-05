@@ -144,6 +144,7 @@
             this.fallback_id = dataEvent;
           }
         }
+        this.$bus.$emit(`t-event.t-ajax-edit.${this.name}.loaded`);
         this.$set(this, 'model', {});
 
         await this.$ajax.get(this.editRouteFunc())
