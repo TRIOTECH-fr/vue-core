@@ -126,10 +126,12 @@
 
       if (this.eventId !== null) {
         this.$bus.$on(this.event_name('refresh'), this.refresh);
+        this.$bus.$on(this.event_name('load'), this.load);
       }
     },
     beforeDestroy() {
       this.$bus.$off(this.event_name('refresh'));
+      this.$bus.$off(this.event_name('load'));
     },
     methods: {
       listOverCallBack(list) {
