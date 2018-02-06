@@ -40,44 +40,13 @@
       };
     },
     props: {
-      id: {
-        type: Number,
-        default: null,
-      },
-      formClass: {
-        type: String,
-      },
-      name: {
-        type: String,
-        default: null,
-      },
-      uri: {
-        type: String,
-        default: null,
-      },
       additionnal_route: {
-        type: String,
-        default: null,
-      },
-      loadOnMount: {
-        type: Boolean,
-        default: true,
-      },
-      refreshAjaxIndex: {
-        type: Boolean,
-        default: false,
-      },
-      refAjaxIndex: {
         type: String,
         default: null,
       },
       closeModal: {
         type: Boolean,
         default: false,
-      },
-      refModal: {
-        type: String,
-        default: null,
       },
       defaultModelValues: {
         type: Object,
@@ -90,6 +59,37 @@
       fieldsFilerInverse: {
         type: Boolean,
         default: false,
+      },
+      formClass: {
+        type: String,
+      },
+      id: {
+        type: Number,
+        default: null,
+      },
+      loadOnMount: {
+        type: Boolean,
+        default: true,
+      },
+      name: {
+        type: String,
+        default: null,
+      },
+      refAjaxIndex: {
+        type: String,
+        default: null,
+      },
+      refModal: {
+        type: String,
+        default: null,
+      },
+      refreshAjaxIndex: {
+        type: Boolean,
+        default: false,
+      },
+      uri: {
+        type: String,
+        default: null,
       },
     },
     async mounted() {
@@ -112,6 +112,15 @@
       },
       getId() {
         return this.id || this.fallback_id;
+      },
+    },
+    watch: {
+      defaultModelValues: {
+        deep: true,
+        handler(oldValue, newValue) {
+          console.log(oldValue, newValue);
+          _.merge(this.model, newValue);
+        },
       },
     },
     methods: {
