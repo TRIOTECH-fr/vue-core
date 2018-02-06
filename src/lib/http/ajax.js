@@ -16,8 +16,8 @@ Axios.defaults.timeout = 10000;
 const Ajax = new Vue({
   store: Store,
   computed: {
+    oauthStore: () => Store.getters.oauth || {},
     oauthConfig: () => Config.get('oauth') || {},
-    oauthStore: () => Store.state.oauth || {},
   },
   methods: {
     difference(objectBase = {}, baseBase = {}, keepIdentifier = false, identifier = 'id') {
@@ -101,7 +101,7 @@ const Ajax = new Vue({
       }, data), !!data.rememberMe);
     },
     refresh() {
-      if (typeof this.oauthStore.refresh_token_expires_at === 'undefined' || (Number(new Date()) - this.oauthStore.refresh_token_expires_at) / 1000 > 0) {
+      if (_.isUndefined(this.oauthStore.refresh_token_expires_at) || (Number(new Date()) - this.oauthStore.refresh_token_expires_at) / 1000 > 0) {
         // no expiration date for refresh token, or refresh token expired, clear and redirect to /login
         this.setKeyValueAction({ key: 'oauth', value: null });
         Router.push('/login');
@@ -141,9 +141,11 @@ const Ajax = new Vue({
           return this.refresh().then(this.asyncRequest.bind(this, config));
         }
 
-        config.headers = _.extend({
-          Authorization: `Bearer ${this.oauthStore.access_token}`,
-        }, config.headers);
+        if (config.url.indexOf('oauth/v2/token') === -1) {
+          config.headers = _.extend({
+            Authorization: `Bearer ${this.oauthStore.access_token}`,
+          }, config.headers);
+        }
       }
 
       if (config.stringify) {

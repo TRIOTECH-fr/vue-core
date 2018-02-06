@@ -19,7 +19,8 @@ const Store = new Vuex.Store({
   },
   mutations: {
     setKeyValue(state, data) {
-      state[data.key] = data.value;
+      this._vm.$set(state, data.key, data.value);
+      // state[data.key] = data.value;
     },
     addKeyValue(state, data) {
       state[data.key].push(data.value);
