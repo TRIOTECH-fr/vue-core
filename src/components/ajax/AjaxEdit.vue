@@ -118,7 +118,6 @@
       defaultModelValues: {
         deep: true,
         handler(oldValue, newValue) {
-          console.log(oldValue, newValue);
           _.merge(this.model, newValue);
         },
       },
