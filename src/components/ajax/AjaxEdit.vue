@@ -64,7 +64,7 @@
         type: String,
       },
       id: {
-        type: Number,
+        type: [Number, String],
         default: null,
       },
       loadOnMount: {
