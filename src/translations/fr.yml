@@ -43,11 +43,6 @@ actions:
   show: Consulter
   loading: Chargement...
 
-flashes:
-  login:
-    title: Connexion à mon espace
-    success: Bienvenue dans votre espace manager
-
 # VueMultiSelect
 vms:
   select: Appuyer sur ENTRER pour sélectionner
