@@ -11,7 +11,6 @@
 </template>
 
 <script>
-  import Ajax from '@triotech/vue-core/src/lib/http/ajax';
   import EntityFilter from '@triotech/vue-core/src/components/EntityFilter';
 
   export default {
@@ -42,13 +41,10 @@
           return Promise.resolve();
         }
         this.$set(state[entity], this.uri_suffix, true);
-        return Ajax
-          .get(this.uri)
-          .then((data) => {
-            this.$set(state[entity], this.uri_suffix, data);
-            this.$bus.$emit(this.event('filters.data'), data);
-          })
-        ;
+        return this.$ajax.get(this.uri).then((data) => {
+          this.$set(state[entity], this.uri_suffix, data);
+          this.$bus.$emit(this.event('filters.data'), data);
+        });
       },
       filters() {
         return _.reduce(this.$store.state.filters, (carry, filter, name) => {

@@ -8,8 +8,6 @@
 </template>
 
 <script>
-  import Ajax from '@triotech/vue-core/src/lib/http/ajax';
-
   export default {
     name: 'LogoutPage',
     props: {

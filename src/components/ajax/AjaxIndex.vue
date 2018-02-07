@@ -49,8 +49,6 @@
 </template>
 
 <script>
-  import Ajax from '@triotech/vue-core/src/lib/http/ajax';
-
   export default {
     name: 'AjaxIndex',
     props: {
@@ -142,7 +140,7 @@
       },
       async load() {
         this.isLoading = true;
-        const fn = Ajax[this.method];
+        const fn = this.$ajax[this.method];
         await fn(this.uri, this.data, this.config).then((items) => {
           this.items = items;
           this.isLoading = false;
