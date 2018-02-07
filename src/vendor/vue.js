@@ -1,1 +1,3 @@
-export * from 'vue';
+import Vue from 'vue';
+
+export default Vue;
