@@ -90,7 +90,7 @@ const Ajax = new Vue({
     head(url, data, config) {
       return this.request(this.build(url, this.httpHead, data, config));
     },
-    redirect(uri) {
+    redirect(uri = '/') {
       location.href = uri;
     },
     login(data) {
@@ -131,7 +131,7 @@ const Ajax = new Vue({
         if (!config.commit && this._.expired(this.oauthStore.expires_at)) {
           if (this._.expired(this.oauthStore.refresh_token_expires_at)) {
             this.setKeyValueAction({ key: 'oauth', value: null });
-            return this.redirect('/login');
+            return this.redirect();
           }
           return this.refresh().then(this.asyncRequest.bind(this, config));
         }
@@ -173,7 +173,7 @@ const Ajax = new Vue({
               return this.refresh().then(this.asyncRequest.bind(this, config));
             } else if (data.error_description.match(/invalid/i) || (data.error_description.match(/expired/i) && error.response.status === 400)) {
               this.setKeyValueAction({ key: 'oauth', value: null });
-              return this.redirect('/login');
+              return this.redirect();
             }
           } else {
             // eslint-disable-next-line no-console
