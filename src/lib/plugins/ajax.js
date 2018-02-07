@@ -24,12 +24,6 @@ const Ajax = new Vue({
     oauthConfig() { return this.$config.get('oauth') || {}; },
   },
   methods: {
-    difference(objectBase = {}, baseBase = {}, keepIdentifier = false, identifier = 'id') {
-      // 25/01/18 deprecated function ...
-      // eslint-disable-next-line no-console
-      console.log('%cthis.$ajax.difference is deprecated, please use _.differenceObj() instead', 'color:orange;background-color:black;padding:3px 10px;font-weight:bolder');
-      return this._.differenceObj(objectBase, baseBase, keepIdentifier, identifier);
-    },
     getUploadsUri(location) {
       return this.url(this.build(location), true);
     },
