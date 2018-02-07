@@ -2,29 +2,33 @@ import Vue from 'vue';
 import { mapActions } from 'vuex';
 import VueAxios from 'vue-axios';
 import Axios from 'axios';
-import qs from 'qs';
-import Config from '@triotech/vue-core/src/lib/core/config';
-import Router from '@triotech/vue-core/src/lib/core/router';
-import Store from '@triotech/vue-core/src/lib/core/store';
-import _ from '@triotech/vue-core/src/vendor/lodash';
-import Y from '@triotech/vue-core/src/lib/helper/y';
+import moment from 'moment';
+import QS from 'qs';
+import Y from '@triotech/vue-core/src/lib/plugins/y';
 
 Vue.use(VueAxios, Axios);
 
 Axios.defaults.timeout = 10000;
 
 const Ajax = new Vue({
-  store: Store,
   computed: {
-    oauthStore: () => Store.getters.oauth || {},
-    oauthConfig: () => Config.get('oauth') || {},
+    httpGet: () => 'GET',
+    httpPost: () => 'POST',
+    httpPut: () => 'PUT',
+    httpPatch: () => 'PATCH',
+    httpDelete: () => 'DELETE',
+    httpHead: () => 'HEAD',
+    oauthTokenEndpoint: () => 'oauth/v2/token',
+    oauthTokenType: () => 'Bearer',
+    oauthStore() { return this.$store.getters.oauth || {}; },
+    oauthConfig() { return this.$config.get('oauth') || {}; },
   },
   methods: {
     difference(objectBase = {}, baseBase = {}, keepIdentifier = false, identifier = 'id') {
       // 25/01/18 deprecated function ...
       // eslint-disable-next-line no-console
       console.log('%cthis.$ajax.difference is deprecated, please use _.differenceObj() instead', 'color:orange;background-color:black;padding:3px 10px;font-weight:bolder');
-      return _.differenceObj(objectBase, baseBase, keepIdentifier, identifier);
+      return this._.differenceObj(objectBase, baseBase, keepIdentifier, identifier);
     },
     getUploadsUri(location) {
       return this.url(this.build(location), true);
@@ -37,39 +41,36 @@ const Ajax = new Vue({
       }
       return url;
     },
-    dataToFormData(dataIn) {
-      const formatKey = (stack, key) => (stack ? `${stack}[${key}]` : key);
-      const getFormData = Y(f => (formData, data, stack = null) => {
-        if (data instanceof Object) {
-          _.forOwn(data, (value, key) => {
-            if (value instanceof Object) {
-              if (value instanceof Blob) {
-                formData.append(formatKey(stack, key), value);
-              } else if (Array.isArray(value)) {
-                value.forEach((subValue) => {
-                  formData.append(`${formatKey(stack, key)}[]`, subValue);
-                });
+    encode(input) {
+      const format = (stack, key) => (stack ? `${stack}[${key}]` : key);
+      return Y(callback => (form, data, stack = null) => {
+        if (this._.isObject(data)) {
+          this._.forOwn(data, (value, key) => {
+            if (this._.isObject(value)) {
+              if (this._.isBlob(value)) {
+                form.append(format(stack, key), value);
+              } else if (this._.isArray(value)) {
+                value.forEach(subValue => form.append(`${format(stack, key)}[]`, subValue));
               } else {
-                f(formData, value, formatKey(stack, key));
+                callback(form, value, format(stack, key));
               }
             } else {
-              formData.append(formatKey(stack, key), value);
+              form.append(format(stack, key), value);
             }
           });
         }
-        return formData;
-      });
-      return getFormData(new FormData(), _.isString(dataIn) ? qs.parse(dataIn) : dataIn);
+        return form;
+      })(new FormData(), this._.isString(input) ? QS.parse(input) : input);
     },
     sync() {
       this.wait = true;
       return this;
     },
     build(url, method, data = {}, config = {}) {
-      return _.extend(config, { url, method, data });
+      return this._.extend(config, { url, method, data });
     },
-    publicRequest(url = '/', method = 'GET', data = {}, config = {}) {
-      const conf = _.merge({
+    publicRequest(url = '/', method = this.httpGet, data = {}, config = {}) {
+      const conf = this._.merge({
         method,
         url,
         data,
@@ -78,33 +79,33 @@ const Ajax = new Vue({
       return this.$http.request(conf).then(response => response.data);
     },
     get(url, data, config) {
-      return this.request(this.build(url, 'GET', data, config));
+      return this.request(this.build(url, this.httpGet, data, config));
     },
     post(url, data, config) {
-      return this.request(this.build(url, 'POST', data, config));
+      return this.request(this.build(url, this.httpPost, data, config));
     },
     put(url, data, config) {
-      return this.request(this.build(url, 'PUT', data, config));
+      return this.request(this.build(url, this.httpPut, data, config));
     },
     patch(url, data, config) {
-      return this.request(this.build(url, 'PATCH', data, config));
+      return this.request(this.build(url, this.httpPatch, data, config));
     },
     delete(url, data, config) {
-      return this.request(this.build(url, 'DELETE', data, config));
+      return this.request(this.build(url, this.httpDelete, data, config));
     },
     head(url, data, config) {
-      return this.request(this.build(url, 'HEAD', data, config));
+      return this.request(this.build(url, this.httpHead, data, config));
     },
     login(data) {
-      return this.oauth(_.extend({
+      return this.oauth(this._.extend({
         grant_type: 'password',
       }, data), !!data.rememberMe);
     },
     refresh() {
-      if (_.isUndefined(this.oauthStore.refresh_token_expires_at) || (Number(new Date()) - this.oauthStore.refresh_token_expires_at) / 1000 > 0) {
+      if (this._.isUndefined(this.oauthStore.refresh_token_expires_at) || (Number(new Date()) - this.oauthStore.refresh_token_expires_at) / 1000 > 0) {
         // no expiration date for refresh token, or refresh token expired, clear and redirect to /login
         this.setKeyValueAction({ key: 'oauth', value: null });
-        Router.push('/login');
+        this.$router.push('/login');
         location.reload();
       }
 
@@ -114,12 +115,12 @@ const Ajax = new Vue({
       });
     },
     oauth(data, commit = true) {
-      return this.request(this.build('oauth/v2/token', 'POST', _.extend({
+      return this.request(this.build(this.oauthTokenEndpoint, this.httpPost, this._.extend({
         client_id: this.oauthConfig.client_id,
         client_secret: this.oauthConfig.client_secret,
       }, data), { commit })).then((value) => {
-        value.expires_at = (value.expires_in * 1000) + Number(new Date());
-        value.refresh_token_expires_at = (value.refresh_token_lifetime * 1000) + Number(new Date());
+        value.expires_at = (value.expires_in * 1000) + moment();
+        value.refresh_token_expires_at = (value.refresh_token_lifetime * 1000) + moment();
         this.setKeyValueAction({ key: 'oauth', value, commit });
         return value;
       });
@@ -136,14 +137,14 @@ const Ajax = new Vue({
     asyncRequest(config) {
       config.url = this.url(config);
 
-      if (!_.isEmpty(this.oauthStore)) {
-        if (!config.commit && (Number(new Date()) - this.oauthStore.expires_at) / 1000 > 0) {
+      if (!this._.isEmpty(this.oauthStore)) {
+        if (!config.commit && (moment() - this.oauthStore.expires_at) / 1000 > 0) {
           return this.refresh().then(this.asyncRequest.bind(this, config));
         }
 
-        if (config.url.indexOf('oauth/v2/token') === -1) {
-          config.headers = _.extend({
-            Authorization: `Bearer ${this.oauthStore.access_token}`,
+        if (config.url.indexOf(this.oauthTokenEndpoint) === -1) {
+          config.headers = this._.extend({
+            Authorization: `${this.oauthTokenType} ${this.oauthStore.access_token}`,
           }, config.headers);
         }
       }
@@ -152,11 +153,11 @@ const Ajax = new Vue({
         config.data = qs.stringify(config.data);
       }
 
-      const multiPart = _.some(config.data, value => value instanceof File);
+      const multiPart = this._.some(config.data, value => value instanceof File);
       if (multiPart) {
-        config.data = this.dataToFormData(config.data);
+        config.data = this.encode(config.data);
         config.headers['X-Http-Method-Override'] = config.method;
-        config.method = 'POST';
+        config.method = this.httpPost;
       }
 
       return this.$http.request(config)
@@ -178,7 +179,7 @@ const Ajax = new Vue({
               return this.refresh().then(this.asyncRequest.bind(this, config));
             } else if (data.error_description.match(/invalid/i) || (data.error_description.match(/expired/i) && error.response.status === 400)) {
               this.setKeyValueAction({ key: 'oauth', value: null });
-              Router.push('/login');
+              this.$router.push('/login');
               location.reload();
             }
           } else {

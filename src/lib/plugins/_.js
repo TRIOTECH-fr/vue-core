@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import _ from 'lodash';
 
-Vue.set(Vue.prototype, '_', _);
-
 _.mixin({
   encode: string => encodeURIComponent(string),
   param(object) {
@@ -11,6 +9,7 @@ _.mixin({
   args(array) {
     return _.reduce(array, (carry, arg, index, args) => _.extend(carry, index % 2 === 1 && { [args[index - 1]]: arg }), {});
   },
+  isBlob: value => value instanceof Blob,
   base64ToBlob(string, type = 'image/jpeg') {
     const bytes = window.atob(string);
     const bytesLength = bytes.length;
@@ -110,5 +109,7 @@ _.mixin({
     });
   },
 });
+
+Vue.set(Vue.prototype, '_', _);
 
 export default window._ = _;

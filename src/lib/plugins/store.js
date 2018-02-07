@@ -5,8 +5,6 @@ import VuexCache from 'vuex-cache';
 import VuexSharedMutations from 'vuex-shared-mutations';
 // eslint-disable-next-line no-unused-vars
 import { sync } from 'vuex-router-sync';
-import Router from '@triotech/vue-core/src/lib/core/router';
-import Config from '@triotech/vue-core/src/lib/core/config';
 
 Vue.use(Vuex);
 
@@ -23,7 +21,9 @@ const Store = new Vuex.Store({
       // state[data.key] = data.value;
     },
     addKeyValue(state, data) {
-      state[data.key].push(data.value);
+      const array = state[data.key];
+      this._vm.$set(array, array.length - 1, data.value);
+      // state[data.key].push(data.value);
     },
     updateFilter(state, filter) {
       const name = filter && filter.name;
@@ -78,10 +78,12 @@ const Store = new Vuex.Store({
     VuexPersistedState(),
     VuexCache,
     VuexSharedMutations({ predicate: ['shareState'] }),
+    // (() => {
+    //  this.unsync = sync(this._vm.$store, this._vm.$router);
+    // })(),
   ],
 });
 
-// eslint-disable-next-line no-unused-vars
-// const unsync = sync(Store, Router);
+Vue.set(Vue.prototype, '$store', Store);
 
 export default Store;

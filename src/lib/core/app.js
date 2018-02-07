@@ -1,11 +1,12 @@
 import Vue from 'vue';
-import Ajax from '@triotech/vue-core/src/lib/http/ajax';
-import Bus from '@triotech/vue-core/src/lib/core/bus';
-import I18n from '@triotech/vue-core/src/lib/core/i18n';
-import Router from '@triotech/vue-core/src/lib/core/router';
-import Store from '@triotech/vue-core/src/lib/core/store';
+import I18n from '@triotech/vue-core/src/lib/plugins/i18n';
+import Router from '@triotech/vue-core/src/lib/plugins/router';
+import Store from '@triotech/vue-core/src/lib/plugins/store';
+import autoload from './autoload';
 import App from '@/App';
 import { mapActions } from 'vuex';
+
+autoload(require.context('@triotech/vue-core/src/lib/plugins', false, /\.js$/));
 
 Vue.config.performance = true;
 Vue.config.productionTip = false;
@@ -38,14 +39,21 @@ export default new Vue({
     run(options = {}) {
       return window.app = new Vue({
         el: '#app',
-        ajax: Ajax,
-        bus: Bus,
         i18n: I18n,
         router: Router,
         store: Store,
         render: h => h(App),
         ...options,
       });
+    },
+    get(key) {
+
+    },
+    set(key, value) {
+
+    },
+    add(array, value) {
+
     },
   },
 });

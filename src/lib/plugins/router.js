@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Config from '@triotech/vue-core/src/lib/core/config';
 import routes from '$config/routing';
-import _ from '@triotech/vue-core/src/vendor/lodash';
 
 Vue.use(VueRouter);
 
@@ -33,9 +31,9 @@ const Router = new VueRouter({
 
 // https://router.vuejs.org/en/advanced/navigation-guards.html
 Router.beforeEach((to, from, next) => {
-  const vm = this.a.app; // this.a instanceof VueRouter
+  const vm = this.default.app;
   vm.$nextTick(() => {
-    _.each(Config.get('firewall'), (data, path) => {
+    _.each(vm.$config.get('firewall'), (data, path) => {
       const store = _.isObject(data) ? data.store : true;
       const state = _.isObject(data) ? data.state : data;
       const redirect = _.isObject(data) ? data.redirect : '/';

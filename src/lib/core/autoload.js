@@ -1,7 +1,4 @@
-
-const Webpack = () => {};
-
-Webpack.find = ((ctx) => {
+export default ((ctx) => {
   const keys = ctx.keys();
   const values = keys.map(ctx);
   return keys.reduce((carry, key, index) => {
@@ -10,5 +7,3 @@ Webpack.find = ((ctx) => {
     return carry;
   }, {});
 });
-
-export default Webpack;
