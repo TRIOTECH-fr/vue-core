@@ -31,7 +31,7 @@ Vue.component('fieldDropdown', {
   mounted() {
     const initialValue = this.modelNameToProperty(this.schema.model);
     if (this.schema.required) {
-      this.$el.children[1].children[2].required = 'required';
+      this.setRequired();
     }
     if (initialValue) {
       if (!this.multiple) {
@@ -62,6 +62,11 @@ Vue.component('fieldDropdown', {
         // eslint-disable-next-line no-prototype-builtins
         .reduce((a, b) => (a && a.hasOwnProperty(b) ? a[b] : null), this.model);
     },
+    setRequired(value = 0) {
+      if (this.schema.required) {
+        this.$el.children[1].children[2].required = value > 0 ? '' : 'required';
+      }
+    },
   },
   watch: {
     model(newValue) {
@@ -70,9 +75,10 @@ Vue.component('fieldDropdown', {
       }
     },
     multiselect_model(newValue, OldValue) {
-      if (this.newValue !== OldValue) {
+      if (newValue !== OldValue) {
         this.setModelValueByPath(this.schema.model, this.value);
       }
+      this.setRequired(_.size(newValue));
     },
   },
   computed: {
