@@ -4,7 +4,7 @@ import Router from '@triotech/vue-core/src/lib/plugins/router';
 import Store from '@triotech/vue-core/src/lib/plugins/store';
 import autoload from './autoload';
 import App from '@/App';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 autoload(require.context('@triotech/vue-core/src/lib/plugins', false, /\.js$/));
 
@@ -31,6 +31,7 @@ Vue.mixin({
   },
   methods: {
     ...mapActions(['setKeyValueAction', 'addKeyValueAction']),
+    ...mapGetters(['oauth']),
   },
 });
 
