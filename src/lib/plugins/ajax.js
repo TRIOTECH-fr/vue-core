@@ -168,10 +168,11 @@ const Ajax = new Vue({
         .catch((error) => {
           const data = (error.response && error.response.data) || {};
           if (data.error === 'invalid_grant') {
-            if (data.error_description.match(/expired/i) && error.response.status === 401) {
+            const description = data.error_description;
+            if (description.match(/expired/i) && error.response.status === 401) {
               delete config.headers;
               return this.refresh().then(this.asyncRequest.bind(this, config));
-            } else if (data.error_description.match(/invalid/i) || (data.error_description.match(/expired/i) && error.response.status === 400)) {
+            } else if (!description.match(/password/i) && description.match(/invalid|expired/i) && error.response.status === 400) {
               this.setKeyValueAction({ key: 'oauth', value: null });
               return this.redirect();
             }
