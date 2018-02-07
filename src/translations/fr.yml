@@ -20,6 +20,12 @@ form:
   first_name: Prénom
   mail: Email
   phone: Téléphone
+  date: Date
+  gender: Genre
+  male: Homme
+  female: Femme
+  image: Image
+  link: Lien
 
 actions:
   cancel: Annuler
