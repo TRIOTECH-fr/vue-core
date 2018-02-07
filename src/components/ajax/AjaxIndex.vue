@@ -162,7 +162,7 @@
       },
       async refresh() {
         this.isLoading = true;
-        const fn = Ajax[this.method];
+        const fn = this.$ajax[this.method];
         await fn(this.uri, this.data, this.config).then((items) => {
           if (items.length < this.items.length) {
             const deletedData = _.differenceWith(this.items, items, (x, y) => x.id === y.id);
