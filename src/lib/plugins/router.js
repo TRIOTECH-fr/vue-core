@@ -45,9 +45,9 @@ Router.beforeEach((to, from, next) => {
   });
 });
 
-Router.beforeEach((to, from, next) => {
+Router.beforeEach((to, from, next, notFound = '/404') => {
   if (!to.matched.length) {
-    next('/404');
+    next(to.path === notFound ? '/' : notFound);
   } else {
     next();
   }
