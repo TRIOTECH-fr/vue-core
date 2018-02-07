@@ -3,7 +3,7 @@ import DatePicker from 'vuejs-datepicker';
 import VueFormGenerator from 'vue-form-generator';
 
 Vue.component('fieldDatePicker', {
-  template: '<date-picker :placeholder="schema.placeholder" :language="language" v-model="datePicker_model" input-class="form-control"></date-picker>',
+  template: '<date-picker :placeholder="schema.placeholder" :required="schema.required" :language="language" v-model="datePicker_model" input-class="form-control"></date-picker>',
   components: {
     DatePicker,
   },
@@ -21,8 +21,11 @@ Vue.component('fieldDatePicker', {
   mixins: [VueFormGenerator.abstractField],
   mounted() {
     const initialValue = this.modelNameToProperty(this.schema.model);
+    if (this.schema.required) {
+      this.$el.children[0].children[0].removeAttribute('readonly');
+    }
     if (!_.isNull(initialValue)) {
-      this.datePicker_model = this.$moment(initialValue).format('YYYY-MM-DD');
+      this.datePicker_model = this.$moment(initialValue).format('L');
     }
   },
   methods: {
@@ -35,7 +38,7 @@ Vue.component('fieldDatePicker', {
         .reduce((a, b) => (a && {}.hasOwnProperty.call(a, b) ? a[b] : null), this.model);
     },
     format(date) {
-      return this.$moment(date).format('YYYY-MM-DD');
+      return this.$moment(date).format('L');
     },
   },
   watch: {

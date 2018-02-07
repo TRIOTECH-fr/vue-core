@@ -16,6 +16,9 @@ Vue.component('fieldDropdown', {
   },
   mounted() {
     const initialValue = this.modelNameToProperty(this.schema.model);
+    if (this.schema.required) {
+      this.$el.children[1].children[2].required = 'required';
+    }
     if (initialValue) {
       if (!this.multiple) {
         if (typeof initialValue === 'object') {
