@@ -4,6 +4,7 @@ import Axios from 'axios';
 import moment from 'moment';
 import QS from 'qs';
 import Y from '@triotech/vue-core/src/lib/plugins/y';
+import { mapActions } from 'vuex';
 
 Vue.use(VueAxios, Axios);
 
@@ -166,8 +167,8 @@ const Ajax = new Vue({
           if (data._embedded && data._embedded.items) {
             data = data._embedded.items;
           }
-          Store.data = data;
-          Store[config.url] = data;
+          this.$store.data = data;
+          this.$store[config.url] = data;
           return data;
         })
         .catch((error) => {
@@ -193,6 +194,7 @@ const Ajax = new Vue({
         })
       ;
     },
+    ...mapActions(['setKeyValueAction']),
   },
 });
 
