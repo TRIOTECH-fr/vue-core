@@ -35,9 +35,9 @@ const Ajax = new Vue({
     },
     url(config, withoutEndpoint = false) {
       let url = config && config.url;
-      const endPoint = withoutEndpoint ? '/' : (Config.endpoint || '');
+      const endPoint = withoutEndpoint ? '/' : (this.$config.endpoint || '');
       if (url && url.indexOf('://') === -1) {
-        url = `${Config.host}${endPoint}${url}`;
+        url = `${this.$config.host}${endPoint}${url}`;
       }
       return url;
     },
@@ -102,13 +102,6 @@ const Ajax = new Vue({
       }, data), !!data.rememberMe);
     },
     refresh() {
-      if (this._.isUndefined(this.oauthStore.refresh_token_expires_at) || (Number(new Date()) - this.oauthStore.refresh_token_expires_at) / 1000 > 0) {
-        // no expiration date for refresh token, or refresh token expired, clear and redirect to /login
-        this.setKeyValueAction({ key: 'oauth', value: null });
-        this.$router.push('/login');
-        location.reload();
-      }
-
       return this.oauth({
         grant_type: 'refresh_token',
         refresh_token: this.oauthStore.refresh_token,
@@ -139,6 +132,10 @@ const Ajax = new Vue({
 
       if (!this._.isEmpty(this.oauthStore)) {
         if (!config.commit && (moment() - this.oauthStore.expires_at) / 1000 > 0) {
+          if (this._.isUndefined(this.oauthStore.refresh_token_expires_at) || (moment() - this.oauthStore.refresh_token_expires_at) / 1000 > 0) {
+            this.setKeyValueAction({ key: 'oauth', value: null });
+            location.href = '/login';
+          }
           return this.refresh().then(this.asyncRequest.bind(this, config));
         }
 
