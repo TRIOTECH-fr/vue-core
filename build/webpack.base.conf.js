@@ -21,9 +21,9 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      vue$: 'vue/dist/vue.esm.js',
       '@': resolve('src'),
-      $: resolve('node_modules/@triotech/vue-core/src/lib/plugins'),
+      '%': resolve('config'),
+      $: resolve('node_modules/@triotech/vue-core/src'),
     },
   },
   node: {

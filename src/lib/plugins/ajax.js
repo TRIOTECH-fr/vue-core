@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import { mapActions } from 'vuex';
 import VueAxios from 'vue-axios';
 import Axios from 'axios';
 import moment from 'moment';
@@ -96,6 +95,9 @@ const Ajax = new Vue({
     head(url, data, config) {
       return this.request(this.build(url, this.httpHead, data, config));
     },
+    redirect(uri) {
+      location.href = uri;
+    },
     login(data) {
       return this.oauth(this._.extend({
         grant_type: 'password',
@@ -131,10 +133,10 @@ const Ajax = new Vue({
       config.url = this.url(config);
 
       if (!this._.isEmpty(this.oauthStore)) {
-        if (!config.commit && (moment() - this.oauthStore.expires_at) / 1000 > 0) {
-          if (this._.isUndefined(this.oauthStore.refresh_token_expires_at) || (moment() - this.oauthStore.refresh_token_expires_at) / 1000 > 0) {
+        if (!config.commit && this._.expired(this.oauthStore.expires_at)) {
+          if (this._.expired(this.oauthStore.refresh_token_expires_at)) {
             this.setKeyValueAction({ key: 'oauth', value: null });
-            location.href = '/login';
+            return this.redirect('/login');
           }
           return this.refresh().then(this.asyncRequest.bind(this, config));
         }
@@ -176,8 +178,7 @@ const Ajax = new Vue({
               return this.refresh().then(this.asyncRequest.bind(this, config));
             } else if (data.error_description.match(/invalid/i) || (data.error_description.match(/expired/i) && error.response.status === 400)) {
               this.setKeyValueAction({ key: 'oauth', value: null });
-              this.$router.push('/login');
-              location.reload();
+              return this.redirect('/login');
             }
           } else {
             // eslint-disable-next-line no-console
@@ -192,7 +193,6 @@ const Ajax = new Vue({
         })
       ;
     },
-    ...mapActions(['setKeyValueAction']),
   },
 });
 

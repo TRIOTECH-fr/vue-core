@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import _ from 'lodash';
+import moment from 'moment';
 
 _.mixin({
   encode: string => encodeURIComponent(string),
@@ -10,15 +11,17 @@ _.mixin({
     return _.reduce(array, (carry, arg, index, args) => _.extend(carry, index % 2 === 1 && { [args[index - 1]]: arg }), {});
   },
   isBlob: value => value instanceof Blob,
+  expired: time => (moment() - time) / 1000 > 0,
   base64ToBlob(string, type = 'image/jpeg') {
     const bytes = window.atob(string);
     const bytesLength = bytes.length;
     const view = new Uint8Array(new ArrayBuffer(bytesLength));
 
-    for (let i = 0; i < bytesLength; i++) {
+    for (let i = 0; i < bytesLength; i += 1) {
       view[i] = bytes.charCodeAt(i);
     }
 
+    // TODO remove window.header
     const header = String.fromCharCode(...view.slice(0, 4));
     if (!window.header) {
       window.header = {};

@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import VueFormGenerator from '@triotech/vue-core/src/bind/vue-form-generator';
+  import VueFormGenerator from '$/vendor/vue-form-generator';
 
   export default {
     name: 'AjaxDeleteComponent',

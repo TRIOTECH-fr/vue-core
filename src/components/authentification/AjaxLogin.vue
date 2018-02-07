@@ -9,8 +9,7 @@
 </template>
 
 <script>
-  import Ajax from '@triotech/vue-core/src/lib/http/ajax';
-  import VueFormGenerator from '@triotech/vue-core/src/bind/vue-form-generator';
+  import VueFormGenerator from '$/vendor/vue-form-generator';
 
   export default {
     name: 'LoginPage',
@@ -75,7 +74,7 @@
         if (this.$store.state.oauth) {
           this.forward();
         } else {
-          await Ajax.get(this.uri)
+          await this.$ajax.get(this.uri)
             .then((data) => {
               this.$set(this.schema, 'fields', _.form(this.$t, data));
               this.$bus.$emit('t-event.load-form.login.success')
@@ -90,7 +89,7 @@
         return this.success_route;
       },
       async submit() {
-        await Ajax.login(this.model)
+        await this.$ajax.login(this.model)
           .then(() => {
             this.$notify({
               title: this.$t('flashes.login.title'),

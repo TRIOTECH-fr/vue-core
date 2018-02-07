@@ -9,8 +9,7 @@
 </template>
 
 <script>
-  import Ajax from '@triotech/vue-core/src/lib/http/ajax';
-  import VueFormGenerator from '@triotech/vue-core/src/bind/vue-form-generator';
+  import VueFormGenerator from '$/vendor/vue-form-generator';
 
   export default {
     name: 'LoginChangePage',
@@ -62,7 +61,7 @@
     },
     methods: {
       async load() {
-        await Ajax.publicRequest(`${this.uri}/${this.token}`)
+        await this.$ajax.publicRequest(`${this.uri}/${this.token}`)
           .then((data) => {
             this.$set(this.schema, 'fields', _.form(this.$t, data));
           })
@@ -75,7 +74,7 @@
         return this.success_route;
       },
       async submit() {
-        await Ajax.publicRequest(`${this.uri}/${this.token}`, 'POST', this.model)
+        await this.$ajax.publicRequest(`${this.uri}/${this.token}`, 'POST', this.model)
           .then(() => {
             this.$notify({
               title: this.$t('flashes.request.title'),
