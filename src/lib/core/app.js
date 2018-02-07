@@ -6,7 +6,7 @@ import autoload from './autoload';
 import App from '@/App';
 import { mapActions, mapGetters } from 'vuex';
 
-autoload(require.context('@triotech/vue-core/src/lib/plugins', false, /\.js$/));
+const loaded = autoload(require.context('@triotech/vue-core/src/lib/plugins', false, /\.js$/));
 
 Vue.config.performance = true;
 Vue.config.productionTip = false;

@@ -10,11 +10,15 @@ Vue.component('fieldDropdown', {
     v-model="multiselect_model"
     :multiple="multiple"
     :options="schema.choices"
-    selectLabel=""
-    selectedLabel=""
-    deselectLabel=""
-    placeholder=""
-  ></multiselect>`,
+    :selectLabel="$t('vms.select')"
+    :selectedLabel="$t('vms.selected')"
+    :deselectLabel="$t('vms.deselect')"
+    :placeholder="$t('vms.placeholder')"
+    :tagPlaceholder="$t('vms.tag_placeholder')"
+  >
+    <slot name="noResult">$t('vms.no_result')</slot>
+    <slot name="maxElements">$t('vms.max_elements')</slot>
+  </multiselect>`,
   components: {
     Multiselect,
   },
