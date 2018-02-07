@@ -15,10 +15,11 @@
       icon: { type: String, default: '' },
       klass: { type: String, default: '' },
       route: { type: String, default: 'home' },
+      sessionKey: { type: String, default: 'oauth' },
     },
     methods: {
       logout() {
-        this.setKeyValueAction({ key: 'oauth', value: null });
+        this.setKeyValueAction({ key: this.sessionKey, value: null });
         this.$router.push({ name: this.route });
       },
     },
