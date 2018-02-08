@@ -43,6 +43,11 @@ actions:
   show: Consulter
   loading: Chargement...
 
+flashes:
+  login:
+    title: Connexion
+    invalid_grant: Les identifiants de connexion sont incorrects
+
 # VueMultiSelect
 vms:
   select: Appuyer sur ENTRER pour sélectionner
