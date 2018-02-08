@@ -144,7 +144,7 @@ const Ajax = new Vue({
       }
 
       if (config.stringify) {
-        config.data = qs.stringify(config.data);
+        config.data = QS.stringify(config.data);
       }
 
       const multiPart = this._.some(config.data, value => value instanceof File);

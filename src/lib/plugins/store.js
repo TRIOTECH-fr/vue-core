@@ -13,17 +13,35 @@ const Store = new Vuex.Store({
     filters: {},
   },
   getters: {
+    get: state => state,
     oauth: state => state.oauth,
+    user: state => state.oauth && state.oauth.user,
   },
   mutations: {
+    set(state, data) {
+      _.each(data, (value, key) => {
+        if (state[key]) {
+          state[key] = Object.assign({}, value);
+        } else {
+          Vue.set(state, key, value);
+        }
+      });
+    },
+    add(state, data) {
+      _.each(data, (value, key) => {
+        const index = state[key].length - 1;
+        state[key].splice(index, 1, value);
+      });
+    },
+    unset(state, data) {
+      _.each(_.isArray(data) ? data : [data], key => Vue.set(state, key, null));
+    },
     setKeyValue(state, data) {
-      this._vm.$set(state, data.key, data.value);
-      // state[data.key] = data.value;
+      Vue.set(state, data.key, data.value);
     },
     addKeyValue(state, data) {
       const array = state[data.key];
-      this._vm.$set(array, array.length - 1, data.value);
-      // state[data.key].push(data.value);
+      Vue.set(array, array.length - 1, data.value);
     },
     updateFilter(state, filter) {
       const name = filter && filter.name;
@@ -38,40 +56,30 @@ const Store = new Vuex.Store({
     },
   },
   actions: {
+    set({ commit }, data) {
+      commit('set', data);
+    },
+    add({ commit }, data) {
+      commit('add', data);
+    },
+    unset({ commit }, data) {
+      commit('unset', data);
+    },
+    reset({ commit }) {
+      commit('unset', _.keys(this.state));
+    },
     setKeyValueAction({ commit }, data) {
-      if (!_.isObject(data)) {
-        console.warn('setKeyValueAction needs a data object as argument');
-      } else if (!_.isString(data.key)) {
-        console.warn('setKeyValueAction data object needs a string key named "key"');
-      } else if (_.isUndefined(data.value)) {
-        console.warn('setKeyValueAction data object needs a defined key named "value"');
-      } else if (data.commit === false) {
-        this._mutations.setKeyValue[0](data);
-      } else {
-        commit('setKeyValue', data);
-      }
+      // eslint-disable-next-line no-console
+      console.warn('deprecated: use this.set(data) instead');
+      commit('setKeyValue', data);
     },
     addKeyValueAction({ commit }, data) {
-      if (!_.isObject(data)) {
-        console.warn('addKeyValueAction needs a data object as argument');
-      } else if (!_.isString(data.key)) {
-        console.warn('addKeyValueAction data object needs a string key named "key"');
-      } else if (_.isUndefined(data.value)) {
-        console.warn('addKeyValueAction data object needs a defined key named "value"');
-      } else if (data.commit === false) {
-        this._mutations.addKeyValue[0](data);
-      } else {
-        commit('addKeyValue', data);
-      }
+      // eslint-disable-next-line no-console
+      console.warn('deprecated: use this.add(data) instead');
+      commit('addKeyValue', data);
     },
     updateFilterAction({ commit }, filter) {
-      if (!_.isObject(filter)) {
-        console.warn('updateFilterAction needs a filter object as argument');
-      } else if (!_.isString(filter.name)) {
-        console.warn('updateFilterAction filter object needs a string key named "name"');
-      } else {
-        commit('updateFilter', filter);
-      }
+      commit('updateFilter', filter);
     },
   },
   plugins: [

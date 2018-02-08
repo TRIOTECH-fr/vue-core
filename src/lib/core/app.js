@@ -1,12 +1,12 @@
 import Vue from 'vue';
-import I18n from '@triotech/vue-core/src/lib/plugins/i18n';
-import Router from '@triotech/vue-core/src/lib/plugins/router';
-import Store from '@triotech/vue-core/src/lib/plugins/store';
-import autoload from './autoload';
-import App from '@/App';
 import { mapActions, mapGetters } from 'vuex';
+import App from '@/App';
+import I18n from '../plugins/i18n';
+import Router from '../plugins/router';
+import Store from '../plugins/store';
+import autoload from './autoload';
 
-const loaded = autoload(require.context('@triotech/vue-core/src/lib/plugins', false, /\.js$/));
+autoload(require.context('@triotech/vue-core/src/lib/plugins', false, /\.js$/));
 
 Vue.config.performance = true;
 Vue.config.productionTip = false;
@@ -30,15 +30,17 @@ Vue.mixin({
     return metaInfo;
   },
   methods: {
+    ...mapActions(['set', 'add', 'unset', 'reset']),
+    ...mapGetters(['get', 'oauth', 'user']),
+    // TODO remove
     ...mapActions(['setKeyValueAction', 'addKeyValueAction']),
-    ...mapGetters(['oauth']),
   },
 });
 
 export default new Vue({
   methods: {
     run(options = {}) {
-      return window.app = new Vue({
+      const app = new Vue({
         el: '#app',
         i18n: I18n,
         router: Router,
@@ -46,15 +48,8 @@ export default new Vue({
         render: h => h(App),
         ...options,
       });
-    },
-    get(key) {
-
-    },
-    set(key, value) {
-
-    },
-    add(array, value) {
-
+      window.app = app;
+      return app;
     },
   },
 });
