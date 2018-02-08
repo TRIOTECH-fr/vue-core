@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueFormGenerator from 'vue-form-generator';
 
 Vue.component('fieldFileUpload', {
-  template: '<input :multiple="schema.multiple" @change="onValueChange" type="file" class="form-control-file" :id="getFieldID(schema)">',
+  template: '<input :multiple="schema.multiple" :accept="mimeConstraint" @change="onValueChange" type="file" class="form-control-file" :id="getFieldID(schema)">',
   components: {
   },
   data() {
@@ -46,6 +46,9 @@ Vue.component('fieldFileUpload', {
     },
   },
   computed: {
+    mimeConstraint() {
+      return _.join(this.schema.mimeType, ', ');
+    },
     value: {
       get() {
         return this.data;
