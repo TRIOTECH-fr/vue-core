@@ -34,7 +34,7 @@ const Store = new Vuex.Store({
       });
     },
     unset(state, data) {
-      _.each(_.isArray(data) ? data : [data], key => Vue.set(state, key, null));
+      _.each(_.isArray(data) ? data : [data], key => delete state[key]);
     },
     setKeyValue(state, data) {
       Vue.set(state, data.key, data.value);
