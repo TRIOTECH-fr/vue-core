@@ -111,7 +111,6 @@ export default {
       }
 
       .custom-template-icon {
-        align-self: end;
         color: $light-grey;
         font-size: 32px;
         padding: 0 10px;
@@ -129,7 +128,7 @@ export default {
       }
       .custom-template-content {
         padding: 10px;
-        flex: 1 0 auto;
+        flex: 1 0;
 
         .custom-template-title {
           letter-spacing: 1px;
