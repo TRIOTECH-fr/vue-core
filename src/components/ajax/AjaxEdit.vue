@@ -40,7 +40,7 @@
       };
     },
     props: {
-      additionnal_route: {
+      additionnalRoute: {
         type: String,
         default: null,
       },
@@ -133,8 +133,8 @@
       },
       editRouteFunc() {
         this.editRoute = `${this.getUri}/${this.getId}/edit`;
-        if (this.additionnal_route) {
-          this.editRoute = `${this.getUri}/${this.getId}/edit/${this.additionnal_route}`;
+        if (this.additionnalRoute) {
+          this.editRoute = `${this.getUri}/${this.getId}/edit/${this.additionnalRoute}`;
         }
 
         return this.editRoute;
