@@ -119,14 +119,6 @@ _.mixin({
       return carry;
     });
   },
-  uniqKeys(collection, key) {
-    return _.keys(_.reduce(collection, (carry, item) => {
-      if (!carry[item[key]]) {
-        carry[item[key]] = 1;
-      }
-      return carry;
-    }, {}));
-  },
 });
 
 Vue.set(Vue.prototype, '_', _);
