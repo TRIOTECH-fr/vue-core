@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Raven from 'raven-js';
 import RavenVue from 'raven-js/plugins/vue';
-import App from '@triotech/vue-core/src/lib/core/app';
-import Config from '@triotech/vue-core/src/lib/plugins/config';
+import App from '../core/app';
+import Config from '../plugins/config';
 
 Raven.addPlugin(RavenVue, Vue).install();
 

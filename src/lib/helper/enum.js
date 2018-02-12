@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import I18n from '@triotech/vue-core/src/lib/core/i18n';
+import I18n from '../plugins/i18n';
 
 // TODO remove if providing unbound enum choices values in triotech/api-bundle
 

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Config from '@triotech/vue-core/src/lib/plugins/config';
+import Config from '../plugins/config';
 
 // TODO convert imgurl vue mixin into vue instance url/filter methods
 Vue.mixin({

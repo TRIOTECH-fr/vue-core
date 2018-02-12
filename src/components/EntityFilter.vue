@@ -24,7 +24,7 @@
   import Multiselect from 'vue-multiselect';
   import { mapActions } from 'vuex';
   import Voca from 'voca';
-  import Enum from '@triotech/vue-core/src/lib/http/enum';
+  import Enum from '../lib/helper/enum';
 
   export default {
     name: 'EntityFilterComponent',

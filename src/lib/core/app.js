@@ -14,7 +14,7 @@ Vue.config.productionTip = false;
 Vue.mixin({
   // https://github.com/declandewet/vue-meta
   metaInfo() {
-    const name = this.$options.name;
+    const { name } = this.$options;
     let metaInfo = {};
     const regex = new RegExp(/(index|show|edit|delete)?page$/i);
     if (name && name.match(regex)) {
