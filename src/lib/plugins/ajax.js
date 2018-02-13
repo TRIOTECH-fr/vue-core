@@ -129,7 +129,7 @@ const Ajax = new Vue({
       if (!this._.isEmpty(this.oauthStore)) {
         if (!config.commit && this._.expired(this.oauthStore.expires_at)) {
           if (this._.expired(this.oauthStore.refresh_token_expires_at)) {
-            this.setKeyValueAction({ key: 'oauth', value: null });
+            this.unset('oauth');
             return this.redirect();
           }
           return this.refresh().then(this.asyncRequest.bind(this, config));
@@ -172,7 +172,7 @@ const Ajax = new Vue({
               delete config.headers;
               return this.refresh().then(this.asyncRequest.bind(this, config));
             } else if (!description.match(/password/i) && description.match(/invalid|expired/i) && error.response.status === 400) {
-              this.setKeyValueAction({ key: 'oauth', value: null });
+              this.unset('oauth');
               return this.redirect();
             }
           } else {
