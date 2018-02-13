@@ -4,7 +4,6 @@ import Axios from 'axios';
 import moment from 'moment';
 import QS from 'qs';
 import Y from '@triotech/vue-core/src/lib/plugins/y';
-import { mapActions } from 'vuex';
 
 Vue.use(VueAxios, Axios);
 
