@@ -156,7 +156,7 @@ const Ajax = new Vue({
 
       return this.$http.request(config)
         .then((res) => {
-          let data = res.data;
+          let { data } = res;
           // eslint-disable-next-line no-underscore-dangle
           if (data._embedded && data._embedded.items) {
             data = data._embedded.items;
@@ -186,10 +186,8 @@ const Ajax = new Vue({
             });
           }
           throw error;
-        })
-      ;
+        });
     },
-    ...mapActions(['setKeyValueAction']),
   },
 });
 

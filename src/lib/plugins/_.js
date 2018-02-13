@@ -1,8 +1,10 @@
 import Vue from 'vue';
 import _ from 'lodash';
 import moment from 'moment';
+import Y from './y';
 
 _.mixin({
+  access: (object, key, defaults) => object[key] || _.extend(object, { [key]: defaults })[key],
   encode: string => encodeURIComponent(string),
   param(object) {
     return _.reduce(object, (carry, value, key) => `${carry}&${this.encode(key)}=${this.encode(value)}`, '').replace('&', '?');
@@ -35,9 +37,8 @@ _.mixin({
   base64ToObjectURL(string) {
     return window.URL.createObjectURL(_.base64ToBlob(string));
   },
-  defaultsDeepObj(baseObject = {}, baseBase = {}) {
-    // eslint-disable-next-line arrow-body-style
-    const addValue = (object = {}, base = {}) => {
+  defaultsDeepObj(...args) {
+    return Y(callback => (object = {}, base = {}) => {
       _.map(base, (currentObj, key) => {
         if (Object.prototype.hasOwnProperty.call(object, key)) {
           if (_.isObject(currentObj) && !(currentObj instanceof Blob)) {
@@ -45,53 +46,47 @@ _.mixin({
             if (_.isNull(object[key])) {
               object[key] = {};
             }
-            addValue(object[key], currentObj);
+            callback(object[key], currentObj);
           }
         } else {
           object[key] = null;
         }
       });
       return object;
-    };
-    return addValue(baseObject, baseBase);
+    })(...args);
   },
   differenceObj(baseObject = {}, baseBase = {}, keepIdentifier = false, identifier = 'id') {
     // eslint-disable-next-line arrow-body-style
-    const changes = (object, base) => {
+    return Y(callback => (object = {}, base = {}) => {
       return _.transform(object, (result, value, key) => {
         if (!_.isEqual(value, base[key]) || (keepIdentifier && key === identifier)) {
           result[key] = (_.isObject(value) && _.isObject(base[key] && !(value instanceof Blob)))
-            ? changes(value, base[key])
+            ? callback(value, base[key])
             : value;
         }
       });
-    };
-    return changes(baseObject, baseBase);
+    })(baseObject, baseBase);
   },
-  clearModelForForm(baseModel = {}, BaseSchema = {}, modelTemp = {}, keepId = true, idKey = 'id') {
-    const formatKey = (stack, key) => (stack ? `${stack}[${key}]` : key);
-    let data = _.defaultsDeepObj(baseModel, modelTemp);
-    const formFields = _.reduce(BaseSchema, (carry, field) => {
+  clearModelForForm(baseModel = {}, baseSchema = {}, modelTemp = {}, keepId = true, idKey = 'id') {
+    const format = (stack, key) => (stack ? `${stack}[${key}]` : key);
+    const formFields = _.reduce(baseSchema, (carry, field) => {
       carry.push(field.model);
       return carry;
     }, keepId ? [idKey] : []);
 
-    const clear = (obj, models, stack = '') => {
+    return Y(callback => (obj, models, stack = '') => {
       _.map(obj, (value, key) => {
-        const keyName = formatKey(stack, key);
+        const keyName = format(stack, key);
         if (!formFields.includes(keyName)) {
           if (_.isObject(value) && !_.isArray(value)) {
-            clear(value, models, keyName);
+            callback(value, models, keyName);
           } else {
             delete obj[key];
           }
         }
       });
       return obj;
-    };
-
-    data = clear(data, formFields);
-    return data;
+    })(_.defaultsDeepObj(baseModel, modelTemp), formFields);
   },
   form($t, fields) {
     return _.each(fields, (field) => {
@@ -112,7 +107,7 @@ _.mixin({
     });
   },
   propsValidator(component, route) {
-    return _.transform({ ...route.params }, (carry, prop, key, props) => {
+    return _.transform({ ...route.params }, (carry, prop, key) => {
       if (!_.isArray(component.props[key].type) && !(prop instanceof component.props[key].type)) {
         carry[key] = component.props[key].type(prop);
       }
