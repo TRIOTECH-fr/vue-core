@@ -19,7 +19,7 @@
     },
     methods: {
       logout() {
-        this.setKeyValueAction({ key: this.sessionKey, value: null });
+        this.unset(this.sessionKey);
         this.$router.push({ name: this.route });
       },
     },
