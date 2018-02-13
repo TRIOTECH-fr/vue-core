@@ -6,8 +6,6 @@ import Router from '../plugins/router';
 import Store from '../plugins/store';
 import autoload from './autoload';
 
-autoload(require.context('@triotech/vue-core/src/lib/plugins', false, /\.js$/));
-
 Vue.config.performance = true;
 Vue.config.productionTip = false;
 
@@ -36,6 +34,8 @@ Vue.mixin({
     ...mapActions(['setKeyValueAction', 'addKeyValueAction']),
   },
 });
+
+autoload(require.context('@triotech/vue-core/src/lib/plugins', false, /\.js$/));
 
 export default new Vue({
   methods: {

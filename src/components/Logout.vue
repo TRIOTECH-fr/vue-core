@@ -20,6 +20,7 @@
     methods: {
       logout() {
         this.unset(this.sessionKey);
+        this.setKeyValueAction({ key: 'oauth', value: null });
         this.$router.push({ name: this.route });
       },
     },

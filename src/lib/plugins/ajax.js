@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueAxios from 'vue-axios';
 import Axios from 'axios';
 import moment from 'moment';
+import { mapActions } from 'vuex';
 import QS from 'qs';
 import Y from '@triotech/vue-core/src/lib/plugins/y';
 
@@ -110,7 +111,12 @@ const Ajax = new Vue({
       }, data), { commit })).then((value) => {
         value.expires_at = (value.expires_in * 1000) + moment();
         value.refresh_token_expires_at = (value.refresh_token_lifetime * 1000) + moment();
-        this.setKeyValueAction({ key: 'oauth', value, commit });
+        if (commit) {
+          this.set({ oauth: value });
+        } else {
+          this.$store.state.oauth = value;
+        }
+        this.setKeyValueAction({ key: 'oauth', value: value, commit });
         return value;
       });
     },
@@ -130,6 +136,7 @@ const Ajax = new Vue({
         if (!config.commit && this._.expired(this.oauthStore.expires_at)) {
           if (this._.expired(this.oauthStore.refresh_token_expires_at)) {
             this.unset('oauth');
+            this.setKeyValueAction({ key: 'oauth', value: null });
             return this.redirect();
           }
           return this.refresh().then(this.asyncRequest.bind(this, config));
@@ -173,6 +180,7 @@ const Ajax = new Vue({
               return this.refresh().then(this.asyncRequest.bind(this, config));
             } else if (!description.match(/password/i) && description.match(/invalid|expired/i) && error.response.status === 400) {
               this.unset('oauth');
+              this.setKeyValueAction({ key: 'oauth', value: null });
               return this.redirect();
             }
           } else {
@@ -187,6 +195,7 @@ const Ajax = new Vue({
           throw error;
         });
     },
+    ...mapActions(['setKeyValueAction']),
   },
 });
 
