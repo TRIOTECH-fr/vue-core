@@ -107,12 +107,13 @@ _.mixin({
     });
   },
   propsValidator(component, route) {
-    return _.transform({ ...route.params }, (carry, prop, key) => {
+    const params = { ...route.params };
+    return _.transform(params, (carry, prop, key) => {
       if (!_.isArray(component.props[key].type) && !(prop instanceof component.props[key].type)) {
         carry[key] = component.props[key].type(prop);
       }
       return carry;
-    });
+    }, params);
   },
 });
 
