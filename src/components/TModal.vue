@@ -1,9 +1,15 @@
 <template>
     <div>
-      <sweet-modal @open="modal_open" @close="modal_close" :ref="modal_uid" class="modal-form" :title="title" :width="width">
-          <slot>
-
-          </slot>
+      <sweet-modal
+        @open="modal_open"
+        @close="modal_close"
+        :ref="modal_uid"
+        class="modal-form"
+        :title="title"
+        :width="width"
+        :class="klass"
+      >
+        <slot></slot>
       </sweet-modal>
     </div>
 </template>
@@ -23,6 +29,10 @@
       width: {
         type: String,
         default: null,
+      },
+      klass: {
+        type: String,
+        default: '',
       },
     },
     mounted() {
