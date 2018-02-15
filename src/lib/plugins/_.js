@@ -14,6 +14,10 @@ _.mixin({
   },
   isBlob: value => value instanceof Blob,
   expired: time => (moment() - time) / 1000 > 0,
+  dataURIToBlob(string) {
+    const [header, base64] = string.split(',');
+    return this.base64ToBlob(base64, header.replace('data:', '').replace(';base64', ''));
+  },
   base64ToBlob(string, type = 'image/jpeg') {
     const bytes = window.atob(string);
     const bytesLength = bytes.length;
