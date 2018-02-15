@@ -65,6 +65,12 @@
         type: Boolean,
         default: false,
       },
+      notificationSuccessText: {
+        type: String,
+        default() {
+          return this.$t(`flashes.${this.name}.create`);
+        },
+      },
     },
     data() {
       return {
@@ -120,7 +126,7 @@
             if (data.status) {
               this.$notify({
                 title: this.$t(`flashes.${this.name}.create_title`),
-                text: this.$t(`flashes.${this.name}.create`),
+                text: this.notificationSuccessText,
                 type: 'success',
               });
               if (this.closeModal) {
