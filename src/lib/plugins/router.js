@@ -53,6 +53,4 @@ Router.beforeEach((to, from, next, notFound = '/404') => {
   }
 });
 
-Vue.set(Vue.prototype, '$router', Router);
-
 export default Router;

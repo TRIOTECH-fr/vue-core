@@ -27,6 +27,4 @@ const I18n = new VueI18n({
 // });
 // Vue.i18n.add('fr', fr_FR)
 
-Vue.set(Vue.prototype, '$i18n', I18n);
-
 export default I18n;

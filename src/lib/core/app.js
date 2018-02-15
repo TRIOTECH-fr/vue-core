@@ -42,6 +42,8 @@ export default new Vue({
     run(options = {}) {
       const app = new Vue({
         el: '#app',
+        i18n: I18n,
+        router: Router,
         render: h => h(App),
         ...options,
       });
