@@ -117,7 +117,7 @@
     watch: {
       defaultModelValues: {
         deep: true,
-        handler(oldValue, newValue) {
+        handler(newValue) {
           _.merge(this.model, newValue);
         },
       },
