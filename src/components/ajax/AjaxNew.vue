@@ -99,6 +99,14 @@
         return this.uri || this.name;
       },
     },
+    watch: {
+      defaultModelValues: {
+        deep: true,
+        handler(newValue) {
+          _.merge(this.model, newValue);
+        },
+      },
+    },
     methods: {
       applyFilterOnSchema() {
         // todo appli with inverse option
