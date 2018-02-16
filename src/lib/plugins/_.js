@@ -18,6 +18,15 @@ _.mixin({
     const [header, base64] = string.split(',');
     return this.base64ToBlob(base64, header.replace('data:', '').replace(';base64', ''));
   },
+  blobToBase64(blob) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
+      reader.readAsDataURL(blob);
+    });
+  },
   base64ToBlob(string, type = 'image/jpeg') {
     const bytes = window.atob(string);
     const bytesLength = bytes.length;
