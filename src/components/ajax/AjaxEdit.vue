@@ -1,22 +1,22 @@
 <template>
-    <div v-if="loading" class="text-center mb-3">
-      <slot name="loader">
-        <i class="ti ti-2x ti-spin ti-refresh"></i>
-      </slot>
+  <div v-if="loading" class="text-center mb-3">
+    <slot name="loader">
+      <i class="ti ti-2x ti-spin ti-refresh"></i>
+    </slot>
+  </div>
+  <form v-else @submit.prevent="submit">
+    <template v-if="this.schema.fields.length > 0">
+      <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" :class="formClass"/>
+      <b-row>
+        <b-col>
+          <b-button block type="submit" variant="primary">{{ $t('actions.save') }}</b-button>
+        </b-col>
+      </b-row>
+    </template>
+    <div class="text-center" v-else>
+      <i class="ti ti-2x ti-spin ti-refresh"></i>
     </div>
-    <form v-else @submit.prevent="submit">
-      <template v-if="this.schema.fields.length > 0">
-        <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" :class="formClass"/>
-        <b-row>
-          <b-col>
-            <b-button block type="submit" variant="primary">{{ $t('actions.save') }}</b-button>
-          </b-col>
-        </b-row>
-      </template>
-      <div class="text-center" v-else>
-        <i class="ti ti-2x ti-spin ti-refresh"></i>
-      </div>
-    </form>
+  </form>
 </template>
 
 <script>
@@ -161,10 +161,13 @@
             this.applyFilterOnSchema();
             const modelTemp = this.defaultModelValues !== null ? this.defaultModelValues : {};
             this.$set(this, 'model', _.clearModelForForm(data.entity, data.form, modelTemp));
-            this.model_back = JSON.parse(JSON.stringify(data.entity));
+            this.updateOldModel();
             this.loading = false;
           })
         ;
+      },
+      updateOldModel() {
+        this.model_back = JSON.parse(JSON.stringify(this.model));
       },
       async submit() {
         const submitData = _.differenceObj(this.model, this.model_back);
@@ -172,6 +175,7 @@
           await this.$ajax.patch(this.editRouteFunc(), submitData)
             .then((data) => {
               if (data.status) {
+                this.updateOldModel();
                 this.$notify({
                   title: this.$t(`flashes.${this.name}.edit_title`),
                   text: this.$t(`flashes.${this.name}.edit`),
