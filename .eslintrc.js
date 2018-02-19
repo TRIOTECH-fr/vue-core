@@ -63,6 +63,7 @@ module.exports = {
     'func-names': ['warn', 'as-needed'],
     'vue/script-indent': ['error', 2, {
       baseIndent: 1,
+      switchCase: 1,
     }],
     'vue/max-attributes-per-line': ['error', {
       singleline: 3,
