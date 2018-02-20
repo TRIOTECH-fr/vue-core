@@ -32,6 +32,7 @@ Vue.mixin({
     ...mapGetters(['get', 'oauth', 'user']),
     // TODO remove
     ...mapActions(['setKeyValueAction', 'addKeyValueAction']),
+    log: window.console.log,
   },
 });
 
