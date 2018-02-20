@@ -1,4 +1,4 @@
-import Vue from '@triotech/vue-core/src/vendor/vue';
+import Vue from 'vue';
 
 const FileSystem = new Vue({
   name: 'FileSystem',
@@ -36,12 +36,14 @@ const FileSystem = new Vue({
             }
             const reader = new FileReader();
             reader.onloadend = () => {
-              if (!reader.result) {
+              if (reader.error) {
+                reject(new Error(reader.error));
+              } else if (!reader.result) {
                 return fileEntry.remove(() => {
                   reject(new Error(`${name} exists and not empty but not readable`));
                 });
               }
-              return resolve(reader.result, file);
+              return resolve({ buffer: reader.result, file });
             };
             reader.onerror = fileEntry.remove;
             return reader.readAsArrayBuffer(file);
