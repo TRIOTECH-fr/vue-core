@@ -6,7 +6,7 @@ const FileSystem = new Vue({
     root() {
       return new Promise((resolve, reject) => {
         if (window.cordova) {
-          this.ready().then(window.resolveLocalFileSystemURL.bind(window, window.cordova.file.dataDirectory, resolve, reject));
+          window.resolveLocalFileSystemURL(window.cordova.file.dataDirectory, resolve, reject);
         } else {
           navigator.webkitPersistentStorage.requestQuota(100 * 1024 * 1024, (grantedBytes) => {
             window.webkitRequestFileSystem(window.PERSISTENT, grantedBytes, (fs) => {
