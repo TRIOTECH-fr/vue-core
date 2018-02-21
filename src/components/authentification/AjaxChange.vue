@@ -1,11 +1,11 @@
 <template>
-    <form @submit.prevent="submit">
-      <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" />
-      <b-button v-if="this.schema.fields.length > 0" type="submit" variant="primary" block>{{ $t('actions.send') }}</b-button>
-      <div class="text-center" v-else>
-        <i class="ti ti-2x ti-spin ti-refresh"></i>
-      </div>
-    </form>
+  <form @submit.prevent="submit">
+    <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" />
+    <b-button v-if="this.schema.fields.length > 0" type="submit" variant="primary" block>{{ $t('actions.send') }}</b-button>
+    <div class="text-center" v-else>
+      <i class="ti ti-2x ti-spin ti-refresh"/>
+    </div>
+  </form>
 </template>
 
 <script>
@@ -64,8 +64,7 @@
         await this.$ajax.publicRequest(`${this.uri}/${this.token}`)
           .then((data) => {
             this.$set(this.schema, 'fields', _.form(this.$t, data));
-          })
-        ;
+          });
       },
       successRoute() {
         if (typeof this.success_route === 'function') {
@@ -77,8 +76,8 @@
         await this.$ajax.publicRequest(`${this.uri}/${this.token}`, 'POST', this.model)
           .then(() => {
             this.$notify({
-              title: this.$t('flashes.request.title'),
-              text: this.$t('flashes.request.success'),
+              title: this.$t('flashes.reset.title'),
+              text: this.$t('flashes.reset.success'),
               type: 'success',
             });
             this.forward();
@@ -86,19 +85,18 @@
           .catch((err) => {
             if (err.response) {
               this.$notify({
-                title: this.$t('flashes.request.title'),
-                text: this.$t(`flashes.request.${err.response.data.error}`),
+                title: this.$t('flashes.reset.title'),
+                text: this.$t(`flashes.reset.${err.response.data.error}`),
                 type: 'error',
               });
             }
-          })
-        ;
+          });
       },
       forward() {
         if (this.closeModal) {
           this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
         }
-        this.$bus.$emit('t-event.new-submit.request.success');
+        this.$bus.$emit('t-event.new-submit.reset.success');
         this.$router.push(this.successRoute());
       },
     },
