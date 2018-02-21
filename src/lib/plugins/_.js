@@ -107,6 +107,10 @@ _.mixin({
       field.label = $t(field.label);
       field.placeholder = $t(field.placeholder);
 
+      if (field.hint) {
+        field.hint = $t(field.hint);
+      }
+
       if (field.type === 'radios') {
         _.each(field.values, (choice) => {
           choice.label = $t(choice.label);
