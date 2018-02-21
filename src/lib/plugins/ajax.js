@@ -37,7 +37,7 @@ const Ajax = new Vue({
     },
     encode(input) {
       const format = (stack, key) => (stack ? `${stack}[${key}]` : key);
-      return Y(callback => (form, data, stack = null) => {
+      return Y(next => (form, data, stack = null) => {
         if (this._.isObject(data)) {
           this._.forOwn(data, (value, key) => {
             if (this._.isObject(value)) {
@@ -46,7 +46,7 @@ const Ajax = new Vue({
               } else if (this._.isArray(value)) {
                 value.forEach(subValue => form.append(`${format(stack, key)}[]`, subValue));
               } else {
-                callback(form, value, format(stack, key));
+                next(form, value, format(stack, key));
               }
             } else {
               form.append(format(stack, key), value);
@@ -116,7 +116,7 @@ const Ajax = new Vue({
         } else {
           this.$store.state.oauth = value;
         }
-        this.setKeyValueAction({ key: 'oauth', value: value, commit });
+        this.setKeyValueAction({ key: 'oauth', value, commit });
         return value;
       });
     },

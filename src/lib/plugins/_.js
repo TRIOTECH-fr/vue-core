@@ -51,7 +51,7 @@ _.mixin({
     return window.URL.createObjectURL(_.base64ToBlob(string));
   },
   defaultsDeepObj(...args) {
-    return Y(callback => (object = {}, base = {}) => {
+    return Y(next => (object = {}, base = {}) => {
       _.map(base, (currentObj, key) => {
         if (Object.prototype.hasOwnProperty.call(object, key)) {
           if (_.isObject(currentObj) && !(currentObj instanceof Blob)) {
@@ -59,7 +59,7 @@ _.mixin({
             if (_.isNull(object[key])) {
               object[key] = {};
             }
-            callback(object[key], currentObj);
+            next(object[key], currentObj);
           }
         } else {
           object[key] = null;
@@ -70,11 +70,11 @@ _.mixin({
   },
   differenceObj(baseObject = {}, baseBase = {}, keepIdentifier = false, identifier = 'id') {
     // eslint-disable-next-line arrow-body-style
-    return Y(callback => (object = {}, base = {}) => {
+    return Y(next => (object = {}, base = {}) => {
       return _.transform(object, (result, value, key) => {
         if (!_.isEqual(value, base[key]) || (keepIdentifier && key === identifier)) {
           result[key] = (_.isObject(value) && _.isObject(base[key] && !(value instanceof Blob)))
-            ? callback(value, base[key])
+            ? next(value, base[key])
             : value;
         }
       });

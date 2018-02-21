@@ -1,7 +1,11 @@
 import Vue from 'vue';
+import Y from '@triotech/vue-core/src/lib/plugins/y';
 
 const FileSystem = new Vue({
   name: 'FileSystem',
+  computed: {
+    blockSize: () => 5 * 1024 * 1024,
+  },
   methods: {
     root() {
       return new Promise((resolve, reject) => {
@@ -25,40 +29,61 @@ const FileSystem = new Vue({
         }
       });
     },
-    read(dirEntry, name) {
+    read(name) {
       return new Promise((resolve, reject) => {
-        dirEntry.getFile(name, {}, (fileEntry) => {
-          fileEntry.file((file) => {
-            if (file.size === 0) {
-              return fileEntry.remove(() => {
-                reject(new Error(`${name} exists but is empty`));
-              });
-            }
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              if (reader.error) {
-                reject(new Error(reader.error));
-              } else if (!reader.result) {
+        this.root().then((dirEntry) => {
+          dirEntry.getFile(name, {}, (fileEntry) => {
+            fileEntry.file((file) => {
+              if (file.size === 0) {
                 return fileEntry.remove(() => {
-                  reject(new Error(`${name} exists and not empty but not readable`));
+                  reject(new Error(`${name} exists but is empty`));
                 });
               }
-              return resolve({ buffer: reader.result, file });
-            };
-            reader.onerror = fileEntry.remove;
-            return reader.readAsArrayBuffer(file);
-          });
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                if (reader.error) {
+                  reject(new Error(reader.error));
+                } else if (!reader.result) {
+                  return fileEntry.remove(() => {
+                    reject(new Error(`${name} exists and not empty but not readable`));
+                  });
+                }
+                return resolve({ buffer: reader.result, file });
+              };
+              reader.onerror = fileEntry.remove;
+              return reader.readAsArrayBuffer(file);
+            });
+          }, reject);
         }, reject);
       });
     },
-    write(dirEntry, name, buffer) {
+    write(name, buffer) {
       return new Promise((resolve, reject) => {
-        dirEntry.getFile(name, { create: true }, (fileEntry) => {
-          fileEntry.createWriter((fileWriter) => {
-            fileWriter.onwriteend = resolve.bind(this, buffer);
-            fileWriter.onerror = reject;
-            fileWriter.write(new Blob([new Uint8Array(buffer)]));
-          });
+        this.root().then((dirEntry) => {
+          dirEntry.getFile(name, { create: true }, (fileEntry) => {
+            fileEntry.createWriter((fileWriter) => {
+              fileWriter.onerror = reject;
+              Y(next => (callback) => {
+                const bytesWritten = fileWriter.length;
+                const totalSize = buffer.byteLength;
+                const blockSize = Math.min(this.blockSize, totalSize - bytesWritten);
+                const nextSize = bytesWritten + blockSize;
+                // if (bytesWritten > 0) {
+                //   fileWriter.seek(fileWriter.length);
+                // }
+                fileWriter.write(new Blob([new Uint8Array(buffer.slice(bytesWritten, nextSize))]));
+                fileWriter.onwrite = () => {
+                  // eslint-disable-next-line
+                  console.debug(name, 100 * nextSize / totalSize, nextSize === fileWriter.length);
+                  if (nextSize < totalSize) {
+                    next(callback);
+                  } else if (_.isFunction(callback)) {
+                    callback();
+                  }
+                };
+              })(resolve.bind(this, buffer));
+            });
+          }, reject);
         }, reject);
       });
     },
