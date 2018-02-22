@@ -63,8 +63,7 @@ const FileSystem = new Vue({
           dirEntry.getFile(name, { create: true }, (fileEntry) => {
             fileEntry.createWriter((fileWriter) => {
               fileWriter.onerror = reject;
-              Y(next => (callback) => {
-                const bytesWritten = fileWriter.length;
+              Y(next => (bytesWritten, callback) => {
                 const totalSize = buffer.byteLength;
                 const blockSize = Math.min(this.blockSize, totalSize - bytesWritten);
                 const nextSize = bytesWritten + blockSize;
@@ -76,12 +75,12 @@ const FileSystem = new Vue({
                   // eslint-disable-next-line
                   console.debug(name, 100 * nextSize / totalSize, nextSize === fileWriter.length);
                   if (nextSize < totalSize) {
-                    next(callback);
+                    next(nextSize, callback);
                   } else if (_.isFunction(callback)) {
                     callback();
                   }
                 };
-              })(resolve.bind(this, buffer));
+              })(0, resolve.bind(this, buffer));
             });
           }, reject);
         }, reject);
