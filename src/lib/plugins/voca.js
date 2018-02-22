@@ -3,4 +3,4 @@ import Voca from 'voca';
 
 Vue.set(Vue.prototype, '$voca', Voca);
 
-export default window.voca = Voca;
+export default Voca;
