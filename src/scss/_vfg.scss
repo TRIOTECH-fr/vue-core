@@ -1,3 +1,11 @@
 .vdp-datepicker {
   width: 100%;
 }
+
+.custom-file-input:lang(fr)~.custom-file-label::after {
+  content: "Ajouter un fichier";
+}
+
+.custom-file-input:lang(en)~.custom-file-label::after {
+  content: "Browse";
+}

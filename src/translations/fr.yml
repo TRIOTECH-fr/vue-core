@@ -30,6 +30,7 @@ form:
 actions:
   cancel: Annuler
   continue: Continuer
+  choose_file: Choisissez un fichier
   create: Créer
   delete: Supprimer
   duplicate: Dupliquer
