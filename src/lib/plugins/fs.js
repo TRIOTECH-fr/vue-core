@@ -62,7 +62,9 @@ const FileSystem = new Vue({
         this.root().then((dirEntry) => {
           dirEntry.getFile(name, { create: true }, (fileEntry) => {
             fileEntry.createWriter((fileWriter) => {
-              fileWriter.onerror = reject;
+              fileWriter.onerror = () => {
+                this.unlink(name).then(reject).catch(reject);
+              };
               Y(next => (bytesWritten, callback) => {
                 const totalSize = buffer.byteLength;
                 const blockSize = Math.min(this.blockSize, totalSize - bytesWritten);
@@ -86,9 +88,13 @@ const FileSystem = new Vue({
         }, reject);
       });
     },
-    unlink(fileEntry) {
+    unlink(name) {
       return new Promise((resolve, reject) => {
-        fileEntry.remove(resolve, reject);
+        this.root().then((dirEntry) => {
+          dirEntry.getFile(name, { }, (fileEntry) => {
+            fileEntry.remove(resolve, reject);
+          }, reject);
+        }, reject);
       });
     },
     clear() {

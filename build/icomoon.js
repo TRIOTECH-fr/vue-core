@@ -1,16 +1,18 @@
 const fs = require('fs');
 const _ = require('lodash');
 const pipeline = require('icomoon-cli');
+const argv = require('yargs').argv
 
-const args = _.reduce(process.argv.slice(2), (carry, arg, index, args) => _.extend(carry, index % 2 === 1 && { [args[index - 1]]: arg }), {});
-const icomoon = args['-d'] || args['-directory'] || 'icomoon';
-const tmp = args['-t'] || args['-output'] || 'tmp';
-const selection = args['-s'] || args['-selection'] || 'selection.json';
+const icomoon = argv.d || argv.directory || 'icomoon';
+const tmp = argv.t || argv.output || 'tmp';
+const selection = argv.s || argv.selection || 'selection.json';
+const visible = argv.v || argv.visible || false;
 const options = {
   icons: [],
   names: [],
   selectionPath: `${icomoon}/${selection}`,
   outputDir: tmp,
+  visible,
   forceOverride: true,
 };
 
