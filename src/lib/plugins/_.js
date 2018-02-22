@@ -36,15 +36,6 @@ _.mixin({
       view[i] = bytes.charCodeAt(i);
     }
 
-    // TODO remove window.header
-    const header = String.fromCharCode(...view.slice(0, 4));
-    if (!window.header) {
-      window.header = {};
-    }
-    if (!window.header[header]) {
-      window.header[header] = true;
-    }
-
     return new Blob([view], { type });
   },
   base64ToObjectURL(string) {
