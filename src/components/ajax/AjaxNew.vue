@@ -3,6 +3,7 @@
     <form @submit.prevent="submit">
       <template v-if="this.schema.fields.length > 0">
         <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" />
+        <slot name="beforeSubmit" />
         <b-row>
           <b-col>
             <b-button block type="submit" variant="success">{{ $t('actions.create') }}</b-button>
