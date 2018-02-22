@@ -23,11 +23,37 @@ Vue.component('fieldFileUpload', {
       default: 'fr',
     },
   },
+  computed: {
+    mimeConstraint() {
+      return _.join(this.schema.mimeType, ', ');
+    },
+    value: {
+      get() {
+        return this.data;
+      },
+    },
+  },
   data() {
     return {
       data: null,
       btnText: this.$t('actions.choose_file'),
     };
+  },
+  watch: {
+    model(newValue, oldValue) {
+      if (!newValue.image) {
+        this.btnText = this.$t('actions.choose_file');
+      }
+
+      if (Object.keys(newValue).length < 1) {
+        document.getElementById(this.getFieldID(this.schema)).value = '';
+      }
+    },
+    data(newValue, OldValue) {
+      if (newValue !== OldValue) {
+        this.setModelValueByPath(this.schema.model, newValue);
+      }
+    },
   },
   mixins: [VueFormGenerator.abstractField],
   mounted() {
@@ -55,28 +81,6 @@ Vue.component('fieldFileUpload', {
         .split('.')
         .map(x => _.snakeCase(x))
         .reduce((a, b) => (a && {}.hasOwnProperty.call(a, b) ? a[b] : null), this.model);
-    },
-  },
-  watch: {
-    model(newValue) {
-      if (Object.keys(newValue).length < 1) {
-        document.getElementById(this.getFieldID(this.schema)).value = '';
-      }
-    },
-    data(newValue, OldValue) {
-      if (newValue !== OldValue) {
-        this.setModelValueByPath(this.schema.model, newValue);
-      }
-    },
-  },
-  computed: {
-    mimeConstraint() {
-      return _.join(this.schema.mimeType, ', ');
-    },
-    value: {
-      get() {
-        return this.data;
-      },
     },
   },
 });

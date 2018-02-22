@@ -10,7 +10,7 @@
         </b-row>
       </template>
       <div class="text-center" v-else>
-        <i class="ti ti-2x ti-spin ti-refresh"></i>
+        <i class="ti ti-2x ti-spin ti-refresh"/>
       </div>
     </form>
   </div>
@@ -119,8 +119,7 @@
       async load() {
         const modelTemp = this.defaultModelValues !== null
           ? this.defaultModelValues
-          : {}
-        ;
+          : {};
         this.$set(this, 'model', modelTemp);
         await this.$ajax.get(`${this.getUri}/new`)
           .then((data) => {
@@ -129,6 +128,30 @@
           });
       },
       async submit() {
+        // TODO SEE HOW TODO THAT CORRECTLY
+        // _.each(this.schema.fields, (field) => {
+        //   let modelField = this.model[field.model];
+
+        //   if (field.model.split('[').length > 1) {
+        //     const fieldModel = field.model.split('[');
+        //     const f1 = fieldModel[0];
+        //     const f2 = fieldModel[1].replace(']', '');
+
+        //     modelField = this.model[f1][f2];
+        //   }
+
+        //   if (field.required && !modelField) {
+        //     this.$notify({
+        //       title: this.$t(`flashes.${this.name}.error`),
+        //       text: this.$t(`flashes.${this.name}.${field.model}.empty`),
+        //       type: 'error',
+        //     });
+        //     canSubmit = false;
+        //   } else {
+        //     canSubmit = true;
+        //   }
+        // });
+
         await this.$ajax.post(`${this.getUri}/new`, this.model)
           .then((data) => {
             if (data.status) {
@@ -183,8 +206,7 @@
                 type: 'error',
               });
             }
-          })
-        ;
+          });
         return false;
       },
     },
