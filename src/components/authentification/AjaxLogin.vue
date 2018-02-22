@@ -1,11 +1,11 @@
 <template>
-    <form @submit.prevent="submit">
-      <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" />
-      <b-button v-if="this.schema.fields.length > 0" type="submit" variant="primary" block>{{ $t('actions.login') }}</b-button>
-      <div class="text-center" v-else>
-        <i class="ti ti-2x ti-spin ti-refresh"></i>
-      </div>
-    </form>
+  <form @submit.prevent="submit">
+    <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" />
+    <b-button v-if="this.schema.fields.length > 0" type="submit" variant="primary" block>{{ $t('actions.login') }}</b-button>
+    <div class="text-center" v-else>
+      <i class="ti ti-2x ti-spin ti-refresh"/>
+    </div>
+  </form>
 </template>
 
 <script>
@@ -67,8 +67,7 @@
       async load() {
         const modelTemp = this.defaultModelValues !== null
           ? this.defaultModelValues
-          : this.model
-        ;
+          : this.model;
         this.$set(this, 'model', modelTemp);
 
         if (this.$store.state.oauth) {
@@ -76,10 +75,15 @@
         } else {
           await this.$ajax.get(this.uri)
             .then((data) => {
+              _.each(data, (field) => {
+                if (field.model === 'password') {
+                  field.hint = '';
+                }
+              });
+
               this.$set(this.schema, 'fields', _.form(this.$t, data));
-              this.$bus.$emit('t-event.load-form.login.success')
-            })
-          ;
+              this.$bus.$emit('t-event.load-form.login.success');
+            });
         }
       },
       successRoute() {
@@ -106,14 +110,13 @@
                 type: 'error',
               });
             }
-          })
-        ;
+          });
       },
       forward() {
         if (this.closeModal) {
           this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
         }
-        //TODO remove new-submit event.
+        // TODO remove new-submit event.
         this.$bus.$emit('t-event.new-submit.login.success');
         this.$bus.$emit('t-event.login.success');
         this.$router.push(this.successRoute());
