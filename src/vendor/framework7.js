@@ -9,7 +9,7 @@ Vue.use(Framework7Vue, Framework7);
 
 const Framework7RouterFindMatchingRoute = Framework7.Router.prototype.findMatchingRoute;
 Framework7.Router.prototype.findMatchingRoute = function findMatchingRoute(url, ...args) {
-  const strippedUrl = window.cordova && url.indexOf('#') === 0 ? url.replace('#', '') : url;
+  const strippedUrl = window.cordova && url && url.indexOf('#') === 0 ? url.replace('#', '') : url;
   return Framework7RouterFindMatchingRoute.call(this, strippedUrl, ...args);
 };
 
