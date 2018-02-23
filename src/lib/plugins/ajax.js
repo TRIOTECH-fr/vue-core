@@ -165,6 +165,7 @@ const Ajax = new Vue({
           let { data } = res;
           // eslint-disable-next-line no-underscore-dangle
           if (data._embedded && data._embedded.items) {
+            // eslint-disable-next-line no-underscore-dangle
             data = data._embedded.items;
           }
           this.$store.data = data;

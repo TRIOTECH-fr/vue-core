@@ -11,7 +11,7 @@ const Config = new Vue({
   },
   methods: {
     // TODO handle dot notation
-    get: key => '' || parameters[key],
+    get: (key, fallback) => parameters[key] || fallback,
     all: () => parameters,
   },
 });

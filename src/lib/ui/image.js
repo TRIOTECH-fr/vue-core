@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import Config from '../plugins/config';
 
 // TODO convert imgurl vue mixin into vue instance url/filter methods
 Vue.mixin({
@@ -7,9 +6,9 @@ Vue.mixin({
     imgurl(uri = '', filter = '') {
       if (uri && filter) {
         // eslint-disable-next-line no-param-reassign
-        uri = `media/cache/resolve/${filter}/${uri.replace('uploads/', '').replace('/app_dev.php/', '')}`;
+        uri = `/media/cache/resolve/${filter}/${uri.replace('uploads/', '')}`;
       }
-      return uri ? Config.host.replace('/api', '').concat(uri) : '#';
+      return uri ? this.$config.host.replace(/\/$/, '').concat(uri) : '#';
     },
   },
 });

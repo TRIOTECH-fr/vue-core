@@ -10,10 +10,10 @@
     @remove="remove"
     label="label"
     :multiple="multiple"
-    selectLabel=""
-    selectedLabel=""
-    deselectLabel=""
-    trackBy="value" />
+    select-label=""
+    selected-label=""
+    deselect-label=""
+    track-by="value" />
     <!-- :v-model="filter.value" -->
     <!-- :hide-selected="true" -->
     <!-- :clear-on-select="false" -->
@@ -24,7 +24,6 @@
   import Multiselect from 'vue-multiselect';
   import { mapActions } from 'vuex';
   import Voca from 'voca';
-  import Enum from '../lib/helper/enum';
 
   export default {
     name: 'EntityFilterComponent',
@@ -61,11 +60,20 @@
         return value && value.value;
       },
     },
+    mounted() {
+      const state = this.$store.state[this.$parent.entity];
+      const filters = state && state.filters;
+      if (!_.isEmpty(filters)) {
+        this.sync(filters);
+      } else {
+        this.$bus.$once(this.event('filters.data'), this.sync);
+      }
+    },
     methods: {
       event(name) { return this.$parent.event(name); },
       sync(filters) {
         const filter = _.find(filters, { id: this.id }) || {};
-        let choices = filter.choices;
+        let { choices } = filter;
 
         if (!choices) {
           return;
@@ -78,7 +86,7 @@
         }));
 
         if (this.enumeration) {
-          if (Enum.enums.length > 0) {
+          if (this.$enum.enums.length > 0) {
             this.update();
           } else {
             this.$bus.$once('enums', this.update);
@@ -88,7 +96,7 @@
       update() {
         this.options = this.$set(this.stored, this.options_key, _.each(this.options, (choice) => {
           const enumeration = this.enumeration === true ? this.enum : this.enumeration;
-          choice.label = Enum.trans(choice.value, enumeration);
+          choice.label = this.$enum.trans(choice.value, enumeration);
         }));
       },
       remove(data) {
@@ -103,15 +111,6 @@
         });
       },
       ...mapActions(['updateFilterAction']),
-    },
-    mounted() {
-      const state = this.$store.state[this.$parent.entity];
-      const filters = state && state.filters
-      if (!_.isEmpty(filters)) {
-        this.sync(filters);
-      } else {
-        this.$bus.$once(this.event('filters.data'), this.sync);
-      }
     },
   };
 </script>

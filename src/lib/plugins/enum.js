@@ -10,10 +10,13 @@ const Enum = new Vue({
     };
   },
   created() {
-    this.$ajax.get('public/enum/').then((data) => {
-      this.enums = data;
-      this.$bus.$emit('enums', data);
-    });
+    if (this.$config.get('enum', false)) {
+      debugger;
+      this.$ajax.get('public/enum/').then((data) => {
+        this.enums = data;
+        this.$bus.$emit('enums', data);
+      });
+    }
   },
   methods: {
     trans(choice, className, domain = 'enums') {
@@ -29,5 +32,7 @@ const Enum = new Vue({
     },
   },
 });
+
+Vue.set(Vue.prototype, '$enum', Enum);
 
 export default Enum;
