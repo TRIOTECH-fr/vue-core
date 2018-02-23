@@ -6,8 +6,12 @@ import parameters from 'json-loader!yaml-loader!@/../config/parameters.yml';
 // TODO handle dot notation for get/set
 
 const Config = new Vue({
+  data() {
+    return {
+      parameters,
+    };
+  },
   computed: {
-    parameters: () => parameters,
     host() {
       return (this.local('host') || this.parameters.host || '').replace(/\/$/, '');
     },
