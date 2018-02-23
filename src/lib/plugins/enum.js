@@ -11,7 +11,6 @@ const Enum = new Vue({
   },
   created() {
     if (this.$config.get('enum', false)) {
-      debugger;
       this.$ajax.get('public/enum/').then((data) => {
         this.enums = data;
         this.$bus.$emit('enums', data);
