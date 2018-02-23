@@ -1,51 +1,52 @@
 <template>
-    <b-container fluid>
-      <b-row>
-        <b-col cols="12">
-            <div v-if="loader && isLoading" class="text-center mb-3">
-                <slot name="loader">
-                    <i class="ti ti-2x ti-spin ti-refresh"></i>
+  <b-container fluid>
+    <b-row>
+      <b-col cols="12">
+        <div v-if="loader && isLoading" class="text-center mb-3">
+          <slot name="loader">
+            <i class="ti ti-2x ti-spin ti-refresh"/>
+          </slot>
+        </div>
+        <template :class="{ hidden: !isLoading }">
+          <slot v-if="!isLoading" name="list-header"/>
+          <template v-if="items.length > 0">
+            <slot name="table-title"/>
+            <table class="table" v-if="renderMode === 'table'">
+              <slot name="header">
+                <tr>
+                  <th>{{ $t('table.item') }}</th>
+                  <th>{{ $t('table.index') }}</th>
+                </tr>
+              </slot>
+              <slot name="item" v-for="(item, index) in listOverCallBack(items)" :item="item" :index="index">
+                <tr>
+                  <td>{{ item }}</td>
+                  <td>{{ index }}</td>
+                  <slot name="table-action"/>
+                </tr>
+              </slot>
+            </table>
+            <b-list-group v-else-if="renderMode === 'list'">
+              <slot name="item" v-for="(item, index) in listOverCallBack(items)" :item="item" :index="index">
+                <b-list-group-item>{{ item }} - {{ index }}</b-list-group-item>
+              </slot>
+            </b-list-group>
+            <div class="mosaic" v-else-if="renderMode === 'mosaic'">
+              <b-row>
+                <slot name="item" v-for="(item, index) in listOverCallBack(items)" :item="item" :index="index">
+                  <b-col sm="3">{{ item }} - {{ index }}</b-col>
                 </slot>
+              </b-row>
             </div>
-            <template :class="{ hidden: !isLoading }">
-                <slot v-if="!isLoading" name="list-header"></slot>
-                <template v-if="items.length > 0">
-                    <table class="table" v-if="renderMode === 'table'">
-                        <slot name="header">
-                            <tr>
-                                <th>{{ $t('table.item') }}</th>
-                                <th>{{ $t('table.index') }}</th>
-                            </tr>
-                        </slot>
-                        <slot name="item" v-for="(item, index) in listOverCallBack(items)" :item="item" :index="index">
-                            <tr>
-                                <td>{{ item }}</td>
-                                <td>{{ index }}</td>
-                                <slot name="table-action"></slot>
-                            </tr>
-                        </slot>
-                    </table>
-                    <b-list-group v-else-if="renderMode === 'list'">
-                        <slot name="item" v-for="(item, index) in listOverCallBack(items)" :item="item" :index="index">
-                            <b-list-group-item>{{ item }} - {{ index }}</b-list-group-item>
-                        </slot>
-                    </b-list-group>
-                    <div class="mosaic" v-else-if="renderMode === 'mosaic'">
-                        <b-row>
-                          <slot name="item" v-for="(item, index) in listOverCallBack(items)" :item="item" :index="index">
-                              <b-col sm="3">{{ item }} - {{ index }}</b-col>
-                          </slot>
-                        </b-row>
-                    </div>
-                    <!-- TODO render custom, render slot -->
-                </template>
-                <b-alert v-else-if="init" show>{{ $t('pages.' + entityName + '.empty_set') }}</b-alert>
-                <slot v-if="!isLoading" name="footer"/>
-            </template>
-        </b-col>
-      </b-row>
-      <slot name="modal"/>
-    </b-container>
+            <!-- TODO render custom, render slot -->
+          </template>
+          <b-alert v-else-if="init" show>{{ $t('pages.' + entityName + '.empty_set') }}</b-alert>
+          <slot v-if="!isLoading" name="footer"/>
+        </template>
+      </b-col>
+    </b-row>
+    <slot name="modal"/>
+  </b-container>
 </template>
 
 <script>
@@ -60,7 +61,8 @@
         type: String,
         default: 'item',
       },
-      uri: { type: String,
+      uri: {
+        type: String,
         required: true,
       },
       method: {
