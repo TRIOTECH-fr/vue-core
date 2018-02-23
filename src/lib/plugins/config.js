@@ -10,9 +10,12 @@ const Config = new Vue({
     endpoint: () => ((localStorage.getItem('endpoint') || parameters.endpoint) || '').replace(/\/$/, '').concat('/'),
   },
   methods: {
-    // TODO handle dot notation
-    get: (key, fallback) => parameters[key] || fallback,
     all: () => parameters,
+    // TODO handle dot notation for get/set
+    get: (key, fallback) => parameters[key] || fallback,
+    set: (key, value) => {
+      parameters[key] = value;
+    },
   },
 });
 
