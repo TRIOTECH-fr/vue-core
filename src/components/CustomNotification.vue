@@ -1,23 +1,28 @@
 <template>
-  <notifications position="top right" class="my-notification-style" :duration="duration" :width="500" :speed="500"  animation-type="velocity">
+  <notifications
+    position="top right"
+    class="my-notification-style"
+    :duration="duration"
+    :width="500"
+    :speed="500"
+    animation-type="velocity"
+  >
     <template slot="body" slot-scope="props">
       <div class="custom-template" :class="props.item.type">
         <div class="custom-template-icon">
-          <i v-if="props.item.type == 'success'" class="ti ti-fw ti-check-circle"></i>
-          <i v-else-if="props.item.type == 'error'" class="ti ti-fw ti-close-circle"></i>
-          <i v-else-if="props.item.type == 'warning'" class="ti ti-fw ti-warning"></i>
-          <i v-else class="ti ti-fw ti-info-circle"></i>
+          <i v-if="props.item.type == 'success'" class="ti ti-fw ti-check-circle"/>
+          <i v-else-if="props.item.type == 'error'" class="ti ti-fw ti-close-circle"/>
+          <i v-else-if="props.item.type == 'warning'" class="ti ti-fw ti-warning"/>
+          <i v-else class="ti ti-fw ti-info-circle"/>
         </div>
         <div class="custom-template-content">
           <div class="custom-template-title">
-            {{props.item.title}}
+            {{ props.item.title }}
           </div>
-          <div class="custom-template-text"
-               v-html="props.item.text"></div>
+          <div class="custom-template-text" v-html="props.item.text"/>
         </div>
-        <div class="custom-template-close"
-             @click="props.close">
-          <i class="ti ti-fw ti-close"></i>
+        <div class="custom-template-close" @click="props.close">
+          <i class="ti ti-fw ti-close"/>
         </div>
       </div>
     </template>
@@ -25,16 +30,15 @@
 </template>
 
 <script>
-
-export default {
-  name: 'CustomNotification',
-  props: {
-    duration: {
-      type: Number,
-      default: -1,
-    }
-  },
-};
+  export default {
+    name: 'CustomNotification',
+    props: {
+      duration: {
+        type: Number,
+        default: -1,
+      },
+    },
+  };
 </script>
 
 <style lang="scss">
