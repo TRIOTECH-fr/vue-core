@@ -3161,9 +3161,9 @@ eslint-plugin-node@^6.0.1:
     resolve "^1.3.3"
     semver "^5.4.1"
 
-eslint-plugin-vue@^4.3.0:
+eslint-plugin-vue@qkdreyer/eslint-plugin-vue#fix-407:
   version "4.3.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-4.3.0.tgz#478c6267269dbaa20f6e8b2cfae7a0ccc98c1d72"
+  resolved "https://codeload.github.com/qkdreyer/eslint-plugin-vue/tar.gz/bc0dda9d0b26f1154e9526a9275c41922c7a56d1"
   dependencies:
     vue-eslint-parser "^2.0.3"
 
