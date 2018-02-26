@@ -48,7 +48,8 @@ const FileSystem = new Vue({
                     reject(new Error(`${name} exists and not empty but not readable`));
                   });
                 }
-                return resolve({ buffer: reader.result, file });
+                file.buffer = reader.result;
+                return resolve(file);
               };
               reader.onerror = fileEntry.remove;
               return reader.readAsArrayBuffer(file);

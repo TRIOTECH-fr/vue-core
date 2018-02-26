@@ -4,6 +4,7 @@ import Framework7Vue from 'framework7-vue/dist/framework7-vue.esm.bundle';
 
 import 'framework7/dist/css/framework7.min.css';
 import 'framework7-icons/css/framework7-icons.css';
+import '../scss/_framework7.scss';
 
 Vue.use(Framework7Vue, Framework7);
 

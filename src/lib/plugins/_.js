@@ -14,9 +14,23 @@ _.mixin({
   },
   isBlob: value => value instanceof Blob,
   expired: time => (moment() - time) / 1000 > 0,
-  dataURIToBlob(string) {
+  dataUriToBlob(string) {
     const [header, base64] = string.split(',');
     return this.base64ToBlob(base64, header.replace('data:', '').replace(';base64', ''));
+  },
+  stringToArrayBuffer(string) {
+    const stringLength = string.length;
+    const buffer = new ArrayBuffer(stringLength * 2);
+    const view = new Uint16Array(buffer);
+
+    for (let i = 0; i < stringLength; i += 1) {
+      view[i] = string.charCodeAt(i);
+    }
+
+    return buffer;
+  },
+  arrayBufferToString(buffer) {
+    return String.fromCharCode.apply(null, new Uint16Array(buffer));
   },
   blobToBase64(blob) {
     return new Promise((resolve) => {
@@ -38,8 +52,8 @@ _.mixin({
 
     return new Blob([view], { type });
   },
-  base64ToObjectURL(string) {
-    return window.URL.createObjectURL(_.base64ToBlob(string));
+  objectURL(string) {
+    return window.URL.createObjectURL(string.slice(0, 5) === 'data:' ? this.dataUriToBlob(string) : this.base64ToBlob(string));
   },
   defaultsDeepObj(...args) {
     return Y(next => (object = {}, base = {}) => {
