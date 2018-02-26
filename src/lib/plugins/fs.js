@@ -4,19 +4,45 @@ import Y from '@triotech/vue-core/src/lib/plugins/y';
 const FileSystem = new Vue({
   name: 'FileSystem',
   computed: {
+    resolveFileSystem: () => (window.cordova ? window.resolveLocalFileSystemURL : window.webkitRequestFileSystem).bind(window),
+    diskSize: () => 300 * 1024 * 1024,
     blockSize: () => 5 * 1024 * 1024,
+    unavailableError: () => 'FileSystem API is unavailable',
+    unhandledError: () => 'FileSystem API is unhandled',
+  },
+  created() {
+    // eslint-disable-next-line no-console
+    this.stat().then(console.debug.bind(console, 'FileSystem usage'));
   },
   methods: {
     root() {
       return new Promise((resolve, reject) => {
-        if (window.cordova) {
-          window.resolveLocalFileSystemURL(window.cordova.file.dataDirectory, resolve, reject);
-        } else {
-          navigator.webkitPersistentStorage.requestQuota(100 * 1024 * 1024, (grantedBytes) => {
-            window.webkitRequestFileSystem(window.PERSISTENT, grantedBytes, (fs) => {
+        if (!this.resolveFileSystem) {
+          reject(new Error(this.unavailableError));
+        } else if (window.cordova) {
+          this.resolveFileSystem(window.cordova.file.dataDirectory, resolve, reject);
+        } else if (navigator.webkitPersistentStorage) {
+          navigator.webkitPersistentStorage.requestQuota(this.diskSize, (grantedBytes) => {
+            this.resolveFileSystem(window.PERSISTENT, grantedBytes, (fs) => {
               resolve(fs.root);
             }, reject);
           }, reject);
+        } else {
+          reject(new Error(this.unhandledError));
+        }
+      });
+    },
+    stat() {
+      return new Promise((resolve, reject) => {
+        if (!this.resolveFileSystem) {
+          reject(new Error(this.unavailableError));
+        } else if (window.cordova) {
+          resolve(0);
+        } else if (navigator.webkitPersistentStorage) {
+          const toPercentage = (callback, divide, divisor) => callback(100 * (divide / divisor), divide, divisor);
+          navigator.webkitPersistentStorage.queryUsageAndQuota(toPercentage.bind(this, resolve), reject);
+        } else {
+          reject(new Error(this.unhandledError));
         }
       });
     },
@@ -63,8 +89,8 @@ const FileSystem = new Vue({
         this.root().then((dirEntry) => {
           dirEntry.getFile(name, { create: true }, (fileEntry) => {
             fileEntry.createWriter((fileWriter) => {
-              fileWriter.onerror = () => {
-                this.unlink(name).then(reject).catch(reject);
+              fileWriter.onerror = (event) => {
+                this.unlink(name).then(reject.bind(this, event.target.error)).catch(reject);
               };
               Y(next => (bytesWritten, callback) => {
                 const totalSize = buffer.byteLength;
@@ -87,6 +113,16 @@ const FileSystem = new Vue({
             });
           }, reject);
         }, reject);
+      });
+    },
+    list() {
+      return new Promise((resolve, reject) => {
+        this.root().then((dirEntry) => {
+          const dirReader = dirEntry.createReader();
+          dirReader.readEntries((fileEntries) => {
+            resolve(fileEntries);
+          }, reject);
+        }).catch(reject);
       });
     },
     unlink(name) {
