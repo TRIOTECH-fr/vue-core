@@ -131,6 +131,7 @@ const Ajax = new Vue({
     },
     asyncRequest(config) {
       config.url = this.url(config);
+      config.headers = [];
 
       if (!this._.isEmpty(this.oauthStore)) {
         if (!config.commit && this._.expired(this.oauthStore.expires_at)) {
