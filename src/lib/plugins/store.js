@@ -20,7 +20,7 @@ const Store = new Vuex.Store({
   mutations: {
     set(state, data) {
       _.each(data, (value, key) => {
-        if (state[key]) {
+        if (_.isObject(value)) {
           state[key] = Object.assign({}, value);
         } else {
           Vue.set(state, key, value);
