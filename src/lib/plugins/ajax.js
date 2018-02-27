@@ -91,7 +91,7 @@ const Ajax = new Vue({
       return this.request(this.build(url, this.httpHead, data, config));
     },
     redirect(uri = '/') {
-      location.href = uri;
+      window.location.href = uri;
     },
     login(data) {
       return this.oauth(this._.extend({
@@ -154,7 +154,7 @@ const Ajax = new Vue({
         config.data = QS.stringify(config.data);
       }
 
-      const multiPart = this._.some(config.data, value => value instanceof File);
+      const multiPart = this._.some(config.data, value => value instanceof Blob);
       if (multiPart) {
         config.data = this.encode(config.data);
         config.headers['X-Http-Method-Override'] = config.method;

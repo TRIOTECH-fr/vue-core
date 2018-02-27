@@ -5,6 +5,7 @@ import VuexCache from 'vuex-cache';
 import VuexSharedMutations from 'vuex-shared-mutations';
 // eslint-disable-next-line no-unused-vars
 import { sync } from 'vuex-router-sync';
+import Y from '@triotech/vue-core/src/lib/plugins/y';
 
 Vue.use(Vuex);
 
@@ -20,11 +21,7 @@ const Store = new Vuex.Store({
   mutations: {
     set(state, data) {
       _.each(data, (value, key) => {
-        if (_.isObject(value)) {
-          state[key] = Object.assign({}, value);
-        } else {
-          Vue.set(state, key, value);
-        }
+        Vue.set(state, key, _.isObject(value) ? Object.assign({}, value) : value);
       });
     },
     add(state, data) {
@@ -34,7 +31,17 @@ const Store = new Vuex.Store({
       });
     },
     unset(state, data) {
-      _.each(_.isArray(data) ? data : [data], key => delete state[key]);
+      _.each(_.isArray(data) ? data : [data], Y(next => (carry, key) => {
+        if (key.indexOf('.') !== -1) {
+          const chunks = key.split('.');
+          const index = chunks[0];
+          if (carry[index]) {
+            next(carry[index], chunks.slice(1).join('.'));
+          }
+        } else {
+          delete carry[key];
+        }
+      }).bind(this, state));
     },
     setKeyValue(state, data) {
       Vue.set(state, data.key, data.value);
