@@ -93,10 +93,10 @@ const Ajax = new Vue({
     redirect(uri = '/') {
       window.location.href = uri;
     },
-    login(data) {
+    login(data, persistSession = true) {
       return this.oauth(this._.extend({
         grant_type: 'password',
-      }, data), !!data.rememberMe);
+      }, data), persistSession);
     },
     refresh() {
       return this.oauth({
@@ -114,9 +114,9 @@ const Ajax = new Vue({
         if (commit) {
           this.set({ oauth: value });
         } else {
-          this.$store.state.oauth = value;
+          // TODO handle rememberMe
+          // this.$store._mutations.set[0](this.get(), data)
         }
-        this.setKeyValueAction({ key: 'oauth', value, commit });
         return value;
       });
     },
@@ -137,7 +137,6 @@ const Ajax = new Vue({
         if (!config.commit && this._.expired(this.oauthStore.expires_at)) {
           if (this._.expired(this.oauthStore.refresh_token_expires_at)) {
             this.unset('oauth');
-            this.setKeyValueAction({ key: 'oauth', value: null });
             return this.redirect();
           }
           return this.refresh().then(this.asyncRequest.bind(this, config));
@@ -182,7 +181,6 @@ const Ajax = new Vue({
               return this.refresh().then(this.asyncRequest.bind(this, config));
             } else if (!description.match(/password/i) && description.match(/invalid|expired/i) && error.response.status === 400) {
               this.unset('oauth');
-              this.setKeyValueAction({ key: 'oauth', value: null });
               return this.redirect();
             }
           } else {
@@ -197,7 +195,6 @@ const Ajax = new Vue({
           throw error;
         });
     },
-    ...mapActions(['setKeyValueAction']),
   },
 });
 
