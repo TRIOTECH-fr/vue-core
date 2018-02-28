@@ -2,7 +2,6 @@ import Vue from 'vue';
 import VueAxios from 'vue-axios';
 import Axios from 'axios';
 import moment from 'moment';
-import { mapActions } from 'vuex';
 import QS from 'qs';
 import Y from '@triotech/vue-core/src/lib/plugins/y';
 
@@ -42,7 +41,8 @@ const Ajax = new Vue({
           this._.forOwn(data, (value, key) => {
             if (this._.isObject(value)) {
               if (this._.isBlob(value)) {
-                form.append(format(stack, key), value);
+                const type = value.type.split('/').slice(-1).join();
+                form.append(format(stack, key), value, `${key}.${type}`);
               } else if (this._.isArray(value)) {
                 value.forEach(subValue => form.append(`${format(stack, key)}[]`, subValue));
               } else {
@@ -153,7 +153,7 @@ const Ajax = new Vue({
         config.data = QS.stringify(config.data);
       }
 
-      const multiPart = this._.some(config.data, value => value instanceof Blob);
+      const multiPart = this._.some(config.data, this._.isBlob);
       if (multiPart) {
         config.data = this.encode(config.data);
         config.headers['X-Http-Method-Override'] = config.method;

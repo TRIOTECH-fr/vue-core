@@ -30,7 +30,14 @@ _.mixin({
     return buffer;
   },
   arrayBufferToString(buffer) {
-    return String.fromCharCode.apply(null, new Uint16Array(buffer));
+    let string = '';
+    const view = new Uint16Array(buffer);
+
+    for (let i = 0; i < view.length; i += 1) {
+      string += String.fromCharCode(view[i]);
+    }
+
+    return string;
   },
   blobToBase64(blob) {
     return new Promise((resolve) => {
