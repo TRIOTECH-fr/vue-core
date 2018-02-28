@@ -4,7 +4,6 @@ import Y from '@triotech/vue-core/src/lib/plugins/y';
 const FileSystem = new Vue({
   name: 'FileSystem',
   computed: {
-    resolveFileSystem: () => (window.cordova ? window.resolveLocalFileSystemURL : window.webkitRequestFileSystem).bind(window),
     diskSize: () => 300 * 1024 * 1024,
     blockSize: () => 5 * 1024 * 1024,
     unavailableError: () => 'FileSystem API is unavailable',
@@ -15,15 +14,19 @@ const FileSystem = new Vue({
     this.stat().then(console.debug.bind(console, 'FileSystem usage'));
   },
   methods: {
+    resolveFileSystem() {
+      return (window.cordova ? window.resolveLocalFileSystemURL : window.webkitRequestFileSystem).bind(window);
+    },
     root() {
       return new Promise((resolve, reject) => {
-        if (!this.resolveFileSystem) {
+        const fileSystem = this.resolveFileSystem();
+        if (!fileSystem) {
           reject(new Error(this.unavailableError));
         } else if (window.cordova) {
-          this.resolveFileSystem(window.cordova.file.dataDirectory, resolve, reject);
+          fileSystem(window.cordova.file.dataDirectory, resolve, reject);
         } else if (navigator.webkitPersistentStorage) {
           navigator.webkitPersistentStorage.requestQuota(this.diskSize, (grantedBytes) => {
-            this.resolveFileSystem(window.PERSISTENT, grantedBytes, (fs) => {
+            fileSystem(window.PERSISTENT, grantedBytes, (fs) => {
               resolve(fs.root);
             }, reject);
           }, reject);
