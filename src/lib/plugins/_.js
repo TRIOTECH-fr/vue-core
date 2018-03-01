@@ -14,64 +14,58 @@ _.mixin({
   },
   isBlob: value => value instanceof Blob,
   expired: time => (moment() - time) / 1000 > 0,
-  stringToArrayBuffer(string) {
+  dataURIToObjectURL(dataURI) {
+    return this.blobToObjectURL(this.dataURIToBlob(dataURI));
+  },
+  base64ToObjectURL(base64, type) {
+    return this.blobToObjectURL(this.base64ToBlob(base64, type));
+  },
+  stringToObjectURL(string, type) {
+    return this.blobToObjectURL(this.stringToBlob(string, type));
+  },
+  typedArrayToObjectURL(typedArray, type) {
+    return this.blobToObjectURL(this.typedArrayToBlob(typedArray, type));
+  },
+  blobToObjectURL(blob) {
+    return window.URL.createObjectURL(blob);
+  },
+  dataURIToBlob(string) {
+    const [header, base64] = string.split(',');
+    return this.base64ToBlob(base64, header.replace('data:', '').replace(';base64', ''));
+  },
+  base64ToBlob(string, type) {
+    return this.stringToBlob(window.atob(string), type);
+  },
+  stringToBlob(string, type) {
+    return this.typedArrayToBlob(this.stringToTypedArray(string), type);
+  },
+  stringToTypedArray(string) {
     const stringLength = string.length;
-    const buffer = new ArrayBuffer(stringLength * 2);
-    const view = new Uint16Array(buffer);
+    const arrayBuffer = new ArrayBuffer(stringLength);
+    const view = new Uint8Array(arrayBuffer);
 
     for (let i = 0; i < stringLength; i += 1) {
       view[i] = string.charCodeAt(i);
     }
 
-    return buffer;
+    return view;
   },
-  arrayBufferToString(buffer) {
+  typedArrayToBlob(typedArray, type = 'image/jpeg') {
+    return new Blob([typedArray], { type });
+  },
+  stringToArrayBuffer(string) {
+    return this.stringToTypedArray(string).buffer;
+  },
+  arrayBufferToString(arrayBuffer) {
     let string = '';
-    const view = new Uint16Array(buffer);
+    const view = new Uint8Array(arrayBuffer);
+    const viewLength = view.length;
 
-    for (let i = 0; i < view.length; i += 1) {
+    for (let i = 0; i < viewLength; i += 1) {
       string += String.fromCharCode(view[i]);
     }
 
     return string;
-  },
-  blobToBase64(blob) {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        resolve(reader.result);
-      };
-      reader.readAsDataURL(blob);
-    });
-  },
-  dataUriToObjectURL(dataUri) {
-    return this.blobToObjectURL(this.dataUriToBlob(dataUri));
-  },
-  base64ToObjectURL(base64) {
-    return this.blobToObjectURL(this.base64ToBlob(base64));
-  },
-  bytesToObjectURL(bytes) {
-    return this.blobToObjectURL(this.bytesToBlob(bytes));
-  },
-  blobToObjectURL(blob) {
-    return window.URL.createObjectURL(blob);
-  },
-  dataUriToBlob(string) {
-    const [header, base64] = string.split(',');
-    return this.base64ToBlob(base64, header.replace('data:', '').replace(';base64', ''));
-  },
-  base64ToBlob(string) {
-    return this.bytesToBlob(window.atob(string));
-  },
-  bytesToBlob(bytes, type = 'image/jpeg') {
-    const bytesLength = bytes.length;
-    const view = new Uint8Array(new ArrayBuffer(bytesLength));
-
-    for (let i = 0; i < bytesLength; i += 1) {
-      view[i] = bytes.charCodeAt(i);
-    }
-
-    return new Blob([view], { type });
   },
   defaultsDeepObj(...args) {
     return Y(next => (object = {}, base = {}) => {
