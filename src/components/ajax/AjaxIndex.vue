@@ -10,22 +10,24 @@
         <template :class="{ hidden: !isLoading }">
           <slot v-if="!isLoading" name="list-header"/>
           <template v-if="items.length > 0">
-            <slot name="table-title"/>
-            <table class="table" v-if="renderMode === 'table'">
-              <slot name="header">
-                <tr>
-                  <th>{{ $t('table.item') }}</th>
-                  <th>{{ $t('table.index') }}</th>
-                </tr>
-              </slot>
-              <slot name="item" v-for="(item, index) in listOverCallBack(items)" :item="item" :index="index">
-                <tr>
-                  <td>{{ item }}</td>
-                  <td>{{ index }}</td>
-                  <slot name="table-action"/>
-                </tr>
-              </slot>
-            </table>
+            <div class="table-responsive" v-if="renderMode === 'table'">
+              <slot name="table-title"/>
+              <table class="table">
+                <slot name="header">
+                  <tr>
+                    <th>{{ $t('table.item') }}</th>
+                    <th>{{ $t('table.index') }}</th>
+                  </tr>
+                </slot>
+                <slot name="item" v-for="(item, index) in listOverCallBack(items)" :item="item" :index="index">
+                  <tr>
+                    <td>{{ item }}</td>
+                    <td>{{ index }}</td>
+                    <slot name="table-action"/>
+                  </tr>
+                </slot>
+              </table>
+            </div>
             <b-list-group v-else-if="renderMode === 'list'">
               <slot name="item" v-for="(item, index) in listOverCallBack(items)" :item="item" :index="index">
                 <b-list-group-item>{{ item }} - {{ index }}</b-list-group-item>
