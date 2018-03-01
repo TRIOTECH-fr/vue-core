@@ -147,6 +147,7 @@
           this.items = items;
           this.isLoading = false;
           this.init = true;
+          this.$bus.$emit('t-event.ajax-index.load-data-success', this.items);
         });
       },
       refresh_data(dataRef, data) {
@@ -183,6 +184,7 @@
           });
           this.isLoading = false;
           this.init = true;
+          this.$bus.$emit('t-event.ajax-index.load-data-success', this.items);
         });
       },
     },

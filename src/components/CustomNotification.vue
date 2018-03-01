@@ -43,6 +43,7 @@
 
 <style lang="scss">
   @import '~@triotech/vue-core/src/scss/vars';
+  @import '~@triotech/vue-core/src/scss/media';
 
   .my-notification-style {
     margin: 10px;
@@ -141,6 +142,13 @@
           font-weight: 600;
         }
       }
+    }
+  }
+
+  @include editable-max-width(575px) {
+    .my-notification-style {
+      margin: 0;
+      width: 100% !important;
     }
   }
 </style>
