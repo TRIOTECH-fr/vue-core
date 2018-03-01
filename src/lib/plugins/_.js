@@ -14,10 +14,6 @@ _.mixin({
   },
   isBlob: value => value instanceof Blob,
   expired: time => (moment() - time) / 1000 > 0,
-  dataUriToBlob(string) {
-    const [header, base64] = string.split(',');
-    return this.base64ToBlob(base64, header.replace('data:', '').replace(';base64', ''));
-  },
   stringToArrayBuffer(string) {
     const stringLength = string.length;
     const buffer = new ArrayBuffer(stringLength * 2);
@@ -48,8 +44,26 @@ _.mixin({
       reader.readAsDataURL(blob);
     });
   },
-  base64ToBlob(string, type = 'image/jpeg') {
-    const bytes = window.atob(string);
+  dataUriToObjectURL(dataUri) {
+    return this.blobToObjectURL(this.dataUriToBlob(dataUri));
+  },
+  base64ToObjectURL(base64) {
+    return this.blobToObjectURL(this.base64ToBlob(base64));
+  },
+  bytesToObjectURL(bytes) {
+    return this.blobToObjectURL(this.bytesToBlob(bytes));
+  },
+  blobToObjectURL(blob) {
+    return window.URL.createObjectURL(blob);
+  },
+  dataUriToBlob(string) {
+    const [header, base64] = string.split(',');
+    return this.base64ToBlob(base64, header.replace('data:', '').replace(';base64', ''));
+  },
+  base64ToBlob(string) {
+    return this.bytesToBlob(window.atob(string));
+  },
+  bytesToBlob(bytes, type = 'image/jpeg') {
     const bytesLength = bytes.length;
     const view = new Uint8Array(new ArrayBuffer(bytesLength));
 
@@ -58,9 +72,6 @@ _.mixin({
     }
 
     return new Blob([view], { type });
-  },
-  objectURL(string) {
-    return window.URL.createObjectURL(string.slice(0, 5) === 'data:' ? this.dataUriToBlob(string) : this.base64ToBlob(string));
   },
   defaultsDeepObj(...args) {
     return Y(next => (object = {}, base = {}) => {
