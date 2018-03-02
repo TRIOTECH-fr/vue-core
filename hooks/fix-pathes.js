@@ -31,7 +31,7 @@ module.exports = (ctx) => {
   const fs = ctx.requireCordovaModule('fs');
   const path = ctx.requireCordovaModule('path');
   const deferred = ctx.requireCordovaModule('q').defer();
-  const projectRoot = ctx.opts.projectRoot;
+  const { projectRoot } = ctx.opts;
 
   Promise.all([
     searchAndReplaceFileInDirectory(fs, path.join(projectRoot, 'www'), 'index\\.html', '=/', '='),
