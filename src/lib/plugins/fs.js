@@ -58,7 +58,7 @@ const FileSystem = new Vue({
         }
       });
     },
-    read(name) {
+    read(name, withBuffer = true) {
       return new Promise((resolve, reject) => {
         this.root().then((dirEntry) => {
           dirEntry.getFile(name, {}, (fileEntry) => {
@@ -68,20 +68,24 @@ const FileSystem = new Vue({
                   reject(new Error(`${name} exists but is empty`));
                 });
               }
-              const reader = new FileReader();
-              reader.onloadend = () => {
-                if (reader.error) {
-                  reject(new Error(reader.error));
-                } else if (!reader.result) {
-                  return fileEntry.remove(() => {
-                    reject(new Error(`${name} exists and not empty but not readable`));
-                  });
-                }
-                file.buffer = reader.result;
-                return resolve(file);
-              };
-              reader.onerror = fileEntry.remove;
-              return reader.readAsArrayBuffer(file);
+              if (withBuffer) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  if (reader.error) {
+                    return reject(new Error(reader.error));
+                  } else if (!reader.result) {
+                    return fileEntry.remove(() => {
+                      reject(new Error(`${name} exists and not empty but not readable`));
+                    });
+                  }
+                  file.buffer = reader.result;
+                  return resolve(file);
+                };
+                reader.onerror = fileEntry.remove;
+                reader.readAsArrayBuffer(file);
+              } else {
+                resolve(file);
+              }
             });
           }, reject);
         }, reject);
@@ -99,9 +103,6 @@ const FileSystem = new Vue({
                 const totalSize = buffer.byteLength;
                 const blockSize = Math.min(this.blockSize, totalSize - bytesWritten);
                 const nextSize = bytesWritten + blockSize;
-                // if (bytesWritten > 0) {
-                //   fileWriter.seek(fileWriter.length);
-                // }
                 fileWriter.write(new Blob([new Uint8Array(buffer.slice(bytesWritten, nextSize))]));
                 fileWriter.onwrite = () => {
                   // eslint-disable-next-line

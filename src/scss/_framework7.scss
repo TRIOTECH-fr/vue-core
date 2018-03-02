@@ -2,15 +2,17 @@
   padding-bottom: constant(safe-area-inset-bottom);
   padding-bottom: env(safe-area-inset-bottom);
   background-color: #f7f7f8;
+}
 
+.device-android {
+  padding-top: 25px;
+}
+
+.device-iphone-x, .device-android {
   .notifications {
     .notification-wrapper {
       margin-top: constant(safe-area-inset-top);
       margin-top: env(safe-area-inset-top);
     }
   }
-}
-
-.device-android {
-  padding-top: 25px;
 }
