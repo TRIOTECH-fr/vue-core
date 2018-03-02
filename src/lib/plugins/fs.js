@@ -59,16 +59,17 @@ const FileSystem = new Vue({
       });
     },
     read(name, withBuffer = true) {
+      const self = this;
+      const moment = this.$moment();
       return new Promise((resolve, reject) => {
         this.root().then((dirEntry) => {
           dirEntry.getFile(name, {}, (fileEntry) => {
             fileEntry.file((file) => {
               if (file.size === 0) {
-                return fileEntry.remove(() => {
+                fileEntry.remove(() => {
                   reject(new Error(`${name} exists but is empty`));
                 });
-              }
-              if (withBuffer) {
+              } else if (withBuffer) {
                 const reader = new FileReader();
                 reader.onloadend = () => {
                   if (reader.error) {
@@ -79,6 +80,7 @@ const FileSystem = new Vue({
                     });
                   }
                   file.buffer = reader.result;
+                  console.debug('fs.read', { name, withBuffer }, `${self.$moment().diff(moment) / 1000}s`);
                   return resolve(file);
                 };
                 reader.onerror = fileEntry.remove;
@@ -92,6 +94,8 @@ const FileSystem = new Vue({
       });
     },
     write(name, buffer) {
+      const self = this;
+      const moment = this.$moment();
       return new Promise((resolve, reject) => {
         this.root().then((dirEntry) => {
           dirEntry.getFile(name, { create: true }, (fileEntry) => {
@@ -110,6 +114,7 @@ const FileSystem = new Vue({
                   if (nextSize < totalSize) {
                     next(nextSize, callback);
                   } else if (_.isFunction(callback)) {
+                    console.debug('fs.write', { name, totalSize }, `${self.$moment().diff(moment) / 1000}s`);
                     callback();
                   }
                 };
