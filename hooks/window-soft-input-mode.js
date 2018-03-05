@@ -9,7 +9,7 @@ module.exports = (ctx) => {
   const manifestPath = path.join(ctx.opts.projectRoot, 'platforms/android', 'AndroidManifest.xml');
 
   if (fs.existsSync(manifestPath)) {
-    const manifest = fs.readFileSync(manifestPath, 'utf8').replace(/(android:windowSoftInputMode=").*?(")/, '$1adjustPan|adjustResize$2');
+    const manifest = fs.readFileSync(manifestPath, 'utf8').replace(/(android:windowSoftInputMode=").*?(")/, '$1stateHidden|adjustResize$2');
     fs.writeFileSync(manifestPath, manifest, 'utf8');
     deferred.resolve();
   } else {
