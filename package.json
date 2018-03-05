@@ -140,5 +140,9 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "devDependencies": {
+    "rollup": "^0.56.4",
+    "rollup-plugin-uglify": "^3.0.0"
+  }
 }
