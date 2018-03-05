@@ -10,8 +10,7 @@ const FileSystem = new Vue({
     unhandledError: () => 'FileSystem API is unhandled',
   },
   created() {
-    // eslint-disable-next-line no-console
-    this.stat().then(console.debug.bind(console, 'FileSystem usage'));
+    this.stat();
   },
   methods: {
     resolveFileSystem() {
