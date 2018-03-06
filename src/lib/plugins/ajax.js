@@ -4,12 +4,14 @@ import Axios from 'axios';
 import moment from 'moment';
 import QS from 'qs';
 import Y from '@triotech/vue-core/src/lib/plugins/y';
+import Router from '@triotech/vue-core/src/lib/plugins/router';
 
 Vue.use(VueAxios, Axios);
 
 Axios.defaults.timeout = 10000;
 
 const Ajax = new Vue({
+  router: Router,
   computed: {
     httpGet: () => 'GET',
     httpPost: () => 'POST',
@@ -18,6 +20,7 @@ const Ajax = new Vue({
     httpDelete: () => 'DELETE',
     httpHead: () => 'HEAD',
     oauthTokenEndpoint: () => 'oauth/v2/token',
+    impersonateEndPoint: () => 'api/private/impersonate',
     oauthTokenType: () => 'Bearer',
     oauthStore() { return this.$store.getters.oauth || {}; },
     oauthConfig() { return this.$config.get('oauth') || {}; },
@@ -92,6 +95,33 @@ const Ajax = new Vue({
     },
     redirect(uri = '/') {
       window.location.href = uri;
+    },
+    impersonate(userEmail = null, routeRedirect = null) {
+      const redirect = () => {
+        if (routeRedirect) {
+          this.$router.push(routeRedirect);
+        }
+      };
+
+      if (!userEmail) {
+        const oauth = JSON.parse(JSON.stringify(this.$store.getters.get.oauthUsurpator));
+        this.set({oauth: oauth});
+        this.set({oauthUsurpator: null});
+        redirect();
+        return Promise.resolve();
+      }
+
+      return this.get(`${this.impersonateEndPoint}/${userEmail}`).then((value) =>
+        {
+          value.expires_at = (value.expires_in * 1000) + moment();
+          value.refresh_token_expires_at = (value.refresh_token_lifetime * 1000) + moment();
+
+          // move current oauth to oauthUsurpator.
+          const oauth = JSON.parse(JSON.stringify(this.$store.getters.get.oauth));
+          this.set({oauthUsurpator: oauth});
+          this.set({oauth: value});
+        }
+      ).then(redirect);
     },
     login(data, persistSession = true) {
       return this.oauth(this._.extend({

@@ -17,6 +17,7 @@ const Store = new Vuex.Store({
     get: state => state,
     oauth: state => state.oauth,
     user: state => state.oauth && state.oauth.user,
+    usurpator: state => state.oauthUsurpator && state.oauthUsurpator.user,
   },
   mutations: {
     set(state, data) {
