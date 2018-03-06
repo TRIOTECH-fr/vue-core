@@ -1,12 +1,19 @@
 <template>
   <div>
     <form @submit.prevent="submit">
-      <template v-if="this.schema.fields.length > 0">
+      <template v-if="schema.fields.length > 0">
         <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" />
         <slot name="beforeSubmit" />
         <b-row>
           <b-col>
-            <b-button block type="submit" variant="success">{{ $t('actions.create') }}</b-button>
+            <b-button
+              :disabled="isDisabled"
+              block
+              type="submit"
+              variant="success"
+            >
+              {{ $t('actions.create') }}
+            </b-button>
           </b-col>
         </b-row>
       </template>
@@ -26,6 +33,10 @@
       'vue-form-generator': VueFormGenerator.component,
     },
     props: {
+      isDisabled: {
+        type: Boolean,
+        default: false,
+      },
       name: {
         type: String,
         default: null,
