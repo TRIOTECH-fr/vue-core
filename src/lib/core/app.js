@@ -52,5 +52,6 @@ export default new Vue({
       window.app = app;
       return app;
     },
+    autoload,
   },
 });
