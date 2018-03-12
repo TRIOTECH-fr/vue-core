@@ -18,11 +18,11 @@
               </tr>
             </slot>
             <slot
-               v-for="(item, index) in listOverCallBack(items)"
-               :key="item[entityUniqueKey] || index"
-               :item="item"
-               :index="index"
-               name="item">
+              v-for="(item, index) in listOverCallBack(items)"
+              :item="item"
+              :index="index"
+              name="item"
+            >
               <tr>
                 <td>{{ item }}</td>
                 <td>{{ index }}</td>
@@ -34,8 +34,7 @@
         <b-list-group v-else-if="renderMode === 'list'">
           <slot
             v-for="(item, index) in listOverCallBack(items)"
-            :key="item[entityUniqueKey] || index"
-            :item="item" :
+            :item="item"
             name="item"
             index="index"
           >
@@ -46,7 +45,6 @@
           <b-row>
             <slot
               v-for="(item, index) in listOverCallBack(items)"
-              :key="item[entityUniqueKey] || index"
               :item="item"
               :index="index"
               name="item"
