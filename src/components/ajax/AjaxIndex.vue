@@ -17,7 +17,12 @@
                 <th>{{ $t('table.index') }}</th>
               </tr>
             </slot>
-            <slot name="item" v-for="(item, index) in listOverCallBack(items)" :item="item" :index="index">
+            <slot
+               v-for="(item, index) in listOverCallBack(items)"
+               :key="item[entityUniqueKey] || index"
+               :item="item"
+               :index="index"
+               name="item">
               <tr>
                 <td>{{ item }}</td>
                 <td>{{ index }}</td>
@@ -27,13 +32,25 @@
           </table>
         </div>
         <b-list-group v-else-if="renderMode === 'list'">
-          <slot name="item" v-for="(item, index) in listOverCallBack(items)" :item="item" :index="index">
+          <slot
+            v-for="(item, index) in listOverCallBack(items)"
+            :key="item[entityUniqueKey] || index"
+            :item="item" :
+            name="item"
+            index="index"
+          >
             <b-list-group-item>{{ item }} - {{ index }}</b-list-group-item>
           </slot>
         </b-list-group>
         <div class="mosaic" v-else-if="renderMode === 'mosaic'">
           <b-row>
-            <slot name="item" v-for="(item, index) in listOverCallBack(items)" :item="item" :index="index">
+            <slot
+              v-for="(item, index) in listOverCallBack(items)"
+              :key="item[entityUniqueKey] || index"
+              :item="item"
+              :index="index"
+              name="item"
+            >
               <b-col sm="3">{{ item }} - {{ index }}</b-col>
             </slot>
           </b-row>
@@ -51,6 +68,10 @@
   export default {
     name: 'AjaxIndex',
     props: {
+      entityUniqueKey: {
+        type: String,
+        default: 'id',
+      },
       eventId: {
         type: String,
         default: null,
