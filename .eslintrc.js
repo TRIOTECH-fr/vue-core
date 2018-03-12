@@ -36,7 +36,7 @@ module.exports = {
     }],
     // allow optionalDependencies
     'import/no-extraneous-dependencies': ['error', {
-      optionalDependencies: ['test/unit/index.js']
+      optionalDependencies: ['test/**/*.js'],
     }],
     'object-shorthand': ['error', 'properties'],
     'no-param-reassign': ['error', {
