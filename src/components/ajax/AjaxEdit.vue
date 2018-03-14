@@ -145,31 +145,31 @@
 
         return this.editRoute;
       },
-      async load(dataEvent = null) {
+      async load(event = null) {
         this.loading = true;
-        if (_.isNull(this.id) && _.isNull(dataEvent)) {
+        if (_.isNull(this.id) && _.isNull(event)) {
           throw new Error('Entity identifier is unknown');
         }
 
-        if (!_.isNull(dataEvent)) {
-          if (_.isNaN(parseInt(dataEvent, 10))) {
-            this.fallbackId = dataEvent.id;
-          } else {
-            this.fallbackId = dataEvent;
+        if (event) {
+          if (!_.isNaN(parseInt(event, 10))) {
+            this.fallbackId = event;
+          } else if (event.id) {
+            this.fallbackId = event.id;
           }
         }
+
         this.$bus.$emit(`t-event.t-ajax-edit.${this.name}.loaded`);
         this.$set(this, 'model', {});
 
-        await this.$ajax.get(this.editRouteFunc())
-          .then((data) => {
-            this.schema.fields = _.form(this.$t, data.form);
-            this.applyFilterOnSchema();
-            const modelTemp = this.defaultModelValues !== null ? this.defaultModelValues : {};
-            this.$set(this, 'model', _.clearModelForForm(data.entity, data.form, modelTemp));
-            this.updatePreviousModel();
-            this.loading = false;
-          });
+        const data = await this.$ajax.get(this.editRouteFunc());
+        this.schema.fields = _.form(this.$t, data.form);
+        this.applyFilterOnSchema();
+        // TODO find how to handle file properties
+        data.entity.file = data.entity.file_name;
+        this.$set(this, 'model', _.clearModelForForm(data.entity, data.form, this.defaultModelValues || {}));
+        this.updatePreviousModel();
+        this.loading = false;
       },
       updatePreviousModel() {
         this.previousModel = JSON.parse(JSON.stringify(this.model));

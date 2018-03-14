@@ -80,15 +80,20 @@
       }
     },
     methods: {
-      async load(dataEvent) {
-        if (_.isNull(this.id) && _.isNull(dataEvent)) {
+      async load(event) {
+        if (_.isNull(this.id) && _.isNull(event)) {
           throw new Error('Entity identifier is unknown');
         }
 
-        if (!_.isNull(dataEvent)) {
-          this.fallbackId = dataEvent.id;
+        if (event) {
+          if (!_.isNaN(parseInt(event, 10))) {
+            this.fallbackId = event;
+          } else if (event.id) {
+            this.fallbackId = event.id;
+          }
         }
 
+        // eslint-disable-next-line no-unused-vars
         const data = await this.$ajax.get(`${this.getUri}/${this.getId}/delete`);
         // TODO handle isDeletable
         // this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));

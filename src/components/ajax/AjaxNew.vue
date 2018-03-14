@@ -2,7 +2,12 @@
   <div>
     <form @submit.prevent="submit">
       <template v-if="schema.fields.length > 0">
-        <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" />
+        <vue-form-generator
+          :schema="schema"
+          :model="model"
+          :options="{ validationAfterLoad: true, validationAfterChanged: true }"
+          :key="$moment().valueOf()"
+        />
         <slot name="beforeSubmit" />
         <b-row>
           <b-col>
@@ -121,7 +126,7 @@
     },
     methods: {
       applyFilterOnSchema() {
-        // todo appli with inverse option
+        // TODO apply with inverse option
         if (_.size(this.fieldsFilterList) > 0) {
           _.forEach(this.fieldsFilterList, (fieldFiltered) => {
             _.remove(this.schema.fields, s => s.model === fieldFiltered);
@@ -140,29 +145,7 @@
           });
       },
       async submit() {
-        // TODO SEE HOW TODO THAT CORRECTLY
-        // _.each(this.schema.fields, (field) => {
-        //   let modelField = this.model[field.model];
-
-        //   if (field.model.split('[').length > 1) {
-        //     const fieldModel = field.model.split('[');
-        //     const f1 = fieldModel[0];
-        //     const f2 = fieldModel[1].replace(']', '');
-
-        //     modelField = this.model[f1][f2];
-        //   }
-
-        //   if (field.required && !modelField) {
-        //     this.$notify({
-        //       title: this.$t(`flashes.${this.name}.error`),
-        //       text: this.$t(`flashes.${this.name}.${field.model}.empty`),
-        //       type: 'error',
-        //     });
-        //     canSubmit = false;
-        //   } else {
-        //     canSubmit = true;
-        //   }
-        // });
+        // TODO https://monterail.github.io/vuelidate/
 
         await this.$ajax.post(`${this.getUri}/new`, this.model)
           .then((data) => {

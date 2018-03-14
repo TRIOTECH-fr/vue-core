@@ -1,13 +1,78 @@
 import Vue from 'vue';
-import 'vue-multiselect/dist/vue-multiselect.min.css';
-import Multiselect from 'vue-multiselect';
-import VueFormGenerator from 'vue-form-generator';
+import Multiselect from '../../vue-multiselect';
+import Mixins from './mixins';
 
 Vue.component('fieldDropdown', {
+  components: {
+    Multiselect,
+  },
+  mixins: Mixins,
+  data() {
+    return {
+      multiselectModel: null,
+    };
+  },
+  computed: {
+    multiple() {
+      return this.schema.selectOptions.multiple || false;
+    },
+    value: {
+      get() {
+        if (this.multiselectModel === null || typeof this.multiselectModel === 'undefined') {
+          return this.multiselectModel;
+        }
+
+        if (this.multiple) {
+          return this.multiselectModel.map(x => parseInt(x.id, 10));
+        }
+
+        return _.isNaN(parseInt(this.multiselectModel.id, 10))
+          ? this.multiselectModel.id
+          : parseInt(this.multiselectModel.id, 10);
+      },
+    },
+  },
+  watch: {
+    model(newValue) {
+      if (Object.keys(newValue).length < 1) {
+        this.multiselectModel = null;
+      }
+    },
+    multiselectModel(newValue, OldValue) {
+      if (newValue !== OldValue) {
+        this.setModelValueByPath(this.schema.model, this.value);
+      }
+      this.setRequired(_.size(newValue));
+    },
+  },
+  mounted() {
+    const initialValue = this.modelNameToProperty(this.schema.model, this.model);
+    if (this.schema.required) {
+      this.setRequired();
+    }
+    if (initialValue) {
+      const findOrFilter = (value, current) => Number(current.id) === Number(_.isObject(value) ? value.id : value);
+      if (!this.multiple) {
+        this.multiselectModel = this.schema.choices.find(findOrFilter.bind(_, initialValue));
+      } else {
+        this.multiselectModel = _.transform(initialValue, (carry, value) => {
+          carry.push(...this.schema.choices.filter(findOrFilter.bind(_, value)));
+          return carry;
+        });
+      }
+    }
+  },
+  methods: {
+    setRequired(value = 0) {
+      if (this.schema.required) {
+        this.$el.children[1].children[2].required = value > 0 ? '' : 'required';
+      }
+    },
+  },
   template: `<multiselect
     label="label"
     track-by="id"
-    v-model="multiselect_model"
+    v-model="multiselectModel"
     :multiple="multiple"
     :options="schema.choices"
     :selectLabel="$t('vms.select')"
@@ -19,86 +84,4 @@ Vue.component('fieldDropdown', {
     <slot name="noResult">$t('vms.no_result')</slot>
     <slot name="maxElements">$t('vms.max_elements')</slot>
   </multiselect>`,
-  components: {
-    Multiselect,
-  },
-  mixins: [VueFormGenerator.abstractField],
-  data() {
-    return {
-      multiselect_model: null,
-    };
-  },
-  mounted() {
-    const initialValue = this.modelNameToProperty(this.schema.model);
-    if (this.schema.required) {
-      this.setRequired();
-    }
-    if (initialValue) {
-      if (!this.multiple) {
-        if (typeof initialValue === 'object') {
-          // eslint-disable-next-line max-len
-          this.multiselect_model = this.schema.choices.find(x => x.id.toString() === initialValue.id.toString());
-        } else {
-          // eslint-disable-next-line max-len
-          this.multiselect_model = this.schema.choices.find(x => x.id === initialValue);
-        }
-      } else {
-        const data = [];
-        initialValue.forEach((value) => {
-          const temp = this.schema.choices.filter(x => x.id === value.id.toString());
-          data.push(...temp);
-        });
-        this.multiselect_model = data;
-      }
-    }
-  },
-  methods: {
-    modelNameToProperty(modelName) {
-      return modelName
-        .replace(/\[(\w+)\]/g, '.$1')
-        .replace(/^\./, '')
-        .split('.')
-        .map(x => _.snakeCase(x))
-        // eslint-disable-next-line no-prototype-builtins
-        .reduce((a, b) => (a && a.hasOwnProperty(b) ? a[b] : null), this.model);
-    },
-    setRequired(value = 0) {
-      if (this.schema.required) {
-        this.$el.children[1].children[2].required = value > 0 ? '' : 'required';
-      }
-    },
-  },
-  watch: {
-    model(newValue) {
-      if (Object.keys(newValue).length < 1) {
-        this.multiselect_model = null;
-      }
-    },
-    multiselect_model(newValue, OldValue) {
-      if (newValue !== OldValue) {
-        this.setModelValueByPath(this.schema.model, this.value);
-      }
-      this.setRequired(_.size(newValue));
-    },
-  },
-  computed: {
-    multiple() {
-      return this.schema.selectOptions.multiple || false;
-    },
-    value: {
-      get() {
-        if (this.multiselect_model === null || typeof this.multiselect_model === 'undefined') {
-          return this.multiselect_model;
-        }
-
-        if (this.multiple) {
-          return this.multiselect_model.map(x => parseInt(x.id, 10));
-        }
-
-        return _.isNaN(parseInt(this.multiselect_model.id, 10))
-          ? this.multiselect_model.id
-          : parseInt(this.multiselect_model.id, 10);
-      },
-    },
-  },
 });
