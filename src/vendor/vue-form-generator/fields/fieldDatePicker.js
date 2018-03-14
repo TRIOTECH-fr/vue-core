@@ -42,7 +42,7 @@ Vue.component('fieldDatePicker', {
       this.$el.children[0].children[0].removeAttribute('readonly');
     }
     if (!_.isNull(initialValue)) {
-      this.datePickerModel = this.$moment(initialValue).format('YYYY-MM-DD');
+      this.datePickerModel = this.format(initialValue);
     }
   },
   methods: {
