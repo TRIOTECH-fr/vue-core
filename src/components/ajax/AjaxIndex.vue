@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="w-100">
     <div v-if="loader && isLoading" class="text-center mb-3">
       <slot name="loader">
-        <i class="text-center ti ti-2x ti-spin ti-refresh"/>
+        <i class="ti ti-2x ti-spin ti-refresh"/>
       </slot>
     </div>
     <template :class="{ hidden: !isLoading }">
