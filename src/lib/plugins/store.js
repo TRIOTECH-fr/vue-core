@@ -5,7 +5,8 @@ import VuexCache from 'vuex-cache';
 import VuexSharedMutations from 'vuex-shared-mutations';
 // eslint-disable-next-line no-unused-vars
 import { sync } from 'vuex-router-sync';
-import Y from '@triotech/vue-core/src/lib/plugins/y';
+import Y from '../helper/y';
+import Router from './router';
 
 Vue.use(Vuex);
 
@@ -76,16 +77,6 @@ const Store = new Vuex.Store({
     reset({ commit }) {
       commit('unset', _.keys(this.state));
     },
-    setKeyValueAction({ commit }, data) {
-      // eslint-disable-next-line no-console
-      console.warn('deprecated: use this.set(data) instead');
-      commit('setKeyValue', data);
-    },
-    addKeyValueAction({ commit }, data) {
-      // eslint-disable-next-line no-console
-      console.warn('deprecated: use this.add(data) instead');
-      commit('addKeyValue', data);
-    },
     updateFilterAction({ commit }, filter) {
       commit('updateFilter', filter);
     },
@@ -99,6 +90,8 @@ const Store = new Vuex.Store({
     // })(),
   ],
 });
+
+const unsync = sync(Store, Router);
 
 Vue.set(Vue.prototype, '$store', Store);
 

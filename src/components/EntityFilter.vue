@@ -5,19 +5,20 @@
     :options="options"
     :placeholder="$t(`placeholders.${name}.${multiple ? 'multiple' : 'single'}`)"
     :preserve-search="true"
-    @input="updateFilterAction"
-    @select="select"
-    @remove="remove"
-    label="label"
     :multiple="multiple"
+    label="label"
     select-label=""
     selected-label=""
     deselect-label=""
-    track-by="value" />
-    <!-- :v-model="filter.value" -->
-    <!-- :hide-selected="true" -->
-    <!-- :clear-on-select="false" -->
-    <!-- :close-on-select="false" -->
+    track-by="value"
+    @input="updateFilterAction"
+    @select="select"
+    @remove="remove"
+  />
+  <!-- :v-model="filter.value" -->
+  <!-- :hide-selected="true" -->
+  <!-- :clear-on-select="false" -->
+  <!-- :close-on-select="false" -->
 </template>
 
 <script>

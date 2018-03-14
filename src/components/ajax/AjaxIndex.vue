@@ -2,13 +2,13 @@
   <div>
     <div v-if="loader && isLoading" class="text-center mb-3">
       <slot name="loader">
-        <i class="ti ti-2x ti-spin ti-refresh"/>
+        <i class="text-center ti ti-2x ti-spin ti-refresh"/>
       </slot>
     </div>
     <template :class="{ hidden: !isLoading }">
       <slot v-if="!isLoading" name="list-header"/>
       <template v-if="items.length > 0">
-        <div class="table-responsive" v-if="renderMode === 'table'">
+        <div v-if="renderMode === 'table'" class="table-responsive">
           <slot name="table-title"/>
           <table class="table">
             <slot name="header">
@@ -23,7 +23,7 @@
               :index="index"
               name="item"
             >
-              <tr>
+              <tr :key="item.id">
                 <td>{{ item }}</td>
                 <td>{{ index }}</td>
                 <slot name="table-action"/>
@@ -41,7 +41,7 @@
             <b-list-group-item>{{ item }} - {{ index }}</b-list-group-item>
           </slot>
         </b-list-group>
-        <div class="mosaic" v-else-if="renderMode === 'mosaic'">
+        <div v-else-if="renderMode === 'mosaic'" class="mosaic">
           <b-row>
             <slot
               v-for="(item, index) in listOverCallBack(items)"
@@ -55,7 +55,7 @@
         </div>
         <!-- TODO render custom, render slot -->
       </template>
-      <b-alert v-else-if="init" show>{{ $t('pages.' + entityName + '.empty_set') }}</b-alert>
+      <b-alert v-else-if="init" show>{{ $t(`pages.${entityName}.empty_set`) }}</b-alert>
       <slot v-if="!isLoading" name="footer"/>
     </template>
     <slot name="modal"/>
@@ -88,13 +88,15 @@
       },
       data: {
         type: Object,
+        default: () => ({}),
       },
       config: {
         type: Object,
         default: () => ({}),
       },
       auth: {
-        type: [String, Boolean],
+        type: [Boolean, String],
+        default: true,
       },
       authHeader: {
         type: String,
@@ -132,7 +134,7 @@
       const auth = _.isBoolean(this.auth) ? 'access_token' : this.auth;
       if (auth) {
         const header = {};
-        header[this.authHeader] = [this.authPrefix, _.get(this.$store.state, auth)].join(' ').trim();
+        header[this.authHeader] = [this.authPrefix, _.get(this.get(), auth)].join(' ').trim();
         this.config.headers = _.extend(header, this.config.headers);
       }
     },
@@ -142,37 +144,36 @@
       }
 
       if (this.eventId !== null) {
-        this.$bus.$on(this.event_name('refresh'), this.refresh);
-        this.$bus.$on(this.event_name('load'), this.load);
+        this.$bus.$on(this.eventName('refresh'), this.refresh);
+        this.$bus.$on(this.eventName('load'), this.load);
       }
     },
     beforeDestroy() {
-      this.$bus.$off(this.event_name('refresh'));
-      this.$bus.$off(this.event_name('load'));
+      this.$bus.$off(this.eventName('refresh'));
+      this.$bus.$off(this.eventName('load'));
     },
     methods: {
       listOverCallBack(list) {
         return this.orderCallBack(list);
       },
-      event_name(action) {
+      eventName(action) {
         return `t-event.ajax-index.${this.eventId}.${action}`;
       },
       async load() {
         this.isLoading = true;
         const fn = this.$ajax[this.method];
-        await fn(this.uri, this.data, this.config).then((items) => {
-          this.items = items;
-          this.isLoading = false;
-          this.init = true;
-          this.$bus.$emit('t-event.ajax-index.load-data-success', this.items);
-        });
+        const items = await fn(this.uri, this.data, this.config);
+        this.items = items;
+        this.isLoading = false;
+        this.init = true;
+        this.$bus.$emit('t-event.ajax-index.load-data-success', this.items);
       },
-      refresh_data(dataRef, data) {
+      refreshData(dataRef, data) {
         if (typeof dataRef !== 'undefined') {
           _.each(data, (value, key) => {
             if (key !== 'id') {
               if (_.isObject(value) && !_.isArray(value)) {
-                this.refresh_data(dataRef[key], value);
+                this.refreshData(dataRef[key], value);
               } else {
                 this.$set(dataRef, key, value);
               }
@@ -194,7 +195,7 @@
           updatedData.forEach((data) => {
             const dataRef = this.items.find(x => x.id === data.id);
             if (typeof dataRef !== 'undefined') {
-              this.refresh_data(dataRef, data);
+              this.refreshData(dataRef, data);
             } else {
               this.$set(this.items, this.items.length, data);
             }

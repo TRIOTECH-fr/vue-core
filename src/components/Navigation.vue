@@ -21,17 +21,21 @@
     props: {
       index: {
         type: Object,
+        default: () => ({}),
       },
       previous: {
         type: Object,
+        default: () => ({}),
       },
       next: {
         type: Object,
+        default: () => ({}),
       },
     },
     build(links, route, param = 'id') {
       const identifier = _.reduce(['previous', 'next'], (carry, link) => {
-        const href = links[link] && links[link].href && (links[link].href.match(/[\d]+$/) || links[link].href.match(/[\w-]+$/));
+        const data = links[link];
+        const href = data && data.href && (data.href.match(/[\d]+$/) || data.href.match(/[\w-]+$/));
         carry[link] = href && href.length > 0 ? href[0] : href;
         return carry;
       }, {});

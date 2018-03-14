@@ -1,20 +1,25 @@
 <template>
   <div v-if="loading" class="text-center mb-3">
     <slot name="loader">
-      <i class="ti ti-2x ti-spin ti-refresh"></i>
+      <i class="ti ti-2x ti-spin ti-refresh"/>
     </slot>
   </div>
   <form v-else @submit.prevent="submit">
-    <template v-if="this.schema.fields.length > 0">
-      <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" :class="formClass"/>
+    <template v-if="schema.fields.length > 0">
+      <vue-form-generator
+        :schema="schema"
+        :model="model"
+        :options="{ validationAfterLoad: true, validationAfterChanged: true }"
+        :class="formClass"
+      />
       <b-row>
         <b-col>
           <b-button block type="submit" variant="primary">{{ $t('actions.save') }}</b-button>
         </b-col>
       </b-row>
     </template>
-    <div class="text-center" v-else>
-      <i class="ti ti-2x ti-spin ti-refresh"></i>
+    <div v-else class="text-center">
+      <i class="ti ti-2x ti-spin ti-refresh"/>
     </div>
   </form>
 </template>
@@ -26,18 +31,6 @@
     name: 'AjaxEditComponent',
     components: {
       'vue-form-generator': VueFormGenerator.component,
-    },
-    data() {
-      return {
-        loading: true,
-        model_back: {},
-        model: {},
-        schema: {
-          fields: [],
-        },
-        fallback_id: null,
-        editRoute: '',
-      };
     },
     props: {
       additionnalRoute: {
@@ -62,6 +55,7 @@
       },
       formClass: {
         type: String,
+        default: '',
       },
       id: {
         type: [Number, String],
@@ -92,6 +86,34 @@
         default: null,
       },
     },
+    data() {
+      return {
+        loading: true,
+        previousModel: {},
+        model: {},
+        schema: {
+          fields: [],
+        },
+        fallbackId: null,
+        editRoute: '',
+      };
+    },
+    computed: {
+      getUri() {
+        return this.uri !== null ? this.uri : this.name;
+      },
+      getId() {
+        return this.id || this.fallbackId;
+      },
+    },
+    watch: {
+      defaultModelValues: {
+        deep: true,
+        handler(newValue) {
+          _.merge(this.model, newValue);
+        },
+      },
+    },
     async mounted() {
       if (this.loadOnMount) {
         this.load();
@@ -105,22 +127,6 @@
       if (!this.loadOnMount && this.refModal !== null) {
         this.$off(`t-event.t-modal.${this.refModal}.open`);
       }
-    },
-    computed: {
-      getUri() {
-        return this.uri !== null ? this.uri : this.name;
-      },
-      getId() {
-        return this.id || this.fallback_id;
-      },
-    },
-    watch: {
-      defaultModelValues: {
-        deep: true,
-        handler(newValue) {
-          _.merge(this.model, newValue);
-        },
-      },
     },
     methods: {
       applyFilterOnSchema() {
@@ -142,14 +148,14 @@
       async load(dataEvent = null) {
         this.loading = true;
         if (_.isNull(this.id) && _.isNull(dataEvent)) {
-          throw String('No entity.id know');
+          throw new Error('Entity identifier is unknown');
         }
 
         if (!_.isNull(dataEvent)) {
           if (_.isNaN(parseInt(dataEvent, 10))) {
-            this.fallback_id = dataEvent.id;
+            this.fallbackId = dataEvent.id;
           } else {
-            this.fallback_id = dataEvent;
+            this.fallbackId = dataEvent;
           }
         }
         this.$bus.$emit(`t-event.t-ajax-edit.${this.name}.loaded`);
@@ -161,21 +167,20 @@
             this.applyFilterOnSchema();
             const modelTemp = this.defaultModelValues !== null ? this.defaultModelValues : {};
             this.$set(this, 'model', _.clearModelForForm(data.entity, data.form, modelTemp));
-            this.updateOldModel();
+            this.updatePreviousModel();
             this.loading = false;
-          })
-        ;
+          });
       },
-      updateOldModel() {
-        this.model_back = JSON.parse(JSON.stringify(this.model));
+      updatePreviousModel() {
+        this.previousModel = JSON.parse(JSON.stringify(this.model));
       },
       async submit() {
-        const submitData = _.differenceObj(this.model, this.model_back);
+        const submitData = _.differenceObj(this.model, this.previousModel);
         if (!_.isEmpty(submitData)) {
           await this.$ajax.patch(this.editRouteFunc(), submitData)
             .then((data) => {
               if (data.status) {
-                this.updateOldModel();
+                this.updatePreviousModel();
                 this.$notify({
                   title: this.$t(`flashes.${this.name}.edit_title`),
                   text: this.$t(`flashes.${this.name}.edit`),
@@ -222,8 +227,7 @@
                   type: 'warning',
                 });
               }
-            })
-          ;
+            });
         }
         return false;
       },

@@ -18,11 +18,6 @@
     components: {
       'vue-form-generator': VueFormGenerator.component,
     },
-    data() {
-      return {
-        fallback_id: null,
-      };
-    },
     props: {
       id: {
         type: [Number, String],
@@ -57,6 +52,19 @@
         default: null,
       },
     },
+    data() {
+      return {
+        fallbackId: null,
+      };
+    },
+    computed: {
+      getUri() {
+        return this.uri || this.name;
+      },
+      getId() {
+        return this.id || this.fallbackId;
+      },
+    },
     async mounted() {
       if (this.loadOnMount) {
         this.load();
@@ -71,28 +79,19 @@
         this.$off(`t-event.t-modal.${this.refModal}.open`);
       }
     },
-    computed: {
-      getUri() {
-        return this.uri || this.name;
-      },
-      getId() {
-        return this.id || this.fallback_id;
-      },
-    },
     methods: {
       async load(dataEvent) {
         if (_.isNull(this.id) && _.isNull(dataEvent)) {
-          throw String('No entity.id know');
+          throw new Error('Entity identifier is unknown');
         }
 
         if (!_.isNull(dataEvent)) {
-          this.fallback_id = dataEvent.id;
+          this.fallbackId = dataEvent.id;
         }
-        await this.$ajax.get(`${this.getUri}/${this.getId}/delete`)
-          .then((data) => {
-            console.log(data);
-            // this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));
-          });
+
+        const data = await this.$ajax.get(`${this.getUri}/${this.getId}/delete`);
+        // TODO handle isDeletable
+        // this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));
       },
       async submit() {
         await this.$ajax.delete(`${this.getUri}/${this.getId}/delete`, this.getId)
@@ -121,8 +120,7 @@
                 type: 'warning',
               });
             }
-          })
-        ;
+          });
         if (this.closeModal) {
           this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
         }

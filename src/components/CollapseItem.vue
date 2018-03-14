@@ -2,60 +2,83 @@
   <div>
     <b-card no-body class="mb-1">
       <b-card-header header-tag="header" class="p-1" role="tab">
-        <b-btn block href="#" class="text-left" v-b-toggle="name" variant="light">{{ title }}</b-btn>
+        <b-btn
+          v-b-toggle="name"
+          block
+          href="#"
+          class="text-left"
+          variant="light"
+        >{{ title }}</b-btn>
       </b-card-header>
-      <b-collapse v-model="ajaxTableVisible" :id="name" accordion="my-accordion" role="tabpanel">
+      <b-collapse v-model="ajaxTableVisible"
+                  :id="name"
+                  accordion="my-accordion"
+                  role="tabpanel">
         <b-card-body>
-          <ajax-index :eventId="uid_ajax_table" :initLoad="false" :uri="uri" auth="oauth.access_token">
+          <ajax-index :event-id="uid_ajax_table"
+                      :init-load="false"
+                      :uri="uri"
+                      auth="oauth.access_token">
             <tr slot="header">
               <th>{{ $t('form.label') }}</th>
-              <th><!--Action--></th>
+              <th><!-- Action --></th>
             </tr>
             <tr slot="item" slot-scope="ctx">
               <td>{{ ctx.item.label }}</td>
               <td class="text-right">
-                <b-button v-if="isEditable" @click="openModal(modal_name('edit'), ctx.item)" variant="primary" size="sm">
-                  <i class="ti ti-fw ti-lg ti-edit"></i>
+                <b-button
+                  v-if="isEditable"
+                  variant="primary"
+                  size="sm"
+                  @click="openModal(modalName('edit'), ctx.item)"
+                >
+                  <i class="ti ti-fw ti-lg ti-edit"/>
                 </b-button>
-                <b-button v-if="isDeletable" @click="openModal(modal_name('delete'), ctx.item)" :disabled="(typeof ctx.item.companies_count !== 'undefined' && ctx.item.companies_count > 0) || (typeof ctx.item.sites_count !== 'undefined' && ctx.item.sites_count > 0)" variant="danger" size="sm">
-                  <i class="ti ti-fw ti-lg ti-trash"></i>
+                <b-button
+                  v-if="isDeletable"
+                  :disabled="_.isFunction(isDeleteDisabled) ? isDeleteDisabled(ctx.item) : isDeleteDisabled"
+                  variant="danger"
+                  size="sm"
+                  @click="openModal(modalName('delete'), ctx.item)"
+                >
+                  <i class="ti ti-fw ti-lg ti-trash"/>
                 </b-button>
               </td>
             </tr>
             <div slot="footer">
-              <b-btn block @click="openModal(modal_name('new'))" variant="success">{{ $t('actions.create') }}</b-btn>
+              <b-btn block variant="success" @click="openModal(modalName('new'))">{{ $t('actions.create') }}</b-btn>
             </div>
             <template slot="modal">
-              <t-modal :eventId="modal_name('new')" :title="$t(`pages.${name}.new`)">
-              <ajax-new
-                :closeModal="true"
-                :refModal="modal_name('new')"
-                :refreshAjaxIndex="true"
-                :refAjaxIndex="uid_ajax_table"
-                :loadOnMount="false"
-                :name="name"
-              />
-            </t-modal>
-            <t-modal :eventId="modal_name('edit')" :title="$t(`pages.${name}.edit`)">
-              <ajax-edit
-                :closeModal="true"
-                :refModal="modal_name('edit')"
-                :refreshAjaxIndex="true"
-                :refAjaxIndex="uid_ajax_table"
-                :loadOnMount="false"
-                :name="name"
-              />
-            </t-modal>
-            <t-modal :eventId="modal_name('delete')" :title="$t(`pages.${name}.delete`)">
-              <ajax-delete
-                :close-modal="true"
-                :refModal="modal_name('delete')"
-                :refreshAjaxIndex="true"
-                :refAjaxIndex="uid_ajax_table"
-                :loadOnMount="false"
-                :name="name"
-              />
-            </t-modal>
+              <t-modal :event-id="modalName('new')" :title="$t(`pages.${name}.new`)">
+                <ajax-new
+                  :close-modal="true"
+                  :ref-modal="modalName('new')"
+                  :refresh-ajax-index="true"
+                  :ref-ajax-index="uid_ajax_table"
+                  :load-on-mount="false"
+                  :name="name"
+                />
+              </t-modal>
+              <t-modal :event-id="modalName('edit')" :title="$t(`pages.${name}.edit`)">
+                <ajax-edit
+                  :close-modal="true"
+                  :ref-modal="modalName('edit')"
+                  :refresh-ajax-index="true"
+                  :ref-ajax-index="uid_ajax_table"
+                  :load-on-mount="false"
+                  :name="name"
+                />
+              </t-modal>
+              <t-modal :event-id="modalName('delete')" :title="$t(`pages.${name}.delete`)">
+                <ajax-delete
+                  :close-modal="true"
+                  :ref-modal="modalName('delete')"
+                  :refresh-ajax-index="true"
+                  :ref-ajax-index="uid_ajax_table"
+                  :load-on-mount="false"
+                  :name="name"
+                />
+              </t-modal>
             </template>
           </ajax-index>
         </b-card-body>
@@ -65,11 +88,11 @@
 </template>
 
 <script>
-  import AjaxEdit from '@triotech/vue-core/src/components/ajax/AjaxEdit';
-  import AjaxNew from '@triotech/vue-core/src/components/ajax/AjaxNew';
-  import AjaxIndex from '@triotech/vue-core/src/components/ajax/AjaxIndex';
-  import AjaxDelete from '@triotech/vue-core/src/components/ajax/AjaxDelete';
-  import TModal from '@triotech/vue-core/src/components/TModal';
+  import AjaxEdit from './ajax/AjaxEdit';
+  import AjaxNew from './ajax/AjaxNew';
+  import AjaxIndex from './ajax/AjaxIndex';
+  import AjaxDelete from './ajax/AjaxDelete';
+  import TModal from './TModal';
 
   export default {
     name: 'CollapseItemComponent',
@@ -83,12 +106,15 @@
     props: {
       name: {
         type: String,
+        default: '',
       },
       title: {
         type: String,
+        default: '',
       },
       uri: {
         type: String,
+        default: '',
       },
       isDeletable: {
         type: Boolean,
@@ -98,13 +124,21 @@
         type: Boolean,
         default: true,
       },
+      isDeleteDisabled: {
+        type: [Boolean, Function],
+        default: false,
+      },
     },
     data() {
       return {
-        // eslint-disable-next-line no-underscore-dangle
-        uid: this._uid,
+        uid: this._uid, // eslint-disable-line no-underscore-dangle
         ajaxTableVisible: false,
       };
+    },
+    computed: {
+      uid_ajax_table() {
+        return `ajax-table-${this.uid}`;
+      },
     },
     watch: {
       ajaxTableVisible(oldValue, newValue) {
@@ -113,13 +147,8 @@
         }
       },
     },
-    computed: {
-      uid_ajax_table() {
-        return `ajax-table-${this.uid}`;
-      },
-    },
     methods: {
-      modal_name(action) {
+      modalName(action) {
         return `${this.name}-${action}-${this.uid}`;
       },
       openModal(id, data = null) {

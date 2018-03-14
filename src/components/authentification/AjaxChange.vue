@@ -1,8 +1,15 @@
 <template>
-  <form @submit.prevent="submit">
+  <form @submit.prevent="onSubmit">
     <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" />
-    <b-button v-if="this.schema.fields.length > 0" type="submit" variant="primary" block>{{ $t('actions.send') }}</b-button>
-    <div class="text-center" v-else>
+    <b-button
+      v-if="schema.fields.length > 0"
+      type="submit"
+      variant="primary"
+      block
+    >
+      {{ $t('actions.send') }}
+    </b-button>
+    <div v-else class="text-center">
       <i class="ti ti-2x ti-spin ti-refresh"/>
     </div>
   </form>
@@ -15,14 +22,6 @@
     name: 'LoginChangePage',
     components: {
       'vue-form-generator': VueFormGenerator.component,
-    },
-    data() {
-      return {
-        model: {},
-        schema: {
-          fields: [],
-        },
-      };
     },
     props: {
       token: {
@@ -50,6 +49,14 @@
         default: null,
       },
     },
+    data() {
+      return {
+        model: {},
+        schema: {
+          fields: [],
+        },
+      };
+    },
     mounted() {
       if (this.loadOnMount) {
         this.load();
@@ -61,10 +68,8 @@
     },
     methods: {
       async load() {
-        await this.$ajax.publicRequest(`${this.uri}/${this.token}`)
-          .then((data) => {
-            this.$set(this.schema, 'fields', _.form(this.$t, data));
-          });
+        const data = await this.$ajax.publicRequest(`${this.uri}/${this.token}`);
+        this.$set(this.schema, 'fields', _.form(this.$t, data));
       },
       successRoute() {
         if (typeof this.success_route === 'function') {
@@ -72,7 +77,7 @@
         }
         return this.success_route;
       },
-      async submit() {
+      async onSubmit() {
         await this.$ajax.publicRequest(`${this.uri}/${this.token}`, 'POST', this.model)
           .then(() => {
             this.$notify({

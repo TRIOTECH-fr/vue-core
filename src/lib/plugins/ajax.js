@@ -3,8 +3,8 @@ import VueAxios from 'vue-axios';
 import Axios from 'axios';
 import moment from 'moment';
 import QS from 'qs';
-import Y from '@triotech/vue-core/src/lib/plugins/y';
-import Router from '@triotech/vue-core/src/lib/plugins/router';
+import Router from './router';
+import Y from '../helper/y';
 
 Vue.use(VueAxios, Axios);
 
@@ -105,23 +105,17 @@ const Ajax = new Vue({
 
       if (!userEmail) {
         const oauth = JSON.parse(JSON.stringify(this.$store.getters.get.oauthUsurpator));
-        this.set({oauth: oauth});
-        this.set({oauthUsurpator: null});
-        redirect();
-        return Promise.resolve();
+        this.set({ oauth, oauthUsurpator: null });
+        return Promise.resolve().then(redirect);
       }
 
-      return this.get(`${this.impersonateEndPoint}/${userEmail}`).then((value) =>
-        {
-          value.expires_at = (value.expires_in * 1000) + moment();
-          value.refresh_token_expires_at = (value.refresh_token_lifetime * 1000) + moment();
+      return this.get(`${this.impersonateEndPoint}/${userEmail}`).then((response) => {
+        response.expires_at = (response.expires_in * 1000) + moment();
+        response.refresh_token_expires_at = (response.refresh_token_lifetime * 1000) + moment();
 
-          // move current oauth to oauthUsurpator.
-          const oauth = JSON.parse(JSON.stringify(this.$store.getters.get.oauth));
-          this.set({oauthUsurpator: oauth});
-          this.set({oauth: value});
-        }
-      ).then(redirect);
+        const oauth = JSON.parse(JSON.stringify(this.$store.getters.get.oauth));
+        this.set({ oauth: response, oauthUsurpator: oauth });
+      }).then(redirect);
     },
     login(data, persistSession = true) {
       return this.oauth(this._.extend({
@@ -138,16 +132,16 @@ const Ajax = new Vue({
       return this.request(this.build(this.oauthTokenEndpoint, this.httpPost, this._.extend({
         client_id: this.oauthConfig.client_id,
         client_secret: this.oauthConfig.client_secret,
-      }, data), { commit })).then((value) => {
-        value.expires_at = (value.expires_in * 1000) + moment();
-        value.refresh_token_expires_at = (value.refresh_token_lifetime * 1000) + moment();
+      }, data), { commit })).then((response) => {
+        response.expires_at = (response.expires_in * 1000) + moment();
+        response.refresh_token_expires_at = (response.refresh_token_lifetime * 1000) + moment();
         if (commit) {
-          this.set({ oauth: value });
+          this.set({ oauth: response });
         } else {
           // TODO handle rememberMe
           // this.$store._mutations.set[0](this.get(), data)
         }
-        return value;
+        return response;
       });
     },
     request(config = {}) {
@@ -161,7 +155,9 @@ const Ajax = new Vue({
     },
     asyncRequest(config) {
       config.url = this.url(config);
-      config.headers = [];
+      if (!config.headers) {
+        config.headers = [];
+      }
 
       if (!this._.isEmpty(this.oauthStore)) {
         if (!config.commit && this._.expired(this.oauthStore.expires_at)) {
@@ -209,13 +205,13 @@ const Ajax = new Vue({
             if (description.match(/expired/i) && error.response.status === 401) {
               delete config.headers;
               return this.refresh().then(this.asyncRequest.bind(this, config));
-            } else if (!description.match(/password/i) && description.match(/invalid|expired/i) && error.response.status === 400) {
+            } else if (!description.match(/password/i) && description.match(/invalid|expired/i) && error.response.status >= 400) {
               this.unset('oauth');
               return this.redirect();
             }
           } else {
             // eslint-disable-next-line no-console
-            console.error({
+            console.error(error.response && error.response.data && error.response.data.error, {
               response: error.response,
               request: error.request,
               message: error.message,

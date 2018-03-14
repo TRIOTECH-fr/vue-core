@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Y from '@triotech/vue-core/src/lib/plugins/y';
+import Y from '../helper/y';
 
 const FileSystem = new Vue({
   name: 'FileSystem',

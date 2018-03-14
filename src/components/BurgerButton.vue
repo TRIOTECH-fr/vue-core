@@ -1,17 +1,22 @@
 <template>
-  <button :class="[isActive, animation]" class="hamburger" @click="toggleMenu" type="button">
+  <button :class="[isActive, animation]"
+          class="hamburger"
+          type="button"
+          @click="toggleMenu"
+  >
     <span class="hamburger-box">
-      <span class="hamburger-inner"></span>
+      <span class="hamburger-inner"/>
     </span>
   </button>
 </template>
 
 <script>
   export default {
-    name: 'BurgerButton',
+    name: 'BurgerButtonComponent',
     props: {
       animation: {
         type: String,
+        default: '',
       },
     },
     data() {

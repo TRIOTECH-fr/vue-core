@@ -17,7 +17,7 @@
           </b-col>
         </b-row>
       </template>
-      <div class="text-center" v-else>
+      <div v-else class="text-center">
         <i class="ti ti-2x ti-spin ti-refresh"/>
       </div>
     </form>
@@ -92,6 +92,19 @@
         },
       };
     },
+    computed: {
+      getUri() {
+        return this.uri || this.name;
+      },
+    },
+    watch: {
+      defaultModelValues: {
+        deep: true,
+        handler(newValue) {
+          _.merge(this.model, newValue);
+        },
+      },
+    },
     mounted() {
       if (this.loadOnMount) {
         this.load();
@@ -105,19 +118,6 @@
       if (!this.loadOnMount && this.refModal !== null) {
         this.$off(`t-event.t-modal.${this.refModal}.opened`);
       }
-    },
-    computed: {
-      getUri() {
-        return this.uri || this.name;
-      },
-    },
-    watch: {
-      defaultModelValues: {
-        deep: true,
-        handler(newValue) {
-          _.merge(this.model, newValue);
-        },
-      },
     },
     methods: {
       applyFilterOnSchema() {

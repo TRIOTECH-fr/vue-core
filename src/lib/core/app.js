@@ -10,7 +10,6 @@ Vue.config.performance = true;
 Vue.config.productionTip = false;
 
 Vue.mixin({
-  // https://github.com/declandewet/vue-meta
   metaInfo() {
     const { name } = this.$options;
     let metaInfo = {};
@@ -30,8 +29,6 @@ Vue.mixin({
   methods: {
     ...mapActions(['set', 'add', 'unset', 'reset']),
     ...mapGetters(['get', 'oauth', 'user']),
-    // TODO remove
-    ...mapActions(['setKeyValueAction', 'addKeyValueAction']),
     log: window.console.log,
   },
 });

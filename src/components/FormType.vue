@@ -1,5 +1,5 @@
 <template>
-  <div class="form-container" :class="{ 'last-step': isLastStep }">
+  <div :class="{ 'form-container': true, 'last-step': isLastStep }">
     <div class="header">
       <b-container>
         <b-row align-v="center">
@@ -14,7 +14,7 @@
                 </template>
                 <template v-else>
                   <template v-for="(part, idx) in parts">
-                    <span :class="{ active: part.isActive }">
+                    <span :key="idx" :class="{ active: part.isActive }">
                       {{ idx + 1 }}
                     </span>
                   </template>
@@ -41,13 +41,18 @@
     <b-container>
       <form>
         <div class="group-container">
-          <template v-for="part in parts">
-            <div class="form-group" :class="{ active: part.isActive, 'is-inline': isLastStep, simplified: isSimplified }">
+          <template v-for="(part, idx) in parts">
+            <div :key="idx" :class="{ 'form-group': true, active: part.isActive, 'is-inline': isLastStep, simplified: isSimplified }">
               <label :for="part.name">
                 {{ $t(part.label) }} {{ part.required ? '*' : '' }}:
               </label>
               <template v-if="part.formType === 'input'">
-                <input :id="part.name" :type="part.type" :placeholder="$t(part.placeholder)" :required="part.required" :pattern="part.pattern" v-model="contact[part.name]" />
+                <input :id="part.name"
+                       :type="part.type"
+                       :placeholder="$t(part.placeholder)"
+                       :required="part.required"
+                       :pattern="part.pattern"
+                       v-model="contact[part.name]" >
               </template>
               <template v-if="part.formType === 'textearea'">
                 <textarea v-autosize="true" v-model="contact[part.name]">
@@ -56,7 +61,7 @@
               </template>
             </div>
           </template>
-          <div ref="error" class="errors" :class="{ display : hasError }"></div>
+          <div ref="error" :class="{ errors: true, display : hasError }"/>
         </div>
         <b-row>
           <template v-if="isSimplified">
@@ -64,7 +69,7 @@
               <b-button type="submit" class="round-btn" @click="nextForm()">
                 <span class="d-none d-sm-block float-left">{{ $t('actions.send') }}</span>
                 <!-- <i class="fa fa-paper-plane"></i> -->
-                <icon name="paper-plane"></icon>
+                <icon name="paper-plane"/>
               </b-button>
             </div>
           </template>
@@ -72,7 +77,7 @@
             <b-col v-if="!isFirstStep" :cols="6">
               <div class="text-left">
                 <b-button type="button" class="round-btn" @click="prevForm()">
-                  <i class="ti ti-lg ti-arrow-left"></i>
+                  <i class="ti ti-lg ti-arrow-left"/>
                   <span class="d-none d-sm-block float-right">{{ $t('actions.prev') }}</span>
                 </b-button>
               </div>
@@ -81,7 +86,7 @@
               <div class="text-right">
                 <b-button type="submit" class="round-btn" @click="nextForm()">
                   <span class="d-none d-sm-block float-left">{{ $t(button.next.text) }}</span>
-                  <i class="ti ti-lg ti-arrow-right"></i>
+                  <i class="ti ti-lg ti-arrow-right"/>
                 </b-button>
               </div>
             </b-col>
@@ -106,6 +111,7 @@
       },
       text: {
         type: Object,
+        default: () => ({}),
       },
       isSimplified: {
         type: Boolean,
@@ -113,12 +119,15 @@
       },
       parts: {
         type: Array,
+        default: () => [],
       },
       button: {
         type: Object,
+        default: () => ({}),
       },
       contact: {
         type: Object,
+        default: () => ({}),
       },
     },
     data() {
@@ -150,8 +159,7 @@
         });
       },
       prevForm() {
-        const active = this.active;
-        const parts = this.parts;
+        const { active, parts } = this;
         const current = parts[active];
         const index = active - 1;
 
@@ -162,8 +170,7 @@
         this.active = index;
       },
       nextForm() {
-        const active = this.active;
-        const parts = this.parts;
+        const { active, parts } = this;
         const current = parts[active];
         let index = active + 1;
 
@@ -194,7 +201,9 @@
           this.send();
           this.$parent.$parent.close();
           _.each(this.contact, (value, key) => this.$set(this.contact, key, ''));
-          this.button && this.$set(this.button.next, 'text', 'actions.next');
+          if (this.button) {
+            this.$set(this.button.next, 'text', 'actions.next');
+          }
           index = 0;
           _.each(parts, (part, idx) => {
             part.isActive = idx === 0;

@@ -1,14 +1,14 @@
 <template>
   <notifications
-    position="top right"
-    class="my-notification-style"
     :duration="duration"
     :width="500"
     :speed="500"
+    position="top right"
+    class="my-notification-style"
     animation-type="velocity"
   >
     <template slot="body" slot-scope="props">
-      <div class="custom-template" :class="props.item.type">
+      <div :class="props.item.type" class="custom-template">
         <div class="custom-template-icon">
           <i v-if="props.item.type == 'success'" class="ti ti-fw ti-check-circle"/>
           <i v-else-if="props.item.type == 'error'" class="ti ti-fw ti-close-circle"/>
@@ -31,7 +31,7 @@
 
 <script>
   export default {
-    name: 'CustomNotification',
+    name: 'CustomNotificationComponent',
     props: {
       duration: {
         type: Number,

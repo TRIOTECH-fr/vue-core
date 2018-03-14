@@ -1,8 +1,11 @@
 <template>
   <form @submit.prevent="submit">
     <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" />
-    <b-button v-if="this.schema.fields.length > 0" type="submit" variant="primary" block>{{ $t('actions.login') }}</b-button>
-    <div class="text-center" v-else>
+    <b-button v-if="schema.fields.length > 0"
+              type="submit"
+              variant="primary"
+              block>{{ $t('actions.login') }}</b-button>
+    <div v-else class="text-center">
       <i class="ti ti-2x ti-spin ti-refresh"/>
     </div>
   </form>
@@ -15,16 +18,6 @@
     name: 'LoginPage',
     components: {
       'vue-form-generator': VueFormGenerator.component,
-    },
-    data() {
-      return {
-        model: {
-          rememberMe: true,
-        },
-        schema: {
-          fields: [],
-        },
-      };
     },
     props: {
       uri: {
@@ -53,6 +46,16 @@
         type: Object,
         default: null,
       },
+    },
+    data() {
+      return {
+        model: {
+          rememberMe: true,
+        },
+        schema: {
+          fields: [],
+        },
+      };
     },
     mounted() {
       if (this.loadOnMount) {

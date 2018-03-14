@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import _ from 'lodash';
 import moment from 'moment';
-import Y from './y';
+import Y from '../helper/y';
 
 _.mixin({
   access: (object, key, defaults) => object[key] || _.extend(object, { [key]: defaults })[key],
