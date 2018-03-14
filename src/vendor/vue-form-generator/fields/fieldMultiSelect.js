@@ -69,19 +69,21 @@ Vue.component('fieldDropdown', {
       }
     },
   },
-  template: `<multiselect
-    label="label"
-    track-by="id"
-    v-model="multiselectModel"
-    :multiple="multiple"
-    :options="schema.choices"
-    :selectLabel="$t('vms.select')"
-    :selectedLabel="$t('vms.selected')"
-    :deselectLabel="$t('vms.deselect')"
-    :placeholder="$t('vms.placeholder')"
-    :tagPlaceholder="$t('vms.tag_placeholder')"
-  >
-    <slot name="noResult">$t('vms.no_result')</slot>
-    <slot name="maxElements">$t('vms.max_elements')</slot>
-  </multiselect>`,
+  template: `
+    <multiselect
+      label="label"
+      track-by="id"
+      v-model="multiselectModel"
+      :multiple="multiple"
+      :options="schema.choices"
+      :selectLabel="$t('vms.select')"
+      :selectedLabel="$t('vms.selected')"
+      :deselectLabel="$t('vms.deselect')"
+      :placeholder="$t('vms.placeholder')"
+      :tagPlaceholder="$t('vms.tag_placeholder')"
+    >
+      <slot name="noResult">$t('vms.no_result')</slot>
+      <slot name="maxElements">$t('vms.max_elements')</slot>
+    </multiselect>
+  `,
 });
