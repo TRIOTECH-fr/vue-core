@@ -169,8 +169,7 @@
       async load() {
         this.isLoading = true;
         const fn = this.$ajax[this.method];
-        const items = await fn(this.uri, this.data, this.config);
-        this.items = items;
+        this.items = await fn(this.uri, this.data, this.config);
         this.isLoading = false;
         this.init = true;
         this.$bus.$emit('t-event.ajax-index.load-data-success', this.items);
