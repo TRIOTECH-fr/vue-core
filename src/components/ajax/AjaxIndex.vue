@@ -53,7 +53,14 @@
             </slot>
           </b-row>
         </div>
-        <!-- TODO render custom, render slot -->
+        <div v-else-if="renderMode === 'custom'">
+          <slot
+            v-for="(item, index) in listOverCallBack(items)"
+            :item="item"
+            :index="index"
+            name="item"
+          />
+        </div>
       </template>
       <b-alert v-else-if="init" show>{{ $t(`pages.${entityName}.empty_set`) }}</b-alert>
       <slot v-if="!isLoading" name="footer"/>
