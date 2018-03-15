@@ -97,11 +97,23 @@
         schema: {
           fields: [],
         },
+        uriOption: null,
       };
     },
     computed: {
       getUri() {
-        return this.uri || this.name;
+        // if uriOption have some option , construc the uri with it!
+        let uri = this.uri || this.name;
+        console.log(this.uriOption);
+        if (this.uriOption)
+        {
+          if (this.uriOption.prefix) {
+            uri = uri + this.uriOption.prefix;
+          }
+        }
+
+        console.log('uri option', uri);
+        return uri;
       },
     },
     watch: {
@@ -135,75 +147,80 @@
           });
         }
       },
-      async load() {
+      async load(dataEvent = null) {
+        // if data is passed with event, store data in uriOption
+        console.log('!data', dataEvent);
+        if (dataEvent) {
+          this.$set(this, 'uriOption', dataEvent);
+        }
         const modelTemp = this.defaultModelValues !== null
-          ? this.defaultModelValues
-          : {};
+                          ? this.defaultModelValues
+                          : {};
         this.$set(this, 'model', modelTemp);
         await this.$ajax.get(`${this.getUri}/new`)
-          .then((data) => {
-            this.$set(this.schema, 'fields', _.form(this.$t, data));
-            this.applyFilterOnSchema();
-          });
+        .then((data) => {
+          this.$set(this.schema, 'fields', _.form(this.$t, data));
+          this.applyFilterOnSchema();
+        });
       },
       async submit() {
         // TODO https://monterail.github.io/vuelidate/
 
         await this.$ajax.post(`${this.getUri}/new`, this.model)
-          .then((data) => {
-            if (data.status) {
-              this.$notify({
-                title: this.$t(`flashes.${this.name}.create_title`),
-                text: this.notificationSuccessText,
-                type: 'success',
-              });
-              if (this.closeModal) {
-                this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
+        .then((data) => {
+          if (data.status) {
+            this.$notify({
+              title: this.$t(`flashes.${this.name}.create_title`),
+              text: this.notificationSuccessText,
+              type: 'success',
+            });
+            if (this.closeModal) {
+              this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
+            }
+            this.$bus.$emit(`t-event.new-submit.${this.name}.success`, this.model);
+          } else {
+            this.$notify({
+              title: this.$t(`flashes.${this.name}.create_title`),
+              text: this.$t(`flashes.${this.name}.not_create`),
+              type: 'error',
+            });
+          }
+          if (this.refreshAjaxIndex) {
+            this.$bus.$emit(`t-event.ajax-index.${this.refAjaxIndex}.refresh`);
+          }
+        }, (data) => {
+          if (data.response.data.code === 400) {
+            const errors = _.reduce(data.response.data.errors.children, (carry, value, key) => {
+              if (value.errors) {
+                carry[key] = value.errors;
               }
-              this.$bus.$emit(`t-event.new-submit.${this.name}.success`, this.model);
-            } else {
-              this.$notify({
-                title: this.$t(`flashes.${this.name}.create_title`),
-                text: this.$t(`flashes.${this.name}.not_create`),
-                type: 'error',
-              });
-            }
-            if (this.refreshAjaxIndex) {
-              this.$bus.$emit(`t-event.ajax-index.${this.refAjaxIndex}.refresh`);
-            }
-          }, (data) => {
-            if (data.response.data.code === 400) {
-              const errors = _.reduce(data.response.data.errors.children, (carry, value, key) => {
-                if (value.errors) {
-                  carry[key] = value.errors;
-                }
-                return carry;
-              }, {});
+              return carry;
+            }, {});
 
-              let flashTitle = '';
-              let flashText = '';
+            let flashTitle = '';
+            let flashText = '';
 
-              _.each(errors, (errorFields, field) => {
-                flashTitle = this.$t(`flashes.${this.name}.error.${field}`);
+            _.each(errors, (errorFields, field) => {
+              flashTitle = this.$t(`flashes.${this.name}.error.${field}`);
 
-                _.each(errorFields, (error) => {
-                  flashText = `${error} <br /> ${flashText}`;
-                });
+              _.each(errorFields, (error) => {
+                flashText = `${error} <br /> ${flashText}`;
               });
+            });
 
-              this.$notify({
-                title: flashTitle,
-                text: flashText,
-                type: 'warning',
-              });
-            } else if (data.response.data.error.code === 500) {
-              this.$notify({
-                title: this.$t(`flashes.${this.name}.error_500_title`),
-                text: this.$t(`flashes.${this.name}.error_500`),
-                type: 'error',
-              });
-            }
-          });
+            this.$notify({
+              title: flashTitle,
+              text: flashText,
+              type: 'warning',
+            });
+          } else if (data.response.data.error.code === 500) {
+            this.$notify({
+              title: this.$t(`flashes.${this.name}.error_500_title`),
+              text: this.$t(`flashes.${this.name}.error_500`),
+              type: 'error',
+            });
+          }
+        });
         return false;
       },
     },

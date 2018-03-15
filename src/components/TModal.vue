@@ -1,13 +1,12 @@
 <template>
     <div>
       <sweet-modal
-        @open="modal_open"
-        @close="modal_close"
-        :ref="modal_uid"
-        class="modal-form"
+        :ref="modalUid"
         :title="title"
         :width="width"
-        :class="klass"
+        :class="{ klass, 'modal-form': true}"
+        @open="onModalOpen"
+        @close="onModalClose"
       >
         <slot></slot>
       </sweet-modal>
@@ -37,38 +36,36 @@
     },
     mounted() {
       if (this.eventId !== null) {
-        this.$bus.$on(this.event_name('open'), this.open_modal);
-        this.$bus.$on(this.event_name('close'), this.close_modal);
+        this.$bus.$on([this.eventName('open'), this.eventName('close')], this.catchModalArguments);
+        this.$bus.$on(this.eventName('open'), this.modalRef.open);
+        this.$bus.$on(this.eventName('close'), this.modalRef.close);
       }
     },
     beforeDestroy() {
-      this.$off(this.event_name('open'));
-      this.$off(this.event_name('close'));
+      if (this.eventId !== null) {
+        this.$off([this.eventName('open'), this.eventName('close')]);
+      }
     },
     computed: {
-      modal_uid() {
-        // eslint-disable-next-line no-underscore-dangle
-        return `${this._uid}_modal`;
+      modalUid() {
+        return `${this._uid}_modal`; // eslint-disable-line no-underscore-dangle
       },
-      modal_state() {
-        return this.$refs[this.modal_uid].is_open;
-      },
+      modalRef() {
+        return this.$refs[this.modalUid];
+      }
     },
     methods: {
-      modal_open() {
-        this.$bus.$emit(this.event_name('opened'));
+      onModalOpen() {
+        this.$bus.$emit(this.eventName('opened'), ...this.modalRef.args);
       },
-      modal_close() {
-        this.$bus.$emit(this.event_name('closed'));
+      onModalClose() {
+        this.$bus.$emit(this.eventName('closed'), ...this.modalRef.args);
       },
-      event_name(action) {
+      eventName(action) {
         return `t-event.t-modal.${this.eventId}.${action}`;
       },
-      open_modal() {
-        this.$refs[this.modal_uid].open();
-      },
-      close_modal() {
-        this.$refs[this.modal_uid].close();
+      catchModalArguments(...args) {
+        this.modalRef.args = args;
       },
     },
   };
