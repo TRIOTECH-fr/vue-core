@@ -165,8 +165,12 @@
         const data = await this.$ajax.get(this.editRouteFunc());
         this.schema.fields = _.form(this.$t, data.form);
         this.applyFilterOnSchema();
+
         // TODO find how to handle file properties
-        data.entity.file = data.entity.file_name;
+        if (data.entity && data.entity.file_name) {
+          data.entity.file = data.entity.file_name;
+        }
+
         this.$set(this, 'model', _.clearModelForForm(data.entity, data.form, this.defaultModelValues || {}));
         this.updatePreviousModel();
         this.loading = false;
