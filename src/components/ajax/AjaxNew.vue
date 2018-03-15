@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form @submit.prevent="submit">
+    <form :id="`form-new-${name}`" @submit.prevent="submit">
       <template v-if="schema.fields.length > 0">
         <vue-form-generator
           :schema="schema"
@@ -132,11 +132,15 @@
       if (!this.loadOnMount && this.refModal !== null) {
         this.$bus.$on(`t-event.t-modal.${this.refModal}.opened`, this.load);
       }
+
+      this.$bus.$on(`t-event.ajax-new.${this.name}.submit`, this.submit);
     },
     beforeDestroy() {
       if (!this.loadOnMount && this.refModal !== null) {
         this.$off(`t-event.t-modal.${this.refModal}.opened`);
       }
+
+      this.$bus.$off(`t-event.ajax-new.${this.name}.submit`);
     },
     methods: {
       applyFilterOnSchema() {
@@ -153,74 +157,75 @@
         if (dataEvent) {
           this.$set(this, 'uriOption', dataEvent);
         }
-        const modelTemp = this.defaultModelValues !== null
-                          ? this.defaultModelValues
-                          : {};
-        this.$set(this, 'model', modelTemp);
-        await this.$ajax.get(`${this.getUri}/new`)
-        .then((data) => {
-          this.$set(this.schema, 'fields', _.form(this.$t, data));
-          this.applyFilterOnSchema();
+
+        this.$bus.$emit(`t-event.ajax-new.${this.name}.loading`);
+        this.$set(this, 'model', this.defaultModelValues || {});
+
+        const data = await this.$ajax.get(`${this.getUri}/new`);
+        this.$set(this.schema, 'fields', _.form(this.$t, data));
+        this.applyFilterOnSchema();
+
+        this.$nextTick(() => {
+          this.$bus.$emit(`t-event.ajax-new.${this.name}.loaded`);
         });
       },
-      async submit() {
+      async submit(extraModel) {
         // TODO https://monterail.github.io/vuelidate/
-
-        await this.$ajax.post(`${this.getUri}/new`, this.model)
-        .then((data) => {
-          if (data.status) {
-            this.$notify({
-              title: this.$t(`flashes.${this.name}.create_title`),
-              text: this.notificationSuccessText,
-              type: 'success',
-            });
-            if (this.closeModal) {
-              this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
-            }
-            this.$bus.$emit(`t-event.new-submit.${this.name}.success`, this.model);
-          } else {
-            this.$notify({
-              title: this.$t(`flashes.${this.name}.create_title`),
-              text: this.$t(`flashes.${this.name}.not_create`),
-              type: 'error',
-            });
-          }
-          if (this.refreshAjaxIndex) {
-            this.$bus.$emit(`t-event.ajax-index.${this.refAjaxIndex}.refresh`);
-          }
-        }, (data) => {
-          if (data.response.data.code === 400) {
-            const errors = _.reduce(data.response.data.errors.children, (carry, value, key) => {
-              if (value.errors) {
-                carry[key] = value.errors;
-              }
-              return carry;
-            }, {});
-
-            let flashTitle = '';
-            let flashText = '';
-
-            _.each(errors, (errorFields, field) => {
-              flashTitle = this.$t(`flashes.${this.name}.error.${field}`);
-
-              _.each(errorFields, (error) => {
-                flashText = `${error} <br /> ${flashText}`;
+        await this.$ajax.post(`${this.getUri}/new`, _.extend(this.model, extraModel))
+          .then((data) => {
+            if (data.status) {
+              this.$notify({
+                title: this.$t(`flashes.${this.name}.create_title`),
+                text: this.notificationSuccessText,
+                type: 'success',
               });
-            });
+              if (this.closeModal) {
+                this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
+              }
+              this.$bus.$emit(`t-event.new-submit.${this.name}.success`, this.model);
+            } else {
+              this.$notify({
+                title: this.$t(`flashes.${this.name}.create_title`),
+                text: this.$t(`flashes.${this.name}.not_create`),
+                type: 'error',
+              });
+            }
+            if (this.refreshAjaxIndex) {
+              this.$bus.$emit(`t-event.ajax-index.${this.refAjaxIndex}.refresh`);
+            }
+          }, (data) => {
+            if (data.response.data.code === 400) {
+              const errors = _.reduce(data.response.data.errors.children, (carry, value, key) => {
+                if (value.errors) {
+                  carry[key] = value.errors;
+                }
+                return carry;
+              }, {});
 
-            this.$notify({
-              title: flashTitle,
-              text: flashText,
-              type: 'warning',
-            });
-          } else if (data.response.data.error.code === 500) {
-            this.$notify({
-              title: this.$t(`flashes.${this.name}.error_500_title`),
-              text: this.$t(`flashes.${this.name}.error_500`),
-              type: 'error',
-            });
-          }
-        });
+              let flashTitle = '';
+              let flashText = '';
+
+              _.each(errors, (errorFields, field) => {
+                flashTitle = this.$t(`flashes.${this.name}.error.${field}`);
+
+                _.each(errorFields, (error) => {
+                  flashText = `${error} <br /> ${flashText}`;
+                });
+              });
+
+              this.$notify({
+                title: flashTitle,
+                text: flashText,
+                type: 'warning',
+              });
+            } else if (data.response.data.error.code === 500) {
+              this.$notify({
+                title: this.$t(`flashes.${this.name}.error_500_title`),
+                text: this.$t(`flashes.${this.name}.error_500`),
+                type: 'error',
+              });
+            }
+          });
         return false;
       },
     },

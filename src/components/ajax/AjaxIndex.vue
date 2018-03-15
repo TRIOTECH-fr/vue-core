@@ -168,11 +168,23 @@
       },
       async load() {
         this.isLoading = true;
+
+        this.$bus.$emit(`t-event.ajax-index.${this.name}.loading`);
+
         const fn = this.$ajax[this.method];
-        this.items = await fn(this.uri, this.data, this.config);
+
+        const data = await fn(this.uri, this.data, this.config);
+        this.items = data;
         this.isLoading = false;
         this.init = true;
-        this.$bus.$emit('t-event.ajax-index.load-data-success', this.items);
+
+        // TODO remove weird event
+        this.$bus.$emit('t-event.ajax-index.load-data-success', data);
+
+        this.$nextTick(() => {
+          // TODO this.name is undefined ?
+          this.$bus.$emit(`t-event.ajax-index.${this.name}.loaded`);
+        });
       },
       refreshData(dataRef, data) {
         if (typeof dataRef !== 'undefined') {

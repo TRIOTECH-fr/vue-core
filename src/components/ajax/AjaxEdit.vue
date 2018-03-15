@@ -4,7 +4,7 @@
       <i class="ti ti-2x ti-spin ti-refresh"/>
     </slot>
   </div>
-  <form v-else @submit.prevent="submit">
+  <form v-else :id="`form-edit-${name}`" @submit.prevent="submit">
     <template v-if="schema.fields.length > 0">
       <vue-form-generator
         :schema="schema"
@@ -159,8 +159,8 @@
           }
         }
 
-        this.$bus.$emit(`t-event.t-ajax-edit.${this.name}.loaded`);
-        this.$set(this, 'model', {});
+        this.$bus.$emit(`t-event.ajax-edit.${this.name}.loading`);
+        this.$set(this, 'model', this.defaultModelValues || {});
 
         const data = await this.$ajax.get(this.editRouteFunc());
         this.schema.fields = _.form(this.$t, data.form);
@@ -174,12 +174,16 @@
         this.$set(this, 'model', _.clearModelForForm(data.entity, data.form, this.defaultModelValues || {}));
         this.updatePreviousModel();
         this.loading = false;
+
+        this.$nextTick(() => {
+          this.$bus.$emit(`t-event.ajax-edit.${this.name}.loaded`);
+        });
       },
       updatePreviousModel() {
         this.previousModel = JSON.parse(JSON.stringify(this.model));
       },
-      async submit() {
-        const submitData = _.differenceObj(this.model, this.previousModel);
+      async submit(extraModel) {
+        const submitData = _.extend(_.differenceObj(this.model, this.previousModel), extraModel);
         if (!_.isEmpty(submitData)) {
           await this.$ajax.patch(this.editRouteFunc(), submitData)
             .then((data) => {

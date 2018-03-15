@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form @submit.prevent="submit">
+    <form :id="`form-delete-${name}`" @submit.prevent="submit">
       <b-row>
         <b-col>
           <b-button block type="submit" variant="danger">{{ $t('actions.delete') }}</b-button>
@@ -93,10 +93,16 @@
           }
         }
 
+        this.$bus.$emit(`t-event.ajax-delete.${this.name}.loading`);
+
         // eslint-disable-next-line no-unused-vars
         const data = await this.$ajax.get(`${this.getUri}/${this.getId}/delete`);
         // TODO handle isDeletable
         // this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));
+
+        this.$nextTick(() => {
+          this.$bus.$emit(`t-event.ajax-delete.${this.name}.loaded`);
+        });
       },
       async submit() {
         await this.$ajax.delete(`${this.getUri}/${this.getId}/delete`, this.getId)
