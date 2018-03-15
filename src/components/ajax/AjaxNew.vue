@@ -11,14 +11,16 @@
         <slot name="beforeSubmit" />
         <b-row>
           <b-col>
-            <b-button
-              :disabled="isDisabled"
-              block
-              type="submit"
-              variant="success"
-            >
-              {{ $t('actions.create') }}
-            </b-button>
+            <slot name="submitButton">
+              <b-button
+                :disabled="isDisabled"
+                block
+                type="submit"
+                variant="success"
+              >
+                {{ $t('actions.create') }}
+              </b-button>
+            </slot>
           </b-col>
         </b-row>
       </template>
