@@ -105,10 +105,9 @@
         // if uriOption have some option , construc the uri with it!
         let uri = this.uri || this.name;
         console.log(this.uriOption);
-        if (this.uriOption)
-        {
+        if (this.uriOption) {
           if (this.uriOption.prefix) {
-            uri = uri + this.uriOption.prefix;
+            uri += this.uriOption.prefix;
           }
         }
 
@@ -170,8 +169,11 @@
         });
       },
       async submit(extraModel) {
+        if (!(extraModel instanceof Event)) {
+          _.extend(this.model, extraModel);
+        }
         // TODO https://monterail.github.io/vuelidate/
-        await this.$ajax.post(`${this.getUri}/new`, _.extend(this.model, extraModel))
+        await this.$ajax.post(`${this.getUri}/new`, this.model)
           .then((data) => {
             if (data.status) {
               this.$notify({

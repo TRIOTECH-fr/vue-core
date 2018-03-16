@@ -183,7 +183,10 @@
         this.previousModel = JSON.parse(JSON.stringify(this.model));
       },
       async submit(extraModel) {
-        const submitData = _.extend(_.differenceObj(this.model, this.previousModel), extraModel);
+        const submitData = _.differenceObj(this.model, this.previousModel);
+        if (!(extraModel instanceof Event)) {
+          _.extend(submitData, extraModel);
+        }
         if (!_.isEmpty(submitData)) {
           await this.$ajax.patch(this.editRouteFunc(), submitData)
             .then((data) => {
