@@ -38,8 +38,8 @@ Vue.component('fieldDropdown', {
         this.multiselectModel = null;
       }
     },
-    multiselectModel(newValue, OldValue) {
-      if (newValue !== OldValue) {
+    multiselectModel(newValue, oldValue) {
+      if (!_.isUndefined(newValue) && newValue !== oldValue) {
         this.setModelValueByPath(this.schema.model, this.value);
       }
       this.setRequired(_.size(newValue));
