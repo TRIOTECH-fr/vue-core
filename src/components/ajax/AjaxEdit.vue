@@ -11,6 +11,7 @@
         :model="model"
         :options="{ validationAfterLoad: true, validationAfterChanged: true }"
         :class="formClass"
+        :key="formUniqueId"
       />
       <b-row>
         <b-col>
@@ -115,6 +116,8 @@
       },
     },
     async mounted() {
+      this.formUniqueId = `${this.$moment().valueOf()}-edit`;
+
       if (this.loadOnMount) {
         this.load();
       }
@@ -248,4 +251,3 @@
 
 <style lang="scss" scoped>
 </style>
-

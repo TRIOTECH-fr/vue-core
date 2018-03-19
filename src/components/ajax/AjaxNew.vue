@@ -6,7 +6,7 @@
           :schema="schema"
           :model="model"
           :options="{ validationAfterLoad: true, validationAfterChanged: true }"
-          :key="$moment().valueOf()"
+          :key="formUniqueId"
         />
         <slot name="beforeSubmit" />
         <b-row>
@@ -98,6 +98,7 @@
           fields: [],
         },
         uriOption: null,
+        formUniqueId: null,
       };
     },
     computed: {
@@ -124,6 +125,8 @@
       },
     },
     mounted() {
+      this.formUniqueId = `${this.$moment().valueOf()}-new`;
+
       if (this.loadOnMount) {
         this.load();
       }
@@ -236,4 +239,3 @@
 
 <style lang="scss" scoped>
 </style>
-
