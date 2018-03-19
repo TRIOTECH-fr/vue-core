@@ -68,6 +68,9 @@ Vue.component('fieldDropdown', {
         this.$el.children[1].children[2].required = value > 0 ? '' : 'required';
       }
     },
+    onChange() {
+      this.$bus.$emit('t-event.multiselect-change');
+    },
   },
   template: `
     <multiselect
@@ -81,6 +84,7 @@ Vue.component('fieldDropdown', {
       :deselectLabel="$t('vms.deselect')"
       :placeholder="$t('vms.placeholder')"
       :tagPlaceholder="$t('vms.tag_placeholder')"
+      @input="onChange"
     >
       <slot name="noResult">$t('vms.no_result')</slot>
       <slot name="maxElements">$t('vms.max_elements')</slot>
