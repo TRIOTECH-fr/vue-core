@@ -69,7 +69,7 @@ Vue.component('fieldDropdown', {
       }
     },
     onChange() {
-      this.$bus.$emit('t-event.multiselect-change');
+      this.$nextTick(this.$bus.$emit.bind(this.$bus, 't-event.multiselect-change'));
     },
   },
   template: `
