@@ -68,7 +68,7 @@
       },
       catchModalArguments(...args) {
         if (this.modalRef) {
-          this.modalRef.args = args;
+          this.modalRef.args = args || [];
         }
       },
     },
