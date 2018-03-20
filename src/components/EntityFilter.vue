@@ -12,9 +12,10 @@
     deselect-label=""
     track-by="value"
     @input="updateFilterAction"
-    @select="select"
-    @remove="remove"
+    @select="onSelect"
+    @remove="onRemove"
   />
+  <!-- TODO finish props binding -->
   <!-- :v-model="filter.value" -->
   <!-- :hide-selected="true" -->
   <!-- :clear-on-select="false" -->
@@ -32,14 +33,38 @@
       Multiselect,
     },
     props: {
-      name: { type: String, required: true },
-      data: { type: Object, default: () => ({}) },
-      multiple: { type: Boolean, default: false },
-      persistant: { type: Boolean, default: true },
-      enumeration: { type: [Boolean, String], default: false },
-      id_prefix: { type: String, default: 'filters_' },
-      enum_suffix: { type: String, default: 'Enum' },
-      options_key: { type: String, default: 'options' },
+      name: {
+        type: String,
+        required: true,
+      },
+      data: {
+        type: Object,
+        default: () => ({}),
+      },
+      multiple: {
+        type: Boolean,
+        default: false,
+      },
+      persistant: {
+        type: Boolean,
+        default: true,
+      },
+      enumeration: {
+        type: [Boolean, String],
+        default: false,
+      },
+      id_prefix: {
+        type: String,
+        default: 'filters_',
+      },
+      enum_suffix: {
+        type: String,
+        default: 'Enum',
+      },
+      options_key: {
+        type: String,
+        default: 'options',
+      },
     },
     data() {
       return {
@@ -47,15 +72,21 @@
       };
     },
     computed: {
-      id() { return this.id_prefix + this.name; },
-      entity() { return this.$parent.entity; },
+      id() {
+        return this.id_prefix + this.name;
+      },
+      entity() {
+        return this.$parent.entity;
+      },
       stored() {
         if (!this.$store.state.filters[this.name]) {
           this.$store.state.filters[this.name] = {};
         }
         return this.$store.state.filters[this.name];
       },
-      enum() { return Voca(this.name).camelCase().capitalize().value() + this.enum_suffix; },
+      enum() {
+        return Voca(this.name).camelCase().capitalize().value() + this.enum_suffix;
+      },
       value() {
         const value = _.extend(this.data, this.stored);
         return value && value.value;
@@ -71,7 +102,9 @@
       }
     },
     methods: {
-      event(name) { return this.$parent.event(name); },
+      event(name) {
+        return this.$parent.event(name);
+      },
       sync(filters) {
         const filter = _.find(filters, { id: this.id }) || {};
         let { choices } = filter;
@@ -100,12 +133,12 @@
           choice.label = this.$enum.trans(choice.value, enumeration);
         }));
       },
-      remove(data) {
+      onRemove(data) {
         // TODO workaround for @input null value on @remove
         data.value = null;
         this.updateFilterAction(data).then(this.select);
       },
-      select() {
+      onSelect() {
         // TODO replace nextTick workaround : @input is called before @select and @remove
         this.$nextTick(() => {
           this.$parent.$emit(this.event('update'));

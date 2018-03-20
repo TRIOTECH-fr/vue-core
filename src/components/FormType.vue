@@ -13,6 +13,7 @@
                   {{ parts.length + 1 }}
                 </template>
                 <template v-else>
+                  <!-- TODO never use idx as key -->
                   <template v-for="(part, idx) in parts">
                     <span :key="idx" :class="{ active: part.isActive }">
                       {{ idx + 1 }}
@@ -41,6 +42,7 @@
     <b-container>
       <form>
         <div class="group-container">
+          <!-- TODO never use idx as key -->
           <template v-for="(part, idx) in parts">
             <div :key="idx" :class="{ 'form-group': true, active: part.isActive, 'is-inline': isLastStep, simplified: isSimplified }">
               <label :for="part.name">
@@ -55,18 +57,19 @@
                        v-model="contact[part.name]" >
               </template>
               <template v-if="part.formType === 'textearea'">
+                <!-- TODO fix eslint alert / use attribute placeholder instead ? -->
                 <textarea v-autosize="true" v-model="contact[part.name]">
                   {{ $t(part.placeholder) }}
                 </textarea>
               </template>
             </div>
           </template>
-          <div ref="error" :class="{ errors: true, display : hasError }"/>
+          <div ref="error" :class="{ errors: true, display : hasError }" />
         </div>
         <b-row>
           <template v-if="isSimplified">
             <div class="text-left">
-              <b-button type="submit" class="round-btn" @click="nextForm()">
+              <b-button type="submit" class="round-btn" @click="onNextFormClick">
                 <span class="d-none d-sm-block float-left">{{ $t('actions.send') }}</span>
                 <!-- <i class="fa fa-paper-plane"></i> -->
                 <icon name="paper-plane"/>
@@ -76,7 +79,7 @@
           <template v-else>
             <b-col v-if="!isFirstStep" :cols="6">
               <div class="text-left">
-                <b-button type="button" class="round-btn" @click="prevForm()">
+                <b-button type="button" class="round-btn" @click="onPrevFormClick">
                   <i class="ti ti-lg ti-arrow-left"/>
                   <span class="d-none d-sm-block float-right">{{ $t('actions.prev') }}</span>
                 </b-button>
@@ -84,7 +87,7 @@
             </b-col>
             <b-col>
               <div class="text-right">
-                <b-button type="submit" class="round-btn" @click="nextForm()">
+                <b-button type="submit" class="round-btn" @click="onNextFormClick">
                   <span class="d-none d-sm-block float-left">{{ $t(button.next.text) }}</span>
                   <i class="ti ti-lg ti-arrow-right"/>
                 </b-button>
@@ -158,7 +161,7 @@
           this.$notify({ title: this.$t('flashes.contact.server_error_title'), text: this.$t('flashes.contact.server_error'), type: 'error' });
         });
       },
-      prevForm() {
+      onPrevFormClick() {
         const { active, parts } = this;
         const current = parts[active];
         const index = active - 1;
@@ -169,7 +172,7 @@
 
         this.active = index;
       },
-      nextForm() {
+      onNextFormClick() {
         const { active, parts } = this;
         const current = parts[active];
         let index = active + 1;

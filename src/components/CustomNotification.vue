@@ -10,9 +10,9 @@
     <template slot="body" slot-scope="props">
       <div :class="props.item.type" class="custom-template">
         <div class="custom-template-icon">
-          <i v-if="props.item.type == 'success'" class="ti ti-fw ti-check-circle"/>
-          <i v-else-if="props.item.type == 'error'" class="ti ti-fw ti-close-circle"/>
-          <i v-else-if="props.item.type == 'warning'" class="ti ti-fw ti-warning"/>
+          <i v-if="props.item.type === 'success'" class="ti ti-fw ti-check-circle"/>
+          <i v-else-if="props.item.type === 'error'" class="ti ti-fw ti-close-circle"/>
+          <i v-else-if="props.item.type === 'warning'" class="ti ti-fw ti-warning"/>
           <i v-else class="ti ti-fw ti-info-circle"/>
         </div>
         <div class="custom-template-content">

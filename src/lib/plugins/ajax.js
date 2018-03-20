@@ -150,8 +150,7 @@ const Ajax = new Vue({
       return promise;
     },
     async syncRequest(config) {
-      const result = await this.asyncRequest(config);
-      return result;
+      return this.asyncRequest(config);
     },
     asyncRequest(config) {
       config.url = this.url(config);
