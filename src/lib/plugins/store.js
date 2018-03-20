@@ -84,6 +84,7 @@ const Store = new Vuex.Store({
   ],
 });
 
+// eslint-disable-next-line no-unused-vars
 const unsync = sync(Store, Router);
 
 Vue.set(Vue.prototype, '$store', Store);

@@ -79,6 +79,7 @@ const FileSystem = new Vue({
                     });
                   }
                   file.buffer = reader.result;
+                  // eslint-disable-next-line no-console
                   console.debug('fs.read', { name, withBuffer }, `${self.$moment().diff(moment) / 1000}s`);
                   return resolve(file);
                 };
@@ -108,11 +109,12 @@ const FileSystem = new Vue({
                 const nextSize = bytesWritten + blockSize;
                 fileWriter.write(new Blob([new Uint8Array(buffer.slice(bytesWritten, nextSize))]));
                 fileWriter.onwrite = () => {
-                  // eslint-disable-next-line
+                  // eslint-disable-next-line no-console, no-mixed-operators
                   console.debug(name, 100 * nextSize / totalSize, nextSize === fileWriter.length);
                   if (nextSize < totalSize) {
                     next(nextSize, callback);
                   } else if (_.isFunction(callback)) {
+                    // eslint-disable-next-line no-console
                     console.debug('fs.write', { name, totalSize }, `${self.$moment().diff(moment) / 1000}s`);
                     callback();
                   }

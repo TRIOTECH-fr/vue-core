@@ -2,7 +2,8 @@
   <section class="filters-container">
     <b-container fluid>
       <b-row>
-        <b-col :sm="12 / items.length" v-for="item, key in items" :key="key">
+        <!-- TODO, nerver use idx in v-for :/ -->
+        <b-col v-for="(item, idx) in items" :key="idx" :sm="12 / items.length">
           <entity-filter :name="item.name" :enumeration="item.enumeration" />
         </b-col>
       </b-row>
@@ -29,11 +30,18 @@
       uri() { return [this.uri_prefix, this.entity, this.uri_suffix].join(this.uri_separator); },
       filter() { return _.template(this.filter_template); },
     },
+    mounted() {
+      this.fetch().then(this.update);
+      this.$on(this.event('update'), this.update);
+    },
+    destroyed() {
+      this.$off(this.event('update'));
+    },
     methods: {
       event(name) { return [this.entity, name].join('.'); },
       fetch() {
-        const state = this.$store.state;
-        const entity = this.entity;
+        const { state } = this.$store;
+        const { entity } = this; // Todo check if this work :/ ( this.entity obj deconstruct )
         if (!state[entity]) {
           state[entity] = {};
         }
@@ -57,10 +65,6 @@
       update() {
         this.$bus.$emit(this.event('fetch'), _.param(this.filters()));
       },
-    },
-    mounted() {
-      this.fetch().then(this.update);
-      this.$on(this.event('update'), this.update);
     },
   };
 </script>

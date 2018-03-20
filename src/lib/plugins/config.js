@@ -1,5 +1,5 @@
 import Vue from 'vue';
-// eslint-disable-next-line import/no-webpack-loader-syntax
+// eslint-disable-next-line import/no-webpack-loader-syntax, import/no-unresolved
 import parameters from 'json-loader!yaml-loader!@/../config/parameters.yml';
 
 // TODO generate computed fns from parameters keys

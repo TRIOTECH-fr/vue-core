@@ -2,10 +2,10 @@
   <button :class="[isActive, animation]"
           class="hamburger"
           type="button"
-          @click="toggleMenu"
+          @click="onToggleMenuClick"
   >
     <span class="hamburger-box">
-      <span class="hamburger-inner"/>
+      <span class="hamburger-inner" />
     </span>
   </button>
 </template>
@@ -25,14 +25,9 @@
       };
     },
     methods: {
-      toggleMenu() {
-        if (this.isActive) {
-          this.isActive = '';
-          this.$bus.$emit('t-event.burger-button.close-menu');
-        } else {
-          this.isActive = 'is-active';
-          this.$bus.$emit('t-event.burger-button.open-menu');
-        }
+      onToggleMenuClick() {
+        this.isActive = this.isActive ? '' : 'is-active';
+        this.$bus.$emit(`t-event.burger-button.${this.isActive ? 'close' : 'open'}-menu`);
 
         return this.isActive;
       },

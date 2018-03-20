@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 module.exports = (ctx) => {
+// eslint-disable-next-line no-console
   console.log('Running: Adding root cordova script');
 
   const fs = ctx.requireCordovaModule('fs');
