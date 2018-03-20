@@ -30,7 +30,7 @@ const Ajax = new Vue({
       return this.url(this.build(location), true);
     },
     url(config, withoutEndpoint = false) {
-      let url = config && config.url;
+      let url = _.isObject(config) ? config.url : config;
       const endPoint = withoutEndpoint ? '/' : (this.$config.endpoint || '');
       if (url && url.indexOf('://') === -1) {
         url = `${this.$config.host}${endPoint}${url}`;
