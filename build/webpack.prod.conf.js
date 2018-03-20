@@ -111,7 +111,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       stripPrefix: 'web/'
     }),
     // seo prerending
-    new PrerenderSpaPlugin(path.join(process.cwd(), 'web'), config.build.prerender),
+    new PrerenderSpaPlugin(path.join(process.cwd(), 'web'), config.build.prerender || []),
     // modules intermediate caching step
     new HardSourceWebpackPlugin()
   ]
