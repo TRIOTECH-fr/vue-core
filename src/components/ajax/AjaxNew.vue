@@ -93,7 +93,7 @@
     },
     data() {
       return {
-        model: {},
+        model: () => ({}),
         schema: {
           fields: [],
         },
@@ -103,16 +103,13 @@
     },
     computed: {
       getUri() {
-        // if uriOption have some option , construc the uri with it!
+        // if uriOption have some option , construct the uri with it!
         let uri = this.uri || this.name;
-        console.log(this.uriOption);
         if (this.uriOption) {
-          if (this.uriOption.prefix) {
-            uri += this.uriOption.prefix;
+          if (this.uriOption.suffix) {
+            uri += this.uriOption.suffix;
           }
         }
-
-        console.log('uri option', uri);
         return uri;
       },
     },
@@ -155,7 +152,6 @@
       },
       async load(dataEvent = null) {
         // if data is passed with event, store data in uriOption
-        console.log('!data', dataEvent);
         if (dataEvent) {
           this.$set(this, 'uriOption', dataEvent);
         }
@@ -176,6 +172,7 @@
           _.extend(this.model, extraModel);
         }
         // TODO https://monterail.github.io/vuelidate/
+
         await this.$ajax.post(`${this.getUri}/new`, this.model)
           .then((data) => {
             if (data.status) {

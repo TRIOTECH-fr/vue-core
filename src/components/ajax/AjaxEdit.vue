@@ -95,16 +95,24 @@
         schema: {
           fields: [],
         },
-        fallbackId: null,
+        uriOption: null,
         editRoute: '',
       };
     },
     computed: {
       getUri() {
-        return this.uri !== null ? this.uri : this.name;
+        // if uriOption have some option , construc the uri with it!
+        let uri = this.uri || this.name;
+        if (this.uriOption) {
+          if (this.uriOption.suffix) {
+            uri = uri + this.uriOption.suffix;
+          }
+        }
+
+        return uri;
       },
       getId() {
-        return this.id || this.fallbackId;
+        return this.id || this.uriOption.id;
       },
     },
     watch: {
@@ -148,18 +156,15 @@
 
         return this.editRoute;
       },
-      async load(event = null) {
-        this.loading = true;
-        if (_.isNull(this.id) && _.isNull(event)) {
-          throw new Error('Entity identifier is unknown');
+      async load(dataEvent = null) {
+        // if data is passed with event, store data in uriOption
+        if (dataEvent) {
+          this.$set(this, 'uriOption', dataEvent);
         }
 
-        if (event) {
-          if (!_.isNaN(parseInt(event, 10))) {
-            this.fallbackId = event;
-          } else if (event.id) {
-            this.fallbackId = event.id;
-          }
+        this.loading = true;
+        if (_.isNull(this.id) && _.isNull(event) && _.isNull(event.id)) {
+          throw new Error('Entity identifier is unknown');
         }
 
         this.$bus.$emit(`t-event.ajax-edit.${this.name}.loading`);
