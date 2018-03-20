@@ -41,16 +41,9 @@ const Store = new Vuex.Store({
             next(carry[index], chunks.slice(1).join('.'));
           }
         } else {
-          delete carry[key];
+          Vue.delete(carry, key);
         }
       }).bind(this, state));
-    },
-    setKeyValue(state, data) {
-      Vue.set(state, data.key, data.value);
-    },
-    addKeyValue(state, data) {
-      const array = state[data.key];
-      Vue.set(array, array.length - 1, data.value);
     },
     updateFilter(state, filter) {
       const name = filter && filter.name;
