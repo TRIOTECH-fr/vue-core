@@ -41,7 +41,7 @@ Vue.component('fieldFileUpload', {
   methods: {
     updateButtonText() {
       const initialValue = this.modelNameToProperty(this.schema.model, this.model);
-      const buttonText = initialValue ? (_.get(initialValue, 'name') || _.get(initialValue, 'original_name')) : this.$t('actions.choose_file');
+      const buttonText = initialValue ? (_.get(initialValue, 'original_name') || _.get(initialValue, 'file_name')) : this.$t('actions.choose_file');
       if (this.btnText !== buttonText) {
         this.btnText = buttonText;
       }
