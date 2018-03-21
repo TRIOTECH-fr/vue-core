@@ -9,3 +9,9 @@
 .multiselect--active {
     z-index: 110 !important;
 }
+
+input.multiselect__input {
+    display: block !important;
+    opacity: 0;
+    position: absolute;
+}
