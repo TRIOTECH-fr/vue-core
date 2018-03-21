@@ -2,6 +2,10 @@
   width: 100%;
 }
 
+.vdp-datepicker__calendar {
+    z-index: 110px !important;
+}
+
 .custom-file-input:lang(fr)~.custom-file-label::after {
   content: "Ajouter un fichier";
 }
