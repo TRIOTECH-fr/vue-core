@@ -5,3 +5,7 @@
 .multiselect__content-wrapper {
   z-index: 100000 !important;
 }
+
+.multiselect--active {
+    z-index: 110 !important;
+}
