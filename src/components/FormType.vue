@@ -250,7 +250,7 @@
 
       .group-container .form-group {
         &.is-inline {
-          margin: 0rem 1% 1rem 1%;
+          margin: 0 1% 1rem 1%;
         }
 
         label {
@@ -455,11 +455,11 @@
         padding: 10px 20px;
 
         i.ti-arrow-left {
-          margin-left: 0px;
+          margin-left: 0;
         }
 
         i.ti-arrow-right {
-          margin-right: 0px;
+          margin-right: 0;
         }
       }
     }

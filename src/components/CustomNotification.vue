@@ -55,8 +55,7 @@
       flex-wrap: nowrap;
       text-align: left;
       font-size: 13px;
-      margin: 5px;
-      margin-bottom: 0;
+      margin: 5px 5px 0;
       align-items: center;
       justify-content: center;
       background: $extra-light-grey;
