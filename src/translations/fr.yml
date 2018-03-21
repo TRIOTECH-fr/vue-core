@@ -36,13 +36,16 @@ actions:
   duplicate: Dupliquer
   edit: Editer
   go_back: Retour
+  loading: Chargement...
   login: Connexion
   logout: Déconnexion
   move_down: Descendre
   move_up: Monter
+  no: Non
+  reset: Réinitialiser
   save: Enregistrer
   show: Consulter
-  loading: Chargement...
+  yes: Oui
 
 flashes:
   login:
