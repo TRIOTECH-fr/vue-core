@@ -14,7 +14,7 @@ Vue.component('fieldFileUpload', {
   data() {
     return {
       data: null,
-      btnText: this.$t('actions.choose_file'),
+      btnText: null,
     };
   },
   computed: {
@@ -33,12 +33,19 @@ Vue.component('fieldFileUpload', {
     },
   },
   mounted() {
-    const initialValue = this.modelNameToProperty(this.schema.model, this.model);
-    if (initialValue) {
-      this.btnText = _.isObject(initialValue) ? initialValue.name : initialValue;
-    }
+    this.updateButtonText();
+  },
+  updated() {
+    this.updateButtonText();
   },
   methods: {
+    updateButtonText() {
+      const initialValue = this.modelNameToProperty(this.schema.model, this.model);
+      const buttonText = initialValue ? (_.get(initialValue, 'name') || _.get(initialValue, 'file_name')) : this.$t('actions.choose_file');
+      if (this.btnText !== buttonText) {
+        this.btnText = buttonText;
+      }
+    },
     onValueChange(evt) {
       if (evt.target.files.length > 0) {
         this.btnText = _.reduce(evt.target.files, (carry, file) => `${carry} ${file.name}`, '').trim();
