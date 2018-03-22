@@ -51,7 +51,7 @@ Vue.component('fieldDropdown', {
       this.setRequired();
     }
     if (initialValue) {
-      const findOrFilter = (value, current) => Number(current.id) === Number(_.isObject(value) ? value.id : value);
+      const findOrFilter = (value, current) => current.id === (_.isObject(value) ? value.id : value);
       if (!this.multiple) {
         this.multiselectModel = this.schema.choices.find(findOrFilter.bind(_, initialValue));
       } else {
