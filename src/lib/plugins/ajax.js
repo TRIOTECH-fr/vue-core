@@ -45,7 +45,7 @@ const Ajax = new Vue({
             if (this._.isObject(value)) {
               if (this._.isBlob(value)) {
                 const type = value.type.split('/').slice(-1).join();
-                form.append(format(stack, key), value, `${key}.${type}`);
+                form.append(format(stack, key), value, value.name || `${key}.${type}`);
               } else if (this._.isArray(value)) {
                 value.forEach(subValue => form.append(`${format(stack, key)}[]`, subValue));
               } else {
