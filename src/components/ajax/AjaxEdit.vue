@@ -86,6 +86,22 @@
         type: String,
         default: null,
       },
+      config: {
+        type: Object,
+        default: () => ({}),
+      },
+      auth: {
+        type: [Boolean, String],
+        default: true,
+      },
+      authHeader: {
+        type: String,
+        default: 'Authorization',
+      },
+      authPrefix: {
+        type: String,
+        default: 'Bearer',
+      },
     },
     data() {
       return {
@@ -134,6 +150,14 @@
         this.$bus.$on(`t-event.t-modal.${this.refModal}.open`, this.load);
       }
     },
+    created() {
+      const auth = _.isBoolean(this.auth) ? 'access_token' : this.auth;
+      if (auth) {
+        const header = {};
+        header[this.authHeader] = [this.authPrefix, _.get(this.get(), auth)].join(' ').trim();
+        this.config.headers = _.extend(header, this.config.headers);
+      }
+    },
     beforeDestroy() {
       if (!this.loadOnMount && this.refModal !== null) {
         this.$off(`t-event.t-modal.${this.refModal}.open`);
@@ -170,7 +194,7 @@
         this.$bus.$emit(`t-event.ajax-edit.${this.name}.loading`);
         this.$set(this, 'model', this.defaultModelValues || {});
 
-        const data = await this.$ajax.get(this.editRouteFunc());
+        const data = await this.$ajax.get(this.editRouteFunc(), {}, this.config);
         this.schema.fields = _.form(this.$t, data.form);
         this.applyFilterOnSchema();
 
@@ -196,7 +220,7 @@
           _.extend(submitData, extraModel);
         }
         if (!_.isEmpty(submitData)) {
-          await this.$ajax.patch(this.editRouteFunc(), submitData)
+          await this.$ajax.patch(this.editRouteFunc(), submitData, this.config)
             .then((data) => {
               if (data.status) {
                 this.updatePreviousModel();

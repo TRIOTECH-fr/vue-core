@@ -90,6 +90,22 @@
           return this.$t(`flashes.${this.name}.create`);
         },
       },
+      config: {
+        type: Object,
+        default: () => ({}),
+      },
+      auth: {
+        type: [Boolean, String],
+        default: true,
+      },
+      authHeader: {
+        type: String,
+        default: 'Authorization',
+      },
+      authPrefix: {
+        type: String,
+        default: 'Bearer',
+      },
     },
     data() {
       return {
@@ -134,6 +150,14 @@
 
       this.$bus.$on(`t-event.ajax-new.${this.name}.submit`, this.submit);
     },
+    created() {
+      const auth = _.isBoolean(this.auth) ? 'access_token' : this.auth;
+      if (auth) {
+        const header = {};
+        header[this.authHeader] = [this.authPrefix, _.get(this.get(), auth)].join(' ').trim();
+        this.config.headers = _.extend(header, this.config.headers);
+      }
+    },
     beforeDestroy() {
       if (!this.loadOnMount && this.refModal !== null) {
         this.$off(`t-event.t-modal.${this.refModal}.opened`);
@@ -159,7 +183,7 @@
         this.$bus.$emit(`t-event.ajax-new.${this.name}.loading`);
         this.$set(this, 'model', this.defaultModelValues || {});
 
-        const data = await this.$ajax.get(`${this.getUri}/new`);
+        const data = await this.$ajax.get(`${this.getUri}/new`, {}, this.config);
         this.$set(this.schema, 'fields', _.form(this.$t, data));
         this.applyFilterOnSchema();
 
@@ -173,7 +197,7 @@
         }
         // TODO https://monterail.github.io/vuelidate/
 
-        await this.$ajax.post(`${this.getUri}/new`, this.model)
+        await this.$ajax.post(`${this.getUri}/new`, this.model, this.config)
           .then((data) => {
             if (data.status) {
               this.$notify({
