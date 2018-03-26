@@ -151,7 +151,7 @@
       this.$bus.$on(`t-event.ajax-new.${this.name}.submit`, this.submit);
     },
     created() {
-      const auth = _.isBoolean(this.auth) ? 'access_token' : this.auth;
+      const auth = _.isBoolean(this.auth) ? 'oauth.access_token' : this.auth;
       if (auth) {
         const header = {};
         header[this.authHeader] = [this.authPrefix, _.get(this.get(), auth)].join(' ').trim();
