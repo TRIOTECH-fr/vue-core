@@ -18,6 +18,23 @@ module.exports = {
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
   },
+  optimization: {
+    minimize: false,
+    runtimeChunk: {
+      name: 'vendor'
+    },
+    splitChunks: {
+      cacheGroups: {
+        default: false,
+        commons: {
+          test: /node_modules/,
+          name: 'vendor',
+          chunks: 'initial',
+          minSize: 1
+        }
+      }
+    }
+  },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
@@ -57,7 +74,7 @@ module.exports = {
           resolve('test'),
           resolve('node_modules/@triotech/vue-core/src'),
           resolve('node_modules/sweet-modal-vue'),
-          resolve('node_modules/vuex-cache'),
+          resolve('node_modules/vuex-cache')
         ]
       },
       {
