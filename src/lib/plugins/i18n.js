@@ -1,15 +1,15 @@
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import autoload from '../core/autoload';
-import _ from '@triotech/vue-core/src/lib/plugins/_';
+import _ from './_';
 
 Vue.use(VueI18n);
 
 const I18n = new VueI18n({
   locale: 'fr',
   messages: _.merge(
-    autoload(require.context('json-loader!@triotech/vue-core/src/translations', false, /\.yml$/)),
-    autoload(require.context('json-loader!@/translations', false, /\.yml$/)),
+    autoload(require.context('json-loader!yaml-loader!@triotech/vue-core/src/translations', false, /\.yml$/)),
+    autoload(require.context('json-loader!yaml-loader!@/translations', false, /\.yml$/)),
   ),
   silentTranslationWarn: true,
 });

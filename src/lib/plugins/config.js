@@ -1,6 +1,6 @@
 import Vue from 'vue';
-// eslint-disable-next-line import/no-webpack-loader-syntax, import/no-unresolved
-import parameters from 'json-loader!yaml-loader!@/../config/parameters.yml';
+import config from '%/config.yml';
+import parameters from '%/parameters.yml';
 
 // TODO generate computed fns from parameters keys
 // TODO handle dot notation for get/set
@@ -8,26 +8,26 @@ import parameters from 'json-loader!yaml-loader!@/../config/parameters.yml';
 const Config = new Vue({
   data() {
     return {
-      parameters,
+      config: _.extend(config, parameters),
     };
   },
   computed: {
     host() {
-      return (this.local('host') || this.parameters.host || '').replace(/\/$/, '');
+      return (this.local('host') || this.config.host || '').replace(/\/$/, '');
     },
     endpoint() {
-      return (this.local('endpoint') || this.parameters.endpoint || '').replace(/\/$/, '').concat('/');
+      return (this.local('endpoint') || this.config.endpoint || '').replace(/\/$/, '').concat('/');
     },
   },
   methods: {
     all() {
-      return this.parameters;
+      return this.config;
     },
     get(key, fallback) {
-      return this.parameters[key] || fallback;
+      return this.config[key] || fallback;
     },
     set(key, value) {
-      this.$set(this.parameters, key, value);
+      this.$set(this.config, key, value);
     },
     local(key) {
       return localStorage.getItem(key);
