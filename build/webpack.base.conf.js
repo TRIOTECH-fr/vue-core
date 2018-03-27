@@ -78,13 +78,13 @@ module.exports = {
         ]
       },
       {
-        test: /\.yml$/,
+        test: /\.ya?ml$/,
         loaders: [
+          'json-loader',
           'yaml-loader'
         ],
         include: [
-          resolve('src'),
-          resolve('node_modules/@triotech/vue-core/src')
+          resolve('config')
         ]
       },
       {
