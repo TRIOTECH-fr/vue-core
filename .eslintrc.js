@@ -14,9 +14,6 @@ module.exports = {
     'airbnb-base',
     'plugin:vue/recommended',
   ],
-  globals: {
-    '_': true,
-  },
   // check if imports actually resolve
   settings: {
     'import/resolver': {

@@ -4,7 +4,6 @@ import Axios from 'axios';
 import moment from 'moment';
 import QS from 'qs';
 import Router from './router';
-import Y from '../helper/y';
 
 Vue.use(VueAxios, Axios);
 
@@ -39,7 +38,7 @@ const Ajax = new Vue({
     },
     encode(input) {
       const format = (stack, key) => (stack ? `${stack}[${key}]` : key);
-      return Y(next => (form, data, stack = null) => {
+      return this._.Y(next => (form, data, stack = null) => {
         if (this._.isObject(data)) {
           this._.forOwn(data, (value, key) => {
             if (this._.isObject(value)) {

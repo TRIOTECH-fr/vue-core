@@ -1,10 +1,10 @@
 import Vue from 'vue';
-import Mixins from './mixins';
-
-window.Mixins = Mixins;
+import AbstractField from './abstractField';
 
 Vue.component('fieldFileUpload', {
-  mixins: Mixins,
+  mixins: [
+    AbstractField,
+  ],
   props: {
     lang: {
       type: String,

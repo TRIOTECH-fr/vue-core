@@ -1,240 +1,184 @@
-<!-- TODO REWORK -->
-<!--<template>-->
-  <!--<div class="w-100">-->
-    <!--<div v-if="loader && isLoading" class="text-center mb-3">-->
-      <!--<slot name="loader">-->
-        <!--<i class="ti ti-2x ti-spin ti-refresh"/>-->
-      <!--</slot>-->
-    <!--</div>-->
-    <!--<template :class="{ hidden: !isLoading }">-->
-      <!--<slot v-if="!isLoading" name="list-header"/>-->
-      <!--<template v-if="items.length > 0">-->
-        <!--<div v-if="renderMode === 'table'" class="table-responsive">-->
-          <!--<slot name="table-title"/>-->
-          <!--<table class="table">-->
-            <!--<slot name="header">-->
-              <!--<tr>-->
-                <!--<th>{{ $t('table.item') }}</th>-->
-                <!--<th>{{ $t('table.index') }}</th>-->
-              <!--</tr>-->
-            <!--</slot>-->
-            <!--<slot-->
-              <!--v-for="(item, index) in listOverCallBack(items)"-->
-              <!--:item="item"-->
-              <!--:index="index"-->
-              <!--name="item"-->
-            <!--&gt;-->
-              <!--<tr :key="item.id">-->
-                <!--<td>{{ item }}</td>-->
-                <!--<td>{{ index }}</td>-->
-                <!--<slot name="table-action"/>-->
-              <!--</tr>-->
-            <!--</slot>-->
-          <!--</table>-->
-        <!--</div>-->
-        <!--<b-list-group v-else-if="renderMode === 'list'">-->
-          <!--<slot-->
-            <!--v-for="(item, index) in listOverCallBack(items)"-->
-            <!--:item="item"-->
-            <!--name="item"-->
-            <!--index="index"-->
-          <!--&gt;-->
-            <!--<b-list-group-item>{{ item }} - {{ index }}</b-list-group-item>-->
-          <!--</slot>-->
-        <!--</b-list-group>-->
-        <!--<div v-else-if="renderMode === 'mosaic'" class="mosaic">-->
-          <!--<b-row>-->
-            <!--<slot-->
-              <!--v-for="(item, index) in listOverCallBack(items)"-->
-              <!--:item="item"-->
-              <!--:index="index"-->
-              <!--name="item"-->
-            <!--&gt;-->
-              <!--<b-col sm="3">{{ item }} - {{ index }}</b-col>-->
-            <!--</slot>-->
-          <!--</b-row>-->
-        <!--</div>-->
-        <!--<div v-else-if="renderMode === 'custom'">-->
-          <!--<slot-->
-            <!--v-for="(item, index) in listOverCallBack(items)"-->
-            <!--:item="item"-->
-            <!--:index="index"-->
-            <!--name="item"-->
-          <!--/>-->
-        <!--</div>-->
-      <!--</template>-->
-      <!--<b-alert v-else-if="init" show>{{ $t(`pages.${entityName}.empty_set`) }}</b-alert>-->
-      <!--<slot v-if="!isLoading" name="footer"/>-->
-    <!--</template>-->
-    <!--<slot name="modal"/>-->
-  <!--</div>-->
-<!--</template>-->
+<template>
+  <div class="w-100">
+    <slot v-if="!isLoading" name="header"/>
+    <div v-if="loader && isLoading" class="text-center mb-3">
+      <slot name="loader">
+        <i class="ti ti-2x ti-spin ti-refresh"/>
+      </slot>
+    </div>
+    <template v-else-if="items.length > 0">
+      <!-- <ajax-index-grid v-if="isGridRenderMode" slot="item" :items="mapItems" /> -->
+      <div v-if="isGridRenderMode" class="mosaic">
+        <b-row>
+          <b-col v-for="(item, index) in items" :key="index" sm="3">
+            <slot :item="item" name="item">
+              {{ item }} - {{ index }}
+            </slot>
+          </b-col>
+        </b-row>
+      </div>
+      <!-- <ajax-index-list v-else-if="isListRenderMode" slot="item" :items="mapItems" /> -->
+      <b-list-group v-else-if="isListRenderMode">
+        <b-list-group-item v-for="(item, index) in items" :key="index">
+          <slot :item="item" name="item">
+            {{ index }} : {{ item }}
+          </slot>
+        </b-list-group-item>
+      </b-list-group>
+      <!-- <ajax-index-table v-else-if="isTableRenderMode" slot="item" :items="mapItems" /> -->
+      <div v-else-if="isTableRenderMode" class="table-responsive">
+        <slot name="table-title"/>
+        <table class="table">
+          <slot name="table-header">
+            <tr>
+              <th>{{ $t('table.item') }}</th>
+              <th>{{ $t('table.index') }}</th>
+            </tr>
+          </slot>
+          <tr v-for="(item, index) in items" :key="index">
+            <slot :item="item" name="item">
+              <td>{{ item }}</td>
+              <td>{{ index }}</td>
+              <slot name="table-action"/>
+            </slot>
+          </tr>
+        </table>
+      </div>
+      <!--  -->
+      <template v-else>
+        <slot
+          v-for="(item, index) in mapItems"
+          :item="item"
+          :index="index"
+          name="item"
+        />
+      </template>
+    </template>
+    <b-alert v-else show>{{ $t(`pages.${entity}.empty_set`) }}</b-alert>
+    <slot v-if="!isLoading" name="footer"/>
+  </div>
+</template>
 
-<!--<script>-->
-  <!--export default {-->
-    <!--name: 'AjaxIndex',-->
-    <!--props: {-->
-      <!--entityUniqueKey: {-->
-        <!--type: String,-->
-        <!--default: 'id',-->
-      <!--},-->
-      <!--eventId: {-->
-        <!--type: String,-->
-        <!--default: null,-->
-      <!--},-->
-      <!--entityName: {-->
-        <!--type: String,-->
-        <!--default: 'item',-->
-      <!--},-->
-      <!--uri: {-->
-        <!--type: String,-->
-        <!--required: true,-->
-      <!--},-->
-      <!--method: {-->
-        <!--type: String,-->
-        <!--default: 'get',-->
-      <!--},-->
-      <!--data: {-->
-        <!--type: Object,-->
-        <!--default: () => ({}),-->
-      <!--},-->
-      <!--config: {-->
-        <!--type: Object,-->
-        <!--default: () => ({}),-->
-      <!--},-->
-      <!--auth: {-->
-        <!--type: [Boolean, String],-->
-        <!--default: true,-->
-      <!--},-->
-      <!--authHeader: {-->
-        <!--type: String,-->
-        <!--default: 'Authorization',-->
-      <!--},-->
-      <!--authPrefix: {-->
-        <!--type: String,-->
-        <!--default: 'Bearer',-->
-      <!--},-->
-      <!--loader: {-->
-        <!--type: Boolean,-->
-        <!--default: true,-->
-      <!--},-->
-      <!--initLoad: {-->
-        <!--type: Boolean,-->
-        <!--default: true,-->
-      <!--},-->
-      <!--renderMode: {-->
-        <!--type: String,-->
-        <!--default: 'table',-->
-      <!--},-->
-      <!--orderCallBack: {-->
-        <!--type: Function,-->
-        <!--default: list => list,-->
-      <!--},-->
-    <!--},-->
-    <!--data() {-->
-      <!--return {-->
-        <!--init: false,-->
-        <!--isLoading: false,-->
-        <!--items: [],-->
-      <!--};-->
-    <!--},-->
-    <!--created() {-->
-      <!--const auth = _.isBoolean(this.auth) ? 'access_token' : this.auth;-->
-      <!--if (auth) {-->
-        <!--const header = {};-->
-        <!--header[this.authHeader] = [this.authPrefix, _.get(this.get(), auth)].join(' ').trim();-->
-        <!--this.config.headers = _.extend(header, this.config.headers);-->
-      <!--}-->
-    <!--},-->
-    <!--async mounted() {-->
-      <!--if (this.initLoad) {-->
-        <!--await this.load();-->
-      <!--}-->
+<script>
+  import AbstractAjax from './AbstractAjax';
+  import AjaxIndexGrid from './AjaxIndexGrid.vue';
+  import AjaxIndexList from './AjaxIndexList.vue';
+  import AjaxIndexTable from './AjaxIndexTable.vue';
 
-      <!--if (this.eventId !== null) {-->
-        <!--this.$bus.$on(this.eventName('refresh'), this.refresh);-->
-        <!--this.$bus.$on(this.eventName('load'), this.load);-->
-      <!--}-->
-    <!--},-->
-    <!--beforeDestroy() {-->
-      <!--this.$bus.$off(this.eventName('refresh'));-->
-      <!--this.$bus.$off(this.eventName('load'));-->
-    <!--},-->
-    <!--methods: {-->
-      <!--listOverCallBack(list) {-->
-        <!--return this.orderCallBack(list);-->
-      <!--},-->
-      <!--eventName(action) {-->
-        <!--return `t-event.ajax-index.${this.eventId}.${action}`;-->
-      <!--},-->
-      <!--async load() {-->
-        <!--this.isLoading = true;-->
+  export default {
+    name: 'AjaxIndexComponent',
+    components: {
+      AjaxIndexGrid,
+      AjaxIndexList,
+      AjaxIndexTable,
+    },
+    mixins: [
+      AbstractAjax,
+    ],
+    props: {
+      method: {
+        type: String,
+        default: 'get',
+      },
+      loader: {
+        type: Boolean,
+        default: true,
+      },
+      renderMode: {
+        type: String,
+        default: 'none',
+      },
+      callback: {
+        type: Function,
+        default: args => args,
+      },
+    },
+    data() {
+      return {
+        items: [],
+      };
+    },
+    computed: {
+      mapItems() {
+        return this.callback(this.items);
+      },
+      isTableRenderMode() {
+        return this.renderMode === 'table';
+      },
+      isListRenderMode() {
+        return this.renderMode === 'list';
+      },
+      isGridRenderMode() {
+        return this.renderMode === 'grid';
+      },
+    },
+    async mounted() {
+      this.on('refresh', this.refresh);
+      this.on('load', this.load);
+    },
+    methods: {
+      async load(reset = true) {
+        this.emit('loading');
+        const items = await this.ajax();
+        if (reset) {
+          this.items = items;
+        } /* else {
+          this.emit('reset', items);
+        } */
+        this.$nextTick(this.emit.bind(this, 'loaded'));
+        return items;
+      },
+      async refresh() {
+        this.load(false).then((items) => {
+          this.handleDeletions(items);
+          this.handleUpdates(items);
+        });
+        // this.once('reset', (items) => {
+        //   this.handleDeletions(items);
+        //   this.handleUpdates(items);
+        // });
+      },
+      handleDeletions(items) {
+        if (items.length < this.items.length) {
+          const deletedItems = this._.differenceWith(this.items, items, (x, y) => x.id === y.id);
+          this._.each(deletedItems, (deletedItem) => {
+            this.$delete(this.items, this._.findIndex(this.items, deletedItem));
+          });
+        }
+      },
+      handleUpdates(items) {
+        const set = this._.Y(next => (current, previous) => {
+          if (!this._.isUndefined(current)) {
+            this._.each(previous, (value, key) => {
+              if (key !== 'id') {
+                if (this._.isObject(value) && !this._.isArray(value)) {
+                  next(current[key], value);
+                } else {
+                  this.$set(current, key, value);
+                }
+              }
+            });
+          }
+        });
 
-        <!--this.$bus.$emit(`t-event.ajax-index.${this.name}.loading`);-->
+        const updatedItems = this.differenceObj(items, this.items, true);
+        this._.each(updatedItems, (updatedItem) => {
+          const item = this.items.find(x => x.id === updatedItem.id);
+          // TODO factorize if-else
+          if (!this._.isUndefined(item)) {
+            set(item, updatedItem);
+          } else {
+            this.$set(this.items, this.items.length, updatedItem);
+          }
+        });
+      },
+    },
+  };
+</script>
 
-        <!--const fn = this.$ajax[this.method];-->
-
-        <!--const data = await fn(this.uri, this.data, this.config);-->
-        <!--this.items = data;-->
-        <!--this.isLoading = false;-->
-        <!--this.init = true;-->
-
-        <!--// TODO remove weird event-->
-        <!--this.$bus.$emit('t-event.ajax-index.load-data-success', data);-->
-
-        <!--this.$nextTick(() => {-->
-          <!--// TODO this.name is undefined ?-->
-          <!--this.$bus.$emit(`t-event.ajax-index.${this.name}.loaded`);-->
-        <!--});-->
-      <!--},-->
-      <!--refreshData(dataRef, data) {-->
-        <!--if (typeof dataRef !== 'undefined') {-->
-          <!--_.each(data, (value, key) => {-->
-            <!--if (key !== 'id') {-->
-              <!--if (_.isObject(value) && !_.isArray(value)) {-->
-                <!--this.refreshData(dataRef[key], value);-->
-              <!--} else {-->
-                <!--this.$set(dataRef, key, value);-->
-              <!--}-->
-            <!--}-->
-          <!--});-->
-        <!--}-->
-      <!--},-->
-      <!--async refresh() {-->
-        <!--this.isLoading = true;-->
-        <!--const fn = this.$ajax[this.method];-->
-        <!--await fn(this.uri, this.data, this.config).then((items) => {-->
-          <!--if (items.length < this.items.length) {-->
-            <!--const deletedData = _.differenceWith(this.items, items, (x, y) => x.id === y.id);-->
-            <!--deletedData.forEach((data) => {-->
-              <!--this.$delete(this.items, _.findIndex(this.items, data));-->
-            <!--});-->
-          <!--}-->
-          <!--const updatedData = _.differenceObj(items, this.items, true);-->
-          <!--updatedData.forEach((data) => {-->
-            <!--const dataRef = this.items.find(x => x.id === data.id);-->
-            <!--if (typeof dataRef !== 'undefined') {-->
-              <!--this.refreshData(dataRef, data);-->
-            <!--} else {-->
-              <!--this.$set(this.items, this.items.length, data);-->
-            <!--}-->
-          <!--});-->
-          <!--this.isLoading = false;-->
-          <!--this.init = true;-->
-          <!--this.$bus.$emit('t-event.ajax-index.load-data-success', this.items);-->
-        <!--});-->
-      <!--},-->
-    <!--},-->
-  <!--};-->
-<!--</script>-->
-
-<!--<style lang="scss">-->
-  <!--.hidden {-->
-    <!--display: none;-->
-  <!--}-->
-
-  <!--.alert.alert-info {-->
-    <!--margin-top: 1rem;-->
-  <!--}-->
-<!--</style>-->
+<style lang="scss">
+  .alert.alert-info {
+    margin-top: 1rem;
+  }
+</style>
 

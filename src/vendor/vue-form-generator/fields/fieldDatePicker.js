@@ -1,12 +1,14 @@
 import Vue from 'vue';
 import DatePicker from 'vuejs-datepicker';
-import Mixins from './mixins';
+import AbstractField from './abstractField';
 
 Vue.component('fieldDatePicker', {
   components: {
     DatePicker,
   },
-  mixins: Mixins,
+  mixins: [
+    AbstractField,
+  ],
   props: {
     language: {
       type: String,
