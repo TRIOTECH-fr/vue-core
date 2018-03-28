@@ -1,8 +1,10 @@
 import Vue from 'vue';
-import Mixins from './mixins';
+import AbstractField from './abstractField';
 
 Vue.component('fieldCustomTextArea', {
-  mixins: Mixins,
+  mixins: [
+    AbstractField,
+  ],
   data() {
     return {
       textAreaModel: '',

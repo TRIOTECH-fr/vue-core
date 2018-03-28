@@ -5,7 +5,6 @@ import VuexCache from 'vuex-cache';
 import VuexSharedMutations from 'vuex-shared-mutations';
 // eslint-disable-next-line no-unused-vars
 import { sync } from 'vuex-router-sync';
-import Y from '../helper/y';
 import Router from './router';
 
 Vue.use(Vuex);
@@ -22,18 +21,18 @@ const Store = new Vuex.Store({
   },
   mutations: {
     set(state, data) {
-      _.each(data, (value, key) => {
-        Vue.set(state, key, _.isObject(value) && !_.isArray(value) ? Object.assign({}, value) : value);
+      this._.each(data, (value, key) => {
+        Vue.set(state, key, _.isObject(value) && !this._.isArray(value) ? Object.assign({}, value) : value);
       });
     },
     add(state, data) {
-      _.each(data, (value, key) => {
+      this._.each(data, (value, key) => {
         const index = state[key].length - 1;
         state[key].splice(index, 1, value);
       });
     },
     unset(state, data) {
-      _.each(_.isArray(data) ? data : [data], Y(next => (carry, key) => {
+      this._.each(this._.isArray(data) ? data : [data], this._.Y(next => (carry, key) => {
         if (key.indexOf('.') !== -1) {
           const chunks = key.split('.');
           const index = chunks[0];
@@ -68,7 +67,7 @@ const Store = new Vuex.Store({
       commit('unset', data);
     },
     reset({ commit }) {
-      commit('unset', _.keys(this.state));
+      commit('unset', this._.keys(this.state));
     },
     updateFilterAction({ commit }, filter) {
       commit('updateFilter', filter);

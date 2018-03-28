@@ -40,12 +40,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      sourceMap: true
-    }),
     // extract css into its own file
     new MiniCSSExtractPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css')
@@ -95,7 +89,10 @@ const webpackConfig = merge(baseWebpackConfig, {
       stripPrefix: 'web/'
     }),
     // seo prerending
-    new PrerenderSpaPlugin(path.join(process.cwd(), 'web'), config.build.prerender || []),
+    new PrerenderSpaPlugin({
+      staticDir: path.join(process.cwd(), 'web'),
+      routes: require('js-yaml').safeLoad(fs.readFileSync(path.join(process.cwd(), 'config/config.yml'), 'utf8')).prerender || []
+    }),
     // modules intermediate caching step
     new HardSourceWebpackPlugin()
   ]

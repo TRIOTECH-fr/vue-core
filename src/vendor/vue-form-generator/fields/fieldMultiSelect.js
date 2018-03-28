@@ -1,12 +1,14 @@
 import Vue from 'vue';
 import Multiselect from '../../vue-multiselect';
-import Mixins from './mixins';
+import AbstractField from './abstractField';
 
 Vue.component('fieldDropdown', {
   components: {
     Multiselect,
   },
-  mixins: Mixins,
+  mixins: [
+    AbstractField,
+  ],
   data() {
     return {
       multiselectModel: null,

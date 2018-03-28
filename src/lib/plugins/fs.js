@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import Y from '../helper/y';
 
 const FileSystem = new Vue({
   name: 'FileSystem',
@@ -103,7 +102,7 @@ const FileSystem = new Vue({
               fileWriter.onerror = (event) => {
                 this.unlink(name).then(reject.bind(this, event.target.error)).catch(reject);
               };
-              Y(next => (bytesWritten, callback) => {
+              this._.Y(next => (bytesWritten, callback) => {
                 const totalSize = buffer.byteLength;
                 const blockSize = Math.min(this.blockSize, totalSize - bytesWritten);
                 const nextSize = bytesWritten + blockSize;
@@ -113,7 +112,7 @@ const FileSystem = new Vue({
                   console.debug(name, 100 * nextSize / totalSize, nextSize === fileWriter.length);
                   if (nextSize < totalSize) {
                     next(nextSize, callback);
-                  } else if (_.isFunction(callback)) {
+                  } else if (this._.isFunction(callback)) {
                     // eslint-disable-next-line no-console
                     console.debug('fs.write', { name, totalSize }, `${self.$moment().diff(moment) / 1000}s`);
                     callback();
