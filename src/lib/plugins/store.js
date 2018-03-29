@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 import VuexPersistedState from 'vuex-persistedstate';
 import VuexCache from 'vuex-cache';
 import VuexSharedMutations from 'vuex-shared-mutations';
-// eslint-disable-next-line no-unused-vars
 import { sync } from 'vuex-router-sync';
 import Router from './router';
 
@@ -21,18 +20,27 @@ const Store = new Vuex.Store({
   },
   mutations: {
     set(state, data) {
-      this._.each(data, (value, key) => {
-        Vue.set(state, key, _.isObject(value) && !this._.isArray(value) ? Object.assign({}, value) : value);
+      const vm = this._vm; // eslint-disable-line no-underscore-dangle
+      vm._.each(data, (value, key) => {
+        Vue.set(state, key, vm._.isObject(value) && !vm._.isArray(value) ? Object.assign({}, value) : value);
       });
     },
     add(state, data) {
-      this._.each(data, (value, key) => {
+      const vm = this._vm; // eslint-disable-line no-underscore-dangle
+      vm._.each(data, (value, key) => {
         const index = state[key].length - 1;
         state[key].splice(index, 1, value);
       });
     },
     unset(state, data) {
-      this._.each(this._.isArray(data) ? data : [data], this._.Y(next => (carry, key) => {
+      const vm = this._vm; // eslint-disable-line no-underscore-dangle
+      let keys = data;
+      if (vm._.isUndefined(keys)) {
+        keys = vm._.keys(this.state);
+      } else if (!vm._.isArray(keys)) {
+        keys = [keys];
+      }
+      vm._.each(keys, vm._.Y(next => (carry, key) => {
         if (key.indexOf('.') !== -1) {
           const chunks = key.split('.');
           const index = chunks[0];
@@ -67,7 +75,7 @@ const Store = new Vuex.Store({
       commit('unset', data);
     },
     reset({ commit }) {
-      commit('unset', this._.keys(this.state));
+      commit('unset');
     },
     updateFilterAction({ commit }, filter) {
       commit('updateFilter', filter);
@@ -77,14 +85,12 @@ const Store = new Vuex.Store({
     VuexPersistedState(),
     VuexCache,
     VuexSharedMutations({ predicate: ['shareState'] }),
-    // (() => {
-    //  this.unsync = sync(this._vm.$store, this._vm.$router);
-    // })(),
+    (router => (store) => {
+      store.unsync = sync(store, router);
+    })(Router),
   ],
+  strict: process.env.NODE_ENV !== 'production',
 });
-
-// eslint-disable-next-line no-unused-vars
-const unsync = sync(Store, Router);
 
 Vue.set(Vue.prototype, '$store', Store);
 

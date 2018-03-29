@@ -23,7 +23,7 @@
 <script>
   import AbstractAjax from './AbstractAjax';
   import AbstractForm from './AbstractForm';
-  import AjaxUpsert from './AjaxUpsert.vue';
+  import AjaxUpsert from './AjaxUpsert';
 
   export default {
     name: 'AjaxNewComponent',
