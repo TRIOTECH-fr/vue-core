@@ -4,11 +4,11 @@
       <i class="ti ti-2x ti-dashboard" />
       <span>{{ $t('actions.list') }}</span>
     </router-link>
-    <router-link v-if="previous && previous.exist" :to="previous.link" class="btn btn-nav btn-prev">
+    <router-link v-if="previous" :to="previous" class="btn btn-nav btn-prev">
       <i class="ti ti-2x ti-arrow-left" />
       <span>{{ $t('actions.prev') }}</span>
     </router-link>
-    <router-link v-if="next && next.exist" :to="next.link" class="btn btn-nav btn-next">
+    <router-link v-if="next" :to="next" class="btn btn-nav btn-next">
       <span>{{ $t('actions.next') }}</span>
       <i class="ti ti-2x ti-arrow-right" />
     </router-link>
@@ -23,46 +23,43 @@
         type: Object,
         default: () => ({}),
       },
-      previous: {
+      links: {
         type: Object,
         default: () => ({}),
       },
-      next: {
-        type: Object,
-        default: () => ({}),
+      route: {
+        type: String,
+        default: '',
+      },
+      param: {
+        type: String,
+        default: 'id',
       },
     },
-    build(links, route, param = 'id') {
-      const identifier = this._.reduce(['previous', 'next'], (carry, link) => {
-        const data = links[link];
-        const href = data && data.href && (data.href.match(/\/([\d]+)$/) || data.href.match(/\/([\w-]+)$/));
-        carry[link] = href && href.length > 1 ? href[1] : href;
-        return carry;
-      }, {});
-
-      const navigation = {
-        previous: {
-          exist: identifier.previous !== undefined,
-          link: {
-            name: route,
-            params: { },
-          },
-        },
-        next: {
-          exist: identifier.next !== undefined,
-          link: {
-            name: route,
-            params: {
-              id: identifier.next,
-            },
-          },
-        },
+    data() {
+      return {
+        previous: null,
+        next: null,
       };
+    },
+    mounted() {
+      this.previous = this.build('previous');
+      this.next = this.build('next');
+    },
+    methods: {
+      build(link) {
+        const data = this.links[link];
+        const href = data && data.href;
+        const matches = href && (href.match(/\/([\d]+)$/) || href.match(/\/([\w-]+)$/));
+        const param = matches && matches.length > 1 && matches[1];
 
-      navigation.previous.link.params[param] = identifier.previous;
-      navigation.next.link.params[param] = identifier.next;
-
-      return navigation;
+        return !!href && {
+          name: this.route,
+          params: {
+            [this.param]: param,
+          },
+        };
+      },
     },
   };
 </script>

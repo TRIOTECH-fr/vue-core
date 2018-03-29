@@ -53,6 +53,7 @@
                   :placeholder="$t(part.placeholder)"
                   :required="part.required"
                   :pattern="part.pattern"
+                  :autocomplete="part.name"
                   v-model="contact[part.name]"
                 >
               </template>
