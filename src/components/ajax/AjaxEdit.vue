@@ -44,11 +44,6 @@
         default: '/{:id}/edit',
       },
     },
-    data() {
-      return {
-        previousModel: {},
-      };
-    },
     methods: {
       async load() {
         this.emit('loading');

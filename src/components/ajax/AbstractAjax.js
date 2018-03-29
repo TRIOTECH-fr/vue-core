@@ -77,16 +77,16 @@ export default {
     }
   },
   methods: {
-    form() {
-      return this.$ajax.get(this.uri, this.model, this.config);
-    },
     ajax(model) {
       const ajaxModel = model || this.model;
-      if (this._.isEmpty(ajaxModel)) {
-        // return false;
+      const { method } = this;
+      const fn = this.$ajax[method];
+
+      if (!this._.isFunction(fn) || (method !== this.$ajax.httpGet.toLowerCase() && this._.isEmpty(ajaxModel))) {
+        return false;
       }
 
-      return this.$ajax[this.method](this.uri, ajaxModel, this.config).then((data) => {
+      return fn(this.uri, ajaxModel, this.config).then((data) => {
         if (this._.has(data, 'status')) {
           if (data.status === 'ok') {
             this.$notify({
@@ -174,10 +174,6 @@ export default {
             : value;
         }
       }))(baseObject, baseBase);
-    },
-    access() {
-      console.log('access');
-      debugger;
     },
   },
 };

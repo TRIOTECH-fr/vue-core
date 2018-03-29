@@ -13,7 +13,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    isSubmitButtonDisabled: {
+    submitButtonDisabled: {
       type: Boolean,
       default: false,
     },
@@ -21,10 +21,15 @@ export default {
       type: String,
       default: '',
     },
+    fetchForm: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
       model: {},
+      previousModel: {},
       schema: {
         fields: [],
       },
@@ -38,11 +43,20 @@ export default {
     formKey() {
       return `${this.name}-${this.timestamp}`;
     },
+    isSubmitButtonDisabled() {
+      return this.submitButtonDisabled || this._.isEmpty(this.differenceObj(this.model, this.previousModel));
+    },
   },
   mounted() {
     this.on('submit', this.submit);
   },
   methods: {
+    form() {
+      if (!this.fetchForm) {
+        return true;
+      }
+      return this.$ajax.get(this.uri, this.model, this.config);
+    },
     clearModelForForm(baseModel = {}, baseSchema = {}, modelTemp = {}, keepIdentifier = true, identifier = 'id') {
       const format = (stack, key) => (stack ? `${stack}[${key}]` : key);
       const formFields = this._.reduce(baseSchema, (carry, field) => {
