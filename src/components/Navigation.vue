@@ -33,10 +33,10 @@
       },
     },
     build(links, route, param = 'id') {
-      const identifier = _.reduce(['previous', 'next'], (carry, link) => {
+      const identifier = this._.reduce(['previous', 'next'], (carry, link) => {
         const data = links[link];
-        const href = data && data.href && (data.href.match(/[\d]+$/) || data.href.match(/[\w-]+$/));
-        carry[link] = href && href.length > 0 ? href[0] : href;
+        const href = data && data.href && (data.href.match(/\/([\d]+)$/) || data.href.match(/\/([\w-]+)$/));
+        carry[link] = href && href.length > 1 ? href[1] : href;
         return carry;
       }, {});
 
