@@ -61,9 +61,9 @@
 
 <script>
   import AbstractAjax from './AbstractAjax';
-  import AjaxIndexGrid from './AjaxIndexGrid.vue';
-  import AjaxIndexList from './AjaxIndexList.vue';
-  import AjaxIndexTable from './AjaxIndexTable.vue';
+  import AjaxIndexGrid from './AjaxIndexGrid';
+  import AjaxIndexList from './AjaxIndexList';
+  import AjaxIndexTable from './AjaxIndexTable';
 
   export default {
     name: 'AjaxIndexComponent',
