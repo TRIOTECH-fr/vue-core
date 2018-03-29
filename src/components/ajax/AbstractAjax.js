@@ -12,18 +12,6 @@ export default {
       type: String,
       default: 'entity',
     },
-    auth: {
-      type: [Boolean, String],
-      default: true,
-    },
-    authHeader: {
-      type: String,
-      default: 'Authorization',
-    },
-    authPrefix: {
-      type: String,
-      default: 'Bearer',
-    },
     loadOnMount: {
       type: Boolean,
       default: true,
@@ -31,6 +19,30 @@ export default {
     notificationSuccessText: {
       type: String,
       default: '',
+    },
+    auth: {
+      type: Boolean,
+      default() {
+        return this.$config.get('auth') !== false;
+      },
+    },
+    authHeaderName: {
+      type: String,
+      default() {
+        return this._.toString(this._.get(this.$config.get('auth'), 'header_name', 'Authorization'));
+      },
+    },
+    authHeaderValuePrefix: {
+      type: String,
+      default() {
+        return this._.toString(this._.get(this.$config.get('auth'), 'header_value_prefix', 'Bearer'));
+      },
+    },
+    authHeaderValuePath: {
+      type: String,
+      default() {
+        return this._.toString(this._.get(this.$config.get('auth'), 'header_value_path', 'oauth.access_token'));
+      },
     },
   },
   computed: {
@@ -55,11 +67,13 @@ export default {
     this.off();
   },
   created() {
-    const auth = this._.isBoolean(this.auth) ? 'access_token' : this.auth;
-    if (auth) {
-      const header = {};
-      header[this.authHeader] = [this.authPrefix, this._.get(this.get(), auth)].join(' ').trim();
-      this.config.headers = this._.extend(header, this.config.headers);
+    if (this.auth) {
+      const authHeaderValue = this._.get(this.get(), this.authHeaderValuePath);
+      this._.extend(this.config, {
+        headers: {
+          [this.authHeaderName]: [this.authHeaderValuePrefix, authHeaderValue].join(' ').trim(),
+        },
+      });
     }
   },
   methods: {
@@ -69,7 +83,7 @@ export default {
     ajax(model) {
       const ajaxModel = model || this.model;
       if (this._.isEmpty(ajaxModel)) {
-        return false;
+        // return false;
       }
 
       return this.$ajax[this.method](this.uri, ajaxModel, this.config).then((data) => {
@@ -160,6 +174,10 @@ export default {
             : value;
         }
       }))(baseObject, baseBase);
+    },
+    access() {
+      console.log('access');
+      debugger;
     },
   },
 };

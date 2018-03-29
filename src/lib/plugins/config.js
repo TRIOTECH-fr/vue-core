@@ -8,26 +8,26 @@ import parameters from '%/parameters.yml';
 const Config = new Vue({
   data() {
     return {
-      config: _.extend(config, parameters),
+      data: this._.extend(config, parameters),
     };
   },
   computed: {
     host() {
-      return (this.local('host') || this.config.host || '').replace(/\/$/, '');
+      return (this.local('host') || this.data.host || '').replace(/\/$/, '');
     },
     endpoint() {
-      return (this.local('endpoint') || this.config.endpoint || '').replace(/\/$/, '').concat('/');
+      return (this.local('endpoint') || this.data.endpoint || '').replace(/\/$/, '').concat('/');
     },
   },
   methods: {
     all() {
-      return this.config;
+      return this.data;
     },
     get(key, fallback) {
-      return this.config[key] || fallback;
+      return this._.has(this.data, key) ? this.data[key] : fallback;
     },
     set(key, value) {
-      this.$set(this.config, key, value);
+      this.$set(this.data, key, value);
     },
     local(key) {
       return localStorage.getItem(key);
