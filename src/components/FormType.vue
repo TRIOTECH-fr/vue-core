@@ -13,7 +13,6 @@
                   {{ parts.length + 1 }}
                 </template>
                 <template v-else>
-                  <!-- TODO never use idx as key -->
                   <template v-for="(part, idx) in parts">
                     <span :key="idx" :class="{ active: part.isActive }">
                       {{ idx + 1 }}
@@ -42,19 +41,20 @@
     <b-container>
       <form>
         <div class="group-container">
-          <!-- TODO never use idx as key -->
           <template v-for="(part, idx) in parts">
             <div :key="idx" :class="{ 'form-group': true, active: part.isActive, 'is-inline': isLastStep, simplified: isSimplified }">
               <label :for="part.name">
                 {{ $t(part.label) }} {{ part.required ? '*' : '' }}:
               </label>
               <template v-if="part.formType === 'input'">
-                <input :id="part.name"
-                       :type="part.type"
-                       :placeholder="$t(part.placeholder)"
-                       :required="part.required"
-                       :pattern="part.pattern"
-                       v-model="contact[part.name]" >
+                <input
+                  :id="part.name"
+                  :type="part.type"
+                  :placeholder="$t(part.placeholder)"
+                  :required="part.required"
+                  :pattern="part.pattern"
+                  v-model="contact[part.name]"
+                >
               </template>
               <template v-if="part.formType === 'textearea'">
                 <!-- TODO fix eslint alert / use attribute placeholder instead ? -->
@@ -150,7 +150,7 @@
     methods: {
       send() {
         this.$ajax.post('public/contact/', {
-          contact: _.clone(this.contact),
+          contact: this._.clone(this.contact),
         }).then((data) => {
           if (data.status) {
             this.$notify({ title: this.$t('flashes.contact.sent_title'), text: this.$t('flashes.contact.sent'), type: 'success' });
@@ -196,19 +196,19 @@
         }
 
         if (index === parts.length) {
-          _.each(parts, (part) => {
+          this._.each(parts, (part) => {
             part.isActive = true;
           });
           this.$set(this.button.next, 'text', 'actions.send');
         } else if (index > parts.length || this.isSimplified) {
           this.send();
           this.$parent.$parent.close();
-          _.each(this.contact, (value, key) => this.$set(this.contact, key, ''));
+          this._.each(this.contact, (value, key) => this.$set(this.contact, key, ''));
           if (this.button) {
             this.$set(this.button.next, 'text', 'actions.next');
           }
           index = 0;
-          _.each(parts, (part, idx) => {
+          this._.each(parts, (part, idx) => {
             part.isActive = idx === 0;
           });
         }

@@ -53,15 +53,15 @@
         type: [Boolean, String],
         default: false,
       },
-      id_prefix: {
+      idPrefix: {
         type: String,
         default: 'filters_',
       },
-      enum_suffix: {
+      enumSuffix: {
         type: String,
         default: 'Enum',
       },
-      options_key: {
+      optionsKey: {
         type: String,
         default: 'options',
       },
@@ -73,7 +73,7 @@
     },
     computed: {
       id() {
-        return this.id_prefix + this.name;
+        return this.idPrefix + this.name;
       },
       entity() {
         return this.$parent.entity;
@@ -85,17 +85,17 @@
         return this.$store.state.filters[this.name];
       },
       enum() {
-        return Voca(this.name).camelCase().capitalize().value() + this.enum_suffix;
+        return Voca(this.name).camelCase().capitalize().value() + this.enumSuffix;
       },
       value() {
-        const value = _.extend(this.data, this.stored);
+        const value = this._.extend(this.data, this.stored);
         return value && value.value;
       },
     },
     mounted() {
       const state = this.$store.state[this.$parent.entity];
       const filters = state && state.filters;
-      if (!_.isEmpty(filters)) {
+      if (!this._.isEmpty(filters)) {
         this.sync(filters);
       } else {
         this.$bus.$once(this.event('filters.data'), this.sync);
@@ -106,16 +106,16 @@
         return this.$parent.event(name);
       },
       sync(filters) {
-        const filter = _.find(filters, { id: this.id }) || {};
+        const filter = this._.find(filters, { id: this.id }) || {};
         let { choices } = filter;
 
         if (!choices) {
           return;
-        } else if (_.isObject(choices)) {
-          choices = _.toArray(choices);
+        } else if (this._.isObject(choices)) {
+          choices = this._.toArray(choices);
         }
 
-        this.options = this.$set(this.stored, this.options_key, _.each(choices, (choice) => {
+        this.options = this.$set(this.stored, this.optionsKey, this._.each(choices, (choice) => {
           choice.name = this.name;
         }));
 
@@ -128,7 +128,7 @@
         }
       },
       update() {
-        this.options = this.$set(this.stored, this.options_key, _.each(this.options, (choice) => {
+        this.options = this.$set(this.stored, this.optionsKey, this._.each(this.options, (choice) => {
           const enumeration = this.enumeration === true ? this.enum : this.enumeration;
           choice.label = this.$enum.trans(choice.value, enumeration);
         }));

@@ -1,8 +1,9 @@
 <template>
-  <button :class="[isActive, animation]"
-          class="hamburger"
-          type="button"
-          @click="onToggleMenuClick"
+  <button
+    :class="[isActive, animation]"
+    class="hamburger"
+    type="button"
+    @click="onToggleMenuClick"
   >
     <span class="hamburger-box">
       <span class="hamburger-inner" />
@@ -28,7 +29,6 @@
       onToggleMenuClick() {
         this.isActive = this.isActive ? '' : 'is-active';
         this.$bus.$emit(`t-event.burger-button.${this.isActive ? 'close' : 'open'}-menu`);
-
         return this.isActive;
       },
     },
