@@ -1,9 +1,9 @@
-import VueFormGenerator from 'vue-form-generator';
+import AbstractAjax from './AbstractAjax';
 
 export default {
-  components: {
-    'vue-form-generator': VueFormGenerator.component,
-  },
+  mixins: [
+    AbstractAjax,
+  ],
   props: {
     id: {
       type: [Number, String],
