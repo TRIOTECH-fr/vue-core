@@ -50,7 +50,7 @@ export default {
       return `${this.apiPath}${this._.template(this.path, { interpolate: /{:([\s\S]+?)}/g })({ id: this.id })}`;
     },
     name() {
-      return this.$voca.kebabCase(this._name.replace('Component', '')); // eslint-disable-line no-underscore-dangle
+      return this.$options._componentTag; // eslint-disable-line no-underscore-dangle
     },
   },
   data() {
