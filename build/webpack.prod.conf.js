@@ -13,10 +13,16 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const loadMinified = require('./load-minified')
 const PrerenderSpaPlugin = require('prerender-spa-plugin')
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
+const yaml = require('js-yaml')
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
   : require('../config/prod.env')
+
+const customConfig = merge(
+  yaml.safeLoad(fs.readFileSync(path.join(process.cwd(), 'config/config.yml'), 'utf8')),
+  yaml.safeLoad(fs.readFileSync(path.join(process.cwd(), 'config/parameters.yml'), 'utf8'))
+)
 
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
@@ -88,15 +94,20 @@ const webpackConfig = merge(baseWebpackConfig, {
       minify: true,
       stripPrefix: 'web/'
     }),
-    // seo prerending
-    new PrerenderSpaPlugin({
-      staticDir: path.join(process.cwd(), 'web'),
-      routes: require('js-yaml').safeLoad(fs.readFileSync(path.join(process.cwd(), 'config/config.yml'), 'utf8')).prerender || []
-    }),
     // modules intermediate caching step
     new HardSourceWebpackPlugin()
   ]
 })
+
+const routes = customConfig.prerender || []
+if (routes.length > 0) {
+  webpackConfig.plugins.push(// seo prerending
+    new PrerenderSpaPlugin({
+      staticDir: path.join(process.cwd(), 'web'),
+      routes
+    })
+  )
+}
 
 if (config.build.productionGzip) {
   const CompressionWebpackPlugin = require('compression-webpack-plugin')
