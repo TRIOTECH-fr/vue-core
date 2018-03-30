@@ -11,13 +11,11 @@
 </template>
 
 <script>
-  import AbstractAjax from './AbstractAjax';
-  import AbstractForm from './AbstractForm';
+  import AbstractForm from '../mixins/AbstractForm';
 
   export default {
     name: 'AjaxDeleteComponent',
     mixins: [
-      AbstractAjax,
       AbstractForm,
     ],
     props: {

@@ -60,7 +60,7 @@
 </template>
 
 <script>
-  import AbstractAjax from './AbstractAjax';
+  import AbstractAjax from '../mixins/AbstractAjax';
   import AjaxIndexGrid from './AjaxIndexGrid';
   import AjaxIndexList from './AjaxIndexList';
   import AjaxIndexTable from './AjaxIndexTable';
