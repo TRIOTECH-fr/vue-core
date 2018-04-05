@@ -1,36 +1,33 @@
 <template>
-  <multiselect
+  <vue-multiselect
     :id="name"
     :value="value"
     :options="options"
     :placeholder="$t(`placeholders.${name}.${multiple ? 'multiple' : 'single'}`)"
     :preserve-search="true"
     :multiple="multiple"
+    :close-on-select="true"
+    :hide-selected="false"
+    :clear-on-select="true"
     label="label"
     select-label=""
     selected-label=""
     deselect-label=""
     track-by="value"
-    @input="updateFilterAction"
+    @input="updateStoreValue"
+    @remove="onSelect"
     @select="onSelect"
-    @remove="onRemove"
   />
-  <!-- TODO finish props binding -->
-  <!-- :v-model="filter.value" -->
-  <!-- :hide-selected="true" -->
-  <!-- :clear-on-select="false" -->
-  <!-- :close-on-select="false" -->
 </template>
 
 <script>
-  import Multiselect from 'vue-multiselect';
-  import { mapActions } from 'vuex';
-  import Voca from 'voca';
+  import VueMultiselect from 'vue-multiselect';
+  import { mapState } from 'vuex';
 
   export default {
-    name: 'EntityFilterComponent',
+    name: 'AjaxFilterComponent',
     components: {
-      Multiselect,
+      VueMultiselect,
     },
     props: {
       name: {
@@ -66,11 +63,6 @@
         default: 'options',
       },
     },
-    data() {
-      return {
-        options: [],
-      };
-    },
     computed: {
       id() {
         return this.idPrefix + this.name;
@@ -78,35 +70,37 @@
       entity() {
         return this.$parent.entity;
       },
-      stored() {
-        if (!this.$store.state.filters[this.name]) {
-          this.$store.state.filters[this.name] = {};
-        }
-        return this.$store.state.filters[this.name];
-      },
       enum() {
-        return Voca(this.name).camelCase().capitalize().value() + this.enumSuffix;
+        return this._.upperFirst(this._.camelCase(this.name)) + this.enumSuffix;
       },
       value() {
-        const value = this._.extend(this.data, this.stored);
-        return value && value.value;
+        return this.filter.value || null;
       },
+      options() {
+        return this.filter.options || [];
+      },
+      updateStoreOptions() {
+        return this.updateStore.bind(this, 'options');
+      },
+      updateStoreValue() {
+        return this.updateStore.bind(this, 'value');
+      },
+      ...mapState({
+        filter(state) {
+          return state.filters[this.name] || {};
+        },
+      }),
     },
     mounted() {
-      const state = this.$store.state[this.$parent.entity];
-      const filters = state && state.filters;
-      if (!this._.isEmpty(filters)) {
-        this.sync(filters);
-      } else {
-        this.$bus.$once(this.event('filters.data'), this.sync);
-      }
+      this.$bus.$once(this.event('filters.data'), this.sync);
     },
     methods: {
       event(name) {
         return this.$parent.event(name);
       },
       sync(filters) {
-        const filter = this._.find(filters, { id: this.id }) || {};
+        const { id } = this;
+        const filter = this._.find(filters, { id }) || {};
         let { choices } = filter;
 
         if (!choices) {
@@ -115,7 +109,7 @@
           choices = this._.toArray(choices);
         }
 
-        this.options = this.$set(this.stored, this.optionsKey, this._.each(choices, (choice) => {
+        this.updateStoreOptions(this._.each(choices, (choice) => {
           choice.name = this.name;
         }));
 
@@ -128,23 +122,21 @@
         }
       },
       update() {
-        this.options = this.$set(this.stored, this.optionsKey, this._.each(this.options, (choice) => {
+        this.updateStoreOptions(this._.each(this.options, (choice) => {
           const enumeration = this.enumeration === true ? this.enum : this.enumeration;
           choice.label = this.$enum.trans(choice.value, enumeration);
         }));
       },
-      onRemove(data) {
-        // TODO workaround for @input null value on @remove
-        data.value = null;
-        this.updateFilterAction(data).then(this.select);
-      },
       onSelect() {
-        // TODO replace nextTick workaround : @input is called before @select and @remove
-        this.$nextTick(() => {
-          this.$parent.$emit(this.event('update'));
-        });
+        this.$nextTick(this.$parent.$emit.bind(this.$parent, this.event('update')));
       },
-      ...mapActions(['updateFilterAction']),
+      updateStore(key, value) {
+        const { filters } = this.get();
+        const filter = this._.access(filters, this.name, {});
+        // TODO fix vuex mutation error
+        filter[key] = value;
+        this.set({ filters });
+      },
     },
   };
 </script>

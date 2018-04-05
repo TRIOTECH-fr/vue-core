@@ -226,8 +226,8 @@
 
 <style lang="scss" scoped>
   @import '~@/scss/vars';
-  @import '~@triotech/vue-core/src/scss/media';
-  @import '~@triotech/vue-core/src/scss/compass';
+  @import '../scss/media';
+  @import '../scss/compass';
   @import 'compass/css3/transform';
   @import 'compass/css3/transition';
   @import 'compass/css3/user-interface';

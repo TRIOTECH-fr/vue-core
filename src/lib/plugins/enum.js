@@ -23,7 +23,7 @@ const Enum = new Vue({
       return key ? I18n.t(`${domain}.${key}`) : '';
     },
     key(choice, className) {
-      const classObj = _.find(this.enums, (item) => {
+      const classObj = this._.find(this.enums, (item) => {
         const classNames = [item.class_name, item.fqcn];
         return classNames.indexOf(className) !== -1;
       });

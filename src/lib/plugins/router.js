@@ -6,10 +6,11 @@ Vue.use(VueRouter);
 
 const vueRouterPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location, ...args) {
-  if (this.app.$f7) {
-    const route = this.match(_.clone(location), this.history.current);
+  const vm = this.app;
+  if (vm.$f7) {
+    const route = this.match(vm._.clone(location), this.history.current);
     if (route.path) {
-      return this.app.$f7.router.navigate(route.fullPath, args);
+      return vm.$f7.router.navigate(route.fullPath, args);
     }
   }
   return vueRouterPush.call(this, location, ...args);
@@ -33,12 +34,12 @@ const Router = new VueRouter({
 Router.beforeEach((to, from, next) => {
   const vm = Router.app;
   vm.$nextTick(() => {
-    _.some(vm.$config.get('firewall'), (data, path) => {
-      const store = _.isObject(data) ? data.store : true;
-      const state = _.isObject(data) ? data.state : data;
+    vm._.some(vm.$config.get('firewall'), (data, path) => {
+      const store = vm._.isObject(data) ? data.store : true;
+      const state = vm._.isObject(data) ? data.state : data;
       const push = to.path.match(path) && (store && !vm.$store.state[state]);
       if (push) {
-        vm.$router.push(_.isObject(data) ? data.redirect : '/');
+        vm.$router.push(vm._.isObject(data) ? data.redirect : '/');
       }
       return push;
     });

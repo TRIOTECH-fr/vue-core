@@ -1,4 +1,5 @@
 import { abstractField } from 'vue-form-generator';
+import _ from 'lodash';
 
 abstractField.methods.modelNameToProperty = (modelName, model) => modelName
   .replace(/\[(\w+)\]/g, '.$1')

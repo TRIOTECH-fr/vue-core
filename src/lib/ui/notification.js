@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueNotifications from 'vue-notification';
-import velocity from 'velocity-animate';
+import VelocityAnimate from 'velocity-animate';
 
-Vue.use(VueNotifications, { velocity });
+Vue.use(VueNotifications, { VelocityAnimate });
 
 export default VueNotifications;

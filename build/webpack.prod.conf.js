@@ -19,10 +19,13 @@ const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
   : require('../config/prod.env')
 
-const customConfig = merge(
-  yaml.safeLoad(fs.readFileSync(path.join(process.cwd(), 'config/config.yml'), 'utf8')),
-  yaml.safeLoad(fs.readFileSync(path.join(process.cwd(), 'config/parameters.yml'), 'utf8'))
-)
+const customConfig = ['config/config.yml', 'config/parameters.yml'].reduce((carry, file) => {
+  const filePath = path.join(process.cwd(), file)
+  if (fs.existsSync(filePath)) {
+    merge(carry, yaml.safeLoad(fs.readFileSync(filePath, 'utf8')))
+  }
+  return carry
+})
 
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
@@ -101,7 +104,8 @@ const webpackConfig = merge(baseWebpackConfig, {
 
 const routes = customConfig.prerender || []
 if (routes.length > 0) {
-  webpackConfig.plugins.push(// seo prerending
+  webpackConfig.plugins.push(
+    // seo prerending
     new PrerenderSpaPlugin({
       staticDir: path.join(process.cwd(), 'web'),
       routes
@@ -128,7 +132,7 @@ if (config.build.productionGzip) {
 }
 
 if (config.build.bundleAnalyzerReport) {
-  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+  const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
   webpackConfig.plugins.push(new BundleAnalyzerPlugin())
 }
 

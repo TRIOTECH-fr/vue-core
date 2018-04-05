@@ -2,8 +2,8 @@
   <section class="filters-container">
     <b-container fluid>
       <b-row>
-        <b-col v-for="(item, idx) in items" :key="idx" :sm="12 / items.length">
-          <entity-filter :name="item.name" :enumeration="item.enumeration" />
+        <b-col v-for="(item, idx) in items" :key="idx" :sm="12 / rows">
+          <ajax-filter :name="item.name" :enumeration="item.enumeration" />
         </b-col>
       </b-row>
     </b-container>
@@ -11,11 +11,11 @@
 </template>
 
 <script>
-  import EntityFilter from './EntityFilter';
+  import AjaxFilter from './AjaxFilter';
 
   export default {
-    name: 'EntityFiltersComponent',
-    components: { EntityFilter },
+    name: 'AjaxFiltersComponent',
+    components: { AjaxFilter },
     props: {
       entity: {
         type: String,
@@ -25,7 +25,7 @@
         type: Array,
         default: () => [],
       },
-      rowItems: {
+      rows: {
         type: Number,
         default: 4,
       },
@@ -62,7 +62,9 @@
       this.$off(this.event('update'));
     },
     methods: {
-      event(name) { return [this.entity, name].join('.'); },
+      event(name) {
+        return [this.entity, name].join('.');
+      },
       fetch() {
         const { state } = this.$store;
         const { entity } = this;
@@ -72,9 +74,8 @@
         if (state[entity].filters === true) {
           return Promise.resolve();
         }
-        this.$set(state[entity], this.uri_suffix, true);
+
         return this.$ajax.get(this.uri).then((data) => {
-          this.$set(state[entity], this.uri_suffix, data);
           this.$bus.$emit(this.event('filters.data'), data);
         });
       },

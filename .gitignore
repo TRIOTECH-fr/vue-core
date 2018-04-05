@@ -1,4 +1,5 @@
 /node_modules/
 /dist/
+/test/e2e/reports/
 *-debug.log*
 *-error.log*

@@ -1,11 +1,11 @@
 import Vue from 'vue';
-import Home from '@/views/Home';
+import App from '@/App';
 
-describe('Home.vue', () => {
+describe('App.vue', () => {
   it('should render correct contents', () => {
-    const Constructor = Vue.extend(Home);
+    const Constructor = Vue.extend(App);
     const vm = new Constructor().$mount();
-    expect(vm.$el.querySelector('.container h1').textContent)
+    expect(vm.$el.querySelector('#app').textContent)
       .to.equal(vm.$t('pages.home.quote'));
   });
 });

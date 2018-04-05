@@ -1,3 +1,5 @@
+@import "compass/css3/user-interface";
+
 .multiselect {
   z-index: 100 !important;
 }
@@ -7,11 +9,16 @@
 }
 
 .multiselect--active {
-    z-index: 110 !important;
+  z-index: 110 !important;
 }
 
-input.multiselect__input {
-    display: block !important;
-    opacity: 0;
-    position: absolute;
+.multiselect__input {
+  display: block !important;
+  position: absolute;
+  background-color: transparent;
+  font-size: 0;
+}
+
+.multiselect--active input.multiselect__input {
+  font-size: 16px;
 }

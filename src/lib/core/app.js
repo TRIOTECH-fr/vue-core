@@ -33,7 +33,7 @@ Vue.mixin({
   },
 });
 
-autoload(require.context('@triotech/vue-core/src/lib/plugins', false, /\.js$/));
+autoload(require.context('../plugins', false, /\.js$/));
 
 export default new Vue({
   methods: {

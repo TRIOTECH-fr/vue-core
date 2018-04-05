@@ -42,8 +42,8 @@
 </script>
 
 <style lang="scss">
-  @import '~@triotech/vue-core/src/scss/vars';
-  @import '~@triotech/vue-core/src/scss/media';
+  @import '~@/scss/vars';
+  @import '~@/scss/media';
 
   .my-notification-style {
     margin: 10px;

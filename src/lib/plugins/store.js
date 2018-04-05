@@ -52,14 +52,6 @@ const Store = new Vuex.Store({
         }
       }).bind(this, state));
     },
-    updateFilter(state, filter) {
-      const name = filter && filter.name;
-      if (filter.value) {
-        state.filters[name].value = filter;
-      } else {
-        state.filters[name] = {};
-      }
-    },
     shareState() {
       // TODO
     },
@@ -76,9 +68,6 @@ const Store = new Vuex.Store({
     },
     reset({ commit }) {
       commit('unset');
-    },
-    updateFilterAction({ commit }, filter) {
-      commit('updateFilter', filter);
     },
   },
   plugins: [
