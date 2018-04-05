@@ -155,21 +155,18 @@ _.mixin({
       return carry;
     }, params);
   },
-  flatTree(root, key) {
-    const stack = [],
-      array = [],
-      hashMap = {};
-    stack.push(root);
-
-    while (stack.length !== 0) {
+  flatTree(tree = [], key = 'id') {
+    const stack = tree;
+    const array = [];
+    const hashMap = {};
+    while (stack.length > 0) {
       const node = stack.pop();
-      if (node.children.length === 0) {
-        if (!hashMap[node[key]]) {
-          hashMap[node[key]] = true;
-          array.push(node);
-        }
-      } else {
-        for (let i = node.children.length - 1; i >= 0; i--) {
+      if (!hashMap[node[key]]) {
+        hashMap[node[key]] = true;
+        array.push(node);
+      }
+      if (node.children.length > 0) {
+        for (let i = node.children.length - 1; i >= 0; i -= 1) {
           stack.push(node.children[i]);
         }
       }
