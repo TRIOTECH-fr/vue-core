@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import App from '@/App';
+import _ from '../plugins/_';
 import I18n from '../plugins/i18n';
 import Router from '../plugins/router';
 import Store from '../plugins/store';

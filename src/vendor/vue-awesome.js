@@ -1,7 +1,7 @@
 import Vue from 'vue';
+import VueAwesome from 'vue-awesome'
 import Icon from 'vue-awesome/components/Icon';
-import 'vue-awesome/icons';
 
 Vue.component('icon', Icon);
 
-export default Icon;
+export default VueAwesome;
