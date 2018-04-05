@@ -12,7 +12,7 @@ const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const loadMinified = require('./load-minified')
 const PrerenderSpaPlugin = require('prerender-spa-plugin')
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
+// const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 const yaml = require('js-yaml')
 
 const env = process.env.NODE_ENV === 'testing'
@@ -21,11 +21,9 @@ const env = process.env.NODE_ENV === 'testing'
 
 const customConfig = ['config/config.yml', 'config/parameters.yml'].reduce((carry, file) => {
   const filePath = path.join(process.cwd(), file)
-  if (fs.existsSync(filePath)) {
-    merge(carry, yaml.safeLoad(fs.readFileSync(filePath, 'utf8')))
-  }
-  return carry
-})
+  const data = fs.existsSync(filePath) ? yaml.safeLoad(fs.readFileSync(filePath, 'utf8')) : {}
+  return merge(carry, data)
+}, {})
 
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
@@ -96,9 +94,9 @@ const webpackConfig = merge(baseWebpackConfig, {
       staticFileGlobs: ['web/**/*.{js,html,css}'],
       minify: true,
       stripPrefix: 'web/'
-    }),
+    })
     // modules intermediate caching step
-    new HardSourceWebpackPlugin()
+    // new HardSourceWebpackPlugin()
   ]
 })
 
