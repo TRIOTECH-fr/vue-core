@@ -40,7 +40,7 @@
         default: false,
       },
       refAjaxIndex: {
-        type: String,
+        type: [String, Array],
         default: null,
       },
       closeModal: {
@@ -63,7 +63,7 @@
         let uri = this.uri || this.name;
         if (this.uriOption) {
           if (this.uriOption.suffix) {
-            uri = uri + this.uriOption.suffix;
+            uri += this.uriOption.suffix;
           }
         }
         return uri;
@@ -124,8 +124,15 @@
                 type: 'error',
               });
             }
+
             if (this.refreshAjaxIndex) {
-              this.$bus.$emit(`t-event.ajax-index.${this.refAjaxIndex}.refresh`);
+              if (this._.isArray(this.refAjaxIndex)) {
+                this._.each(this.refAjaxIndex, (refAjaxIndex) => {
+                  this.$bus.$emit(`t-event.ajax-index.${refAjaxIndex}.refresh`);
+                });
+              } else {
+                this.$bus.$emit(`t-event.ajax-index.${this.refAjaxIndex}.refresh`);
+              }
             }
           }, (errors) => {
             if (errors.response.status === 400) {

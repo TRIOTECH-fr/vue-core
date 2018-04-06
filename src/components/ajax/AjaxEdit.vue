@@ -71,7 +71,7 @@
         default: null,
       },
       refAjaxIndex: {
-        type: String,
+        type: [String, Array],
         default: null,
       },
       refModal: {
@@ -121,7 +121,7 @@
         let uri = this.uri || this.name;
         if (this.uriOption) {
           if (this.uriOption.suffix) {
-            uri = uri + this.uriOption.suffix;
+            uri += this.uriOption.suffix;
           }
         }
 
@@ -242,7 +242,13 @@
               }
 
               if (this.refreshAjaxIndex) {
-                this.$bus.$emit(`t-event.ajax-index.${this.refAjaxIndex}.refresh`);
+                if (this._.isArray(this.refAjaxIndex)) {
+                  this._.each(this.refAjaxIndex, (refAjaxIndex) => {
+                    this.$bus.$emit(`t-event.ajax-index.${refAjaxIndex}.refresh`);
+                  });
+                } else {
+                  this.$bus.$emit(`t-event.ajax-index.${this.refAjaxIndex}.refresh`);
+                }
               }
             }, (data) => {
               if (data.response.data.code === 400) {

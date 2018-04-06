@@ -61,7 +61,7 @@
         default: false,
       },
       refAjaxIndex: {
-        type: String,
+        type: [String, Array],
         default: null,
       },
       closeModal: {
@@ -216,8 +216,15 @@
                 type: 'error',
               });
             }
+
             if (this.refreshAjaxIndex) {
-              this.$bus.$emit(`t-event.ajax-index.${this.refAjaxIndex}.refresh`);
+              if (this._.isArray(this.refAjaxIndex)) {
+                this._.each(this.refAjaxIndex, (refAjaxIndex) => {
+                  this.$bus.$emit(`t-event.ajax-index.${refAjaxIndex}.refresh`);
+                });
+              } else {
+                this.$bus.$emit(`t-event.ajax-index.${this.refAjaxIndex}.refresh`);
+              }
             }
           }, (data) => {
             if (data.response.data.code === 400) {
