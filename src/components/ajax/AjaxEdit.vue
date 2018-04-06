@@ -191,7 +191,7 @@
         }
 
         this.loading = true;
-        if (_.isNull(this.id) && _.isNull(event) && _.isNull(event.id)) {
+        if (_.isNull(this.id) && _.isNull(dataEvent) && _.isNull(dataEvent.id)) {
           throw new Error('Entity identifier is unknown');
         }
 
