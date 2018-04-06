@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Triotech Vue Core",
   "author": "qkdreyer <quentin.dreyer@triotech.fr>",
-  "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "build": "build/postdeploy.sh",
