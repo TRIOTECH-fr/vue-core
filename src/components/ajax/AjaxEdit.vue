@@ -102,6 +102,10 @@
         type: String,
         default: 'Bearer',
       },
+      action: {
+        type: String,
+        default: 'edit',
+      },
     },
     data() {
       return {
@@ -173,9 +177,9 @@
         }
       },
       editRouteFunc() {
-        this.editRoute = `${this.getUri}/${this.getId}/edit`;
+        this.editRoute = `${this.getUri}/${this.getId}/${this.action}`;
         if (this.additionnalRoute) {
-          this.editRoute = `${this.getUri}/${this.getId}/edit/${this.additionnalRoute}`;
+          this.editRoute = `${this.getUri}/${this.getId}/${this.action}/${this.additionnalRoute}`;
         }
 
         return this.editRoute;

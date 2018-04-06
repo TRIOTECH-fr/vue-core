@@ -51,6 +51,10 @@
         type: String,
         default: null,
       },
+      action: {
+        type: String,
+        default: 'delete',
+      },
     },
     data() {
       return {
@@ -93,14 +97,14 @@
           this.$set(this, 'uriOption', dataEvent);
         }
 
-        if (_.isNull(this.id) && _.isNull(event) && _.isNull(event.id)) {
+        if (_.isNull(this.id) && _.isNull(dataEvent) && _.isNull(dataEvent.id)) {
           throw new Error('Entity identifier is unknown');
         }
 
         this.$bus.$emit(`t-event.ajax-delete.${this.name}.loading`);
 
         // eslint-disable-next-line no-unused-vars
-        const data = await this.$ajax.get(`${this.getUri}/${this.getId}/delete`);
+        const data = await this.$ajax.get(`${this.getUri}/${this.getId}/${this.action}`);
         // TODO handle isDeletable
         // this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));
 
@@ -109,7 +113,7 @@
         });
       },
       async submit() {
-        await this.$ajax.delete(`${this.getUri}/${this.getId}/delete`, this.getId)
+        await this.$ajax.delete(`${this.getUri}/${this.getId}/${this.action}`, this.getId)
           .then((data) => {
             if (data.status) {
               this.$notify({

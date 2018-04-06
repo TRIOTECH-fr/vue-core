@@ -106,6 +106,10 @@
         type: String,
         default: 'Bearer',
       },
+      action: {
+        type: String,
+        default: 'new',
+      },
     },
     data() {
       return {
@@ -183,7 +187,7 @@
         this.$bus.$emit(`t-event.ajax-new.${this.name}.loading`);
         this.$set(this, 'model', this.defaultModelValues || {});
 
-        const data = await this.$ajax.get(`${this.getUri}/new`, {}, this.config);
+        const data = await this.$ajax.get(`${this.getUri}/${this.action}`, {}, this.config);
         this.$set(this.schema, 'fields', _.form(this.$t, data));
         this.applyFilterOnSchema();
 
@@ -197,7 +201,7 @@
         }
         // TODO https://monterail.github.io/vuelidate/
 
-        await this.$ajax.post(`${this.getUri}/new`, this.model, this.config)
+        await this.$ajax.post(`${this.getUri}/${this.action}`, this.model, this.config)
           .then((data) => {
             if (data.status) {
               this.$notify({
