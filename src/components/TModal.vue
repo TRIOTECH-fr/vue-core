@@ -4,18 +4,19 @@
       :ref="modalUid"
       :title="title"
       :width="width"
-      :class="{ klass, 'modal-form': true}"
+      :class="klass"
+      class="modal-form"
       @open="onModalOpen"
       @close="onModalClose"
     >
-      <slot></slot>
+      <slot />
     </sweet-modal>
   </div>
 </template>
 
 <script>
   export default {
-    name: 't-modal',
+    name: 'TModal',
     props: {
       eventId: {
         type: String,
@@ -34,6 +35,14 @@
         default: '',
       },
     },
+    computed: {
+      modalUid() {
+        return `${this._uid}_modal`; // eslint-disable-line no-underscore-dangle
+      },
+      modalRef() {
+        return this.$refs[this.modalUid];
+      },
+    },
     mounted() {
       if (this.eventId !== null) {
         this.$bus.$on([this.eventName('open'), this.eventName('close')], this.catchModalArguments);
@@ -45,14 +54,6 @@
       if (this.eventId !== null) {
         this.$off([this.eventName('open'), this.eventName('close')]);
       }
-    },
-    computed: {
-      modalUid() {
-        return `${this._uid}_modal`; // eslint-disable-line no-underscore-dangle
-      },
-      modalRef() {
-        return this.$refs[this.modalUid];
-      },
     },
     methods: {
       onModalOpen() {
