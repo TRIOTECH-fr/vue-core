@@ -3976,9 +3976,9 @@ framework7-vue@v2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/framework7-vue/-/framework7-vue-2.2.0.tgz#4ece7de6cad043db5eef12d207e41f7611087349"
 
-framework7@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/framework7/-/framework7-2.2.0.tgz#552f4a8291debcf37a6d62e8db691f65a7b1ac50"
+framework7@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/framework7/-/framework7-2.2.1.tgz#100048548de13849450b806d4cebafc35a4ddd78"
   dependencies:
     dom7 "^2.0.3"
     path-to-regexp "^2.1.0"
