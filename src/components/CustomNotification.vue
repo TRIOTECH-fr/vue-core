@@ -43,7 +43,7 @@
 
 <style lang="scss">
   @import '~@/scss/vars';
-  @import '~@/scss/media';
+  @import '../scss/media';
 
   .my-notification-style {
     margin: 10px;
