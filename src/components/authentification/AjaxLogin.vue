@@ -24,7 +24,7 @@
         type: String,
         default: 'public/login/',
       },
-      success_route: {
+      successRoute: {
         type: [Object, Function],
         default() {
           return { name: 'dashboard' };
@@ -89,11 +89,11 @@
             });
         }
       },
-      successRoute() {
-        if (typeof this.success_route === 'function') {
-          return this.success_route();
+      goSuccessRoute() {
+        if (typeof this.successRoute === 'function') {
+          return this.successRoute();
         }
-        return this.success_route;
+        return this.successRoute;
       },
       async submit() {
         await this.$ajax.login(this.model)
@@ -122,7 +122,7 @@
         // TODO remove new-submit event.
         this.$bus.$emit('t-event.new-submit.login.success');
         this.$bus.$emit('t-event.login.success');
-        this.$router.push(this.successRoute());
+        this.$router.push(this.goSuccessRoute());
       },
     },
   };
