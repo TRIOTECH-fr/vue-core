@@ -41,8 +41,8 @@ module.exports = (ctx) => {
 
   Promise.all([
     searchAndReplaceFileInDirectory(fs, path.join(projectRoot, 'www'), 'index\\.html', '=/', '='),
-    searchAndReplaceFileInDirectory(fs, path.join(projectRoot, 'www/static/js'), 'app\\.[\\w]*\\.js$', '/static/', 'static/'),
-    searchAndReplaceFileInDirectory(fs, path.join(projectRoot, 'www/static/css'), 'app\\.[\\w]*\\.css$', '/static/', '../'),
+    searchAndReplaceFileInDirectory(fs, path.join(projectRoot, 'www/static/js'), '(app|vendor)\\.[\\w]*\\.js$', '/static/', 'static/'),
+    searchAndReplaceFileInDirectory(fs, path.join(projectRoot, 'www/static/css'), '(app|vendor)\\.[\\w]*\\.css$', '/static/', '../'),
   ]).then(deferred.resolve).catch(deferred.reject);
 
   return deferred.promise;
