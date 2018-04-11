@@ -1,28 +1,34 @@
 #!/usr/bin/env node
 
+const searchAndReplace = (fs, dirPath, search, replace, file) => new Promise((resolve, reject) => {
+  const filePath = `${dirPath}/${file}`;
+  console.log(`Running: Replacing ${search} with ${replace} in ${filePath}`);
+  fs.readFile(filePath, 'utf-8', (readError, data) => {
+    if (readError) {
+      reject(readError);
+    }
+    fs.writeFile(filePath, data.replace(new RegExp(search, 'g'), replace), 'utf-8', (writeError) => {
+      if (writeError) {
+        reject(writeError);
+      } else {
+        resolve();
+      }
+    });
+  });
+});
+
 const searchAndReplaceFileInDirectory = (fs, dirPath, matching, search, replace) => new Promise((resolve, reject) => {
   fs.readdir(dirPath, (readdirError, files) => {
     if (readdirError) {
       reject(readdirError);
     } else {
-      files.forEach((file) => {
-        if (file.match(new RegExp(matching))) {
-          const filePath = `${dirPath}/${file}`;
-          console.log(`Running: Replacing ${search} with ${replace} in ${filePath}`);
-          fs.readFile(filePath, 'utf-8', (readError, data) => {
-            if (readError) {
-              reject(readError);
-            }
-            fs.writeFile(filePath, data.replace(new RegExp(search, 'g'), replace), 'utf-8', (writeError) => {
-              if (writeError) {
-                reject(writeError);
-              } else {
-                resolve();
-              }
-            });
-          });
-        }
-      });
+      const matchingFiles = files.filter(file => file.match(new RegExp(matching)));
+      if (matchingFiles.length === 0) {
+        resolve();
+      } else {
+        const promises = matchingFiles.map(searchAndReplace.bind(null, fs, dirPath, search, replace));
+        Promise.all(promises).then(resolve).catch(reject);
+      }
     }
   });
 });
