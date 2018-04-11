@@ -2,6 +2,7 @@
 
 const path = require('path')
 const config = require('../config')
+const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
 const pkg = require('../package.json')
 
 exports.assetsPath = function (_path) {
@@ -22,18 +23,25 @@ exports.cssLoaders = function (options) {
     }
   }
 
-  // generate loader string to be used with extract text plugin
+  // generate loader string to be used with MiniCSSExtractPlugin
   function generateLoaders (loader, loaderOptions) {
     const loaders = [cssLoader]
+
     if (loader) {
       loaders.push({
         loader: `${loader}-loader`,
-        options: Object.assign({}, loaderOptions, {
+        options: {
+          ...loaderOptions,
           sourceMap: options.sourceMap
-        })
+        }
       })
     }
 
+    // Extract CSS when that option is specified
+    // (which is the case during production build)
+    if (options.extract) {
+      return [MiniCSSExtractPlugin.loader].concat(loaders)
+    }
     return ['vue-style-loader'].concat(loaders)
   }
 
@@ -43,7 +51,11 @@ exports.cssLoaders = function (options) {
     postcss: generateLoaders(),
     less: generateLoaders('less'),
     sass: generateLoaders('sass', { indentedSyntax: true }),
-    scss: generateLoaders('sass', { includePaths: [path.resolve(process.cwd(), 'node_modules/compass-mixins/lib')] }),
+    scss: generateLoaders('sass', {
+      includePaths: [
+        path.resolve(process.cwd(), 'node_modules/compass-mixins/lib')
+      ]
+    }),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
   }
@@ -70,18 +82,15 @@ exports.createNotifierCallback = function () {
     if (severity !== 'error') {
       return
     }
+
     const error = errors[0]
-    console.log(error)
-    const filename = error.file.split('!').pop()
+    const filename = error.file && error.file.split('!').pop()
+
     notifier.notify({
       title: pkg.name,
       message: `${severity}: ${error.name}`,
       subtitle: filename || '',
       icon: path.join(__dirname, 'logo.png')
-    })
-
-    notifier.on('click', (notifierObject, options) => {
-      console.log('click', notifierObject, options)
     })
   }
 }
