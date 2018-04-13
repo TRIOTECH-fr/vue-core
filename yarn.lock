@@ -9171,7 +9171,7 @@ trim-right@^1.0.1:
 
 "trio-icons@git+https://git.triotech.fr/composer/trio-icons.git":
   version "1.0.0"
-  resolved "git+https://git.triotech.fr/composer/trio-icons.git#a7ffde4dd7aa33d7ca5e5de11d45dd9bde2b125d"
+  resolved "git+https://git.triotech.fr/composer/trio-icons.git#1bcf61fee95fe36d2942de35decea2b57c850a76"
 
 "true-case-path@^1.0.2":
   version "1.0.2"
@@ -9579,10 +9579,6 @@ vue-eslint-parser@^2.0.3:
     espree "^3.5.2"
     esquery "^1.0.0"
     lodash "^4.17.4"
-
-vue-form-generator@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/vue-form-generator/-/vue-form-generator-2.2.1.tgz#b1f8a7744bd1fa7e53894b81b10f6109410dc03a"
 
 "vue-form-generator@github:andrelec1/vue-form-generator#da6f91d75bd56fb76cbf9721b94ecb9528f4ff97":
   version "2.2.1"

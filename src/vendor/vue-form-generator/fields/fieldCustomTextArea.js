@@ -34,6 +34,7 @@ Vue.component('fieldCustomTextArea', {
       :rows="schema.rows"
       :hint="schema.hint"
       :max="schema.max"
+      :maxlength="schema.max"
       v-model="textAreaModel"
       class="form-control"
     >
