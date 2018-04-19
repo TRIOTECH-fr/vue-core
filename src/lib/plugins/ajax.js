@@ -30,6 +30,9 @@ const Ajax = new Vue({
     oauthConfig() { return this.$config.get('oauth') || {}; },
   },
   methods: {
+    configure(options) {
+      this._.extend(params, options);
+    },
     getUploadsUri(location) {
       return this.url(this.build(location), true);
     },
