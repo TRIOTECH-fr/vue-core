@@ -9,6 +9,11 @@ Vue.use(VueAxios, Axios);
 
 Axios.defaults.timeout = 10000;
 
+const params = {
+  oauthTokenEndpoint: 'oauth/v2/token',
+  impersonateEndPoint: 'api/private/impersonate',
+};
+
 const Ajax = new Vue({
   router: Router,
   computed: {
@@ -18,8 +23,8 @@ const Ajax = new Vue({
     httpPatch: () => 'PATCH',
     httpDelete: () => 'DELETE',
     httpHead: () => 'HEAD',
-    oauthTokenEndpoint: () => 'oauth/v2/token',
-    impersonateEndPoint: () => 'api/private/impersonate',
+    oauthTokenEndpoint: () => params.oauthTokenEndpoint,
+    impersonateEndPoint: () => params.impersonateEndPoint,
     oauthTokenType: () => 'Bearer',
     oauthStore() { return this.$store.getters.oauth || {}; },
     oauthConfig() { return this.$config.get('oauth') || {}; },
@@ -96,6 +101,10 @@ const Ajax = new Vue({
       window.location.href = uri;
     },
     impersonate(userEmail = null, routeRedirect = null) {
+      if (this.impersonateEndPoint === false) {
+        return false;
+      }
+
       const redirect = () => {
         if (routeRedirect) {
           this.$router.push(routeRedirect);
