@@ -9,11 +9,6 @@ Vue.use(VueAxios, Axios);
 
 Axios.defaults.timeout = 10000;
 
-const params = {
-  oauthTokenEndpoint: 'oauth/v2/token',
-  impersonateEndPoint: 'api/private/impersonate',
-};
-
 const Ajax = new Vue({
   router: Router,
   computed: {
@@ -23,16 +18,21 @@ const Ajax = new Vue({
     httpPatch: () => 'PATCH',
     httpDelete: () => 'DELETE',
     httpHead: () => 'HEAD',
-    oauthTokenEndpoint: () => params.oauthTokenEndpoint,
-    impersonateEndPoint: () => params.impersonateEndPoint,
+    oauthTokenEndpoint() {
+      return this.oauthConfig.token_endpoint || 'oauth/v2/token';
+    },
+    impersonateEndpoint() {
+      return this.oauthConfig.impersonate_endpoint || 'api/private/impersonate';
+    },
     oauthTokenType: () => 'Bearer',
-    oauthStore() { return this.$store.getters.oauth || {}; },
-    oauthConfig() { return this.$config.get('oauth') || {}; },
+    oauthStore() {
+      return this.$store.getters.oauth || {};
+    },
+    oauthConfig() {
+      return this.$config.get('oauth') || {};
+    },
   },
   methods: {
-    configure(options) {
-      this._.extend(params, options);
-    },
     getUploadsUri(location) {
       return this.url(this.build(location), true);
     },
@@ -104,7 +104,7 @@ const Ajax = new Vue({
       window.location.href = uri;
     },
     impersonate(userEmail = null, routeRedirect = null) {
-      if (this.impersonateEndPoint === false) {
+      if (this.impersonateEndpoint === false) {
         return false;
       }
 
@@ -120,7 +120,7 @@ const Ajax = new Vue({
         return Promise.resolve().then(redirect);
       }
 
-      return this.get(`${this.impersonateEndPoint}/${userEmail}`).then((response) => {
+      return this.get(`${this.impersonateEndpoint}/${userEmail}`).then((response) => {
         response.expires_at = (response.expires_in * 1000) + moment();
         response.refresh_token_expires_at = (response.refresh_token_lifetime * 1000) + moment();
 
