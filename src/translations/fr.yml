@@ -55,8 +55,10 @@ flashes:
 # VueMultiSelect
 vms:
   select: Appuyer sur ENTRER pour sélectionner
+  select_group: Appuyer sur ENTRER pour sélectionner le groupe
   selected: Sélectionné
   deselect: Désélectionner
+  deselect_group: Désélectionner le groupe
   no_result: Aucun résultat
   max_elements: Vous avez sélectionné le nombre maximum d'options. Pour en choisir une autre, veuillez en désélectionner une.
   placeholder: Choisissez une option
