@@ -9652,6 +9652,12 @@ vue-scrollto@^2.9.0:
   dependencies:
     bezier-easing "^2.0.3"
 
+vue-select-image@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/vue-select-image/-/vue-select-image-1.2.2.tgz#8e323c04baa6ce0d70165c6f95db052f31ad5737"
+  dependencies:
+    vue "^2.5.13"
+
 vue-slick@^1.1.12:
   version "1.1.12"
   resolved "https://registry.yarnpkg.com/vue-slick/-/vue-slick-1.1.12.tgz#c0e3ab135c828abc6ff02362935a5275b8c5aeed"
