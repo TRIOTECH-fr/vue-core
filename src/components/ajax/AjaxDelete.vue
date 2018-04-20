@@ -121,12 +121,14 @@
                 text: this.$t(`flashes.${this.name}.delete`),
                 type: 'success',
               });
+              this.$bus.$emit(`t-event.ajax-delete.${this.name}.success`);
             } else {
               this.$notify({
                 title: this.$t(`flashes.${this.name}.delete_title`),
                 text: this.$t(`flashes.${this.name}.not_delete`),
                 type: 'error',
               });
+              this.$bus.$emit(`t-event.ajax-delete.${this.name}.error`);
             }
 
             if (this.refreshAjaxIndex) {
