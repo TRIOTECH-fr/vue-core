@@ -1,14 +1,14 @@
 <template>
   <form @submit.prevent="onSubmit">
     <vue-form-generator :schema="schema" :model="model" :options="{ validationAfterLoad: true, validationAfterChanged: true }" />
-    <b-button
-      v-if="schema.fields.length > 0"
-      type="submit"
-      variant="primary"
-      block
-    >
-      {{ $t('actions.send') }}
-    </b-button>
+    <template v-if="schema.fields.length > 0">
+      <b-button type="submit" variant="primary" block>
+        {{ $t('actions.send') }}
+      </b-button>
+      <b-button block @click="$router.push({ name: 'home' })">
+        {{ $t('actions.go_back') }}
+      </b-button>
+    </template>
     <div v-else class="text-center">
       <i class="ti ti-2x ti-spin ti-refresh"/>
     </div>
@@ -16,10 +16,10 @@
 </template>
 
 <script>
-  import VueFormGenerator from '@triotech/vue-core/src/vendor/vue-form-generator';
+  import VueFormGenerator from 'vue-form-generator';
 
   export default {
-    name: 'LoginChangePage',
+    name: 'AjaxChangeComponent',
     components: {
       'vue-form-generator': VueFormGenerator.component,
     },
@@ -78,24 +78,23 @@
         return this.success_route;
       },
       async onSubmit() {
-        await this.$ajax.publicRequest(`${this.uri}/${this.token}`, 'POST', this.model)
-          .then(() => {
+        await this.$ajax.publicRequest(`${this.uri}/${this.token}`, 'POST', this.model).then((response) => {
+          const type = response.status === true ? 'sucess' : 'error';
+          this.$notify({
+            title: this.$t('flashes.reset.title'),
+            text: this.$t(`flashes.reset.${type}`),
+            type,
+          });
+          this.forward();
+        }).catch((err) => {
+          if (err.response) {
             this.$notify({
               title: this.$t('flashes.reset.title'),
-              text: this.$t('flashes.reset.success'),
-              type: 'success',
+              text: this.$t(`flashes.reset.${err.response.data.error}`),
+              type: 'error',
             });
-            this.forward();
-          })
-          .catch((err) => {
-            if (err.response) {
-              this.$notify({
-                title: this.$t('flashes.reset.title'),
-                text: this.$t(`flashes.reset.${err.response.data.error}`),
-                type: 'error',
-              });
-            }
-          });
+          }
+        });
       },
       forward() {
         if (this.closeModal) {
