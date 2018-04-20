@@ -66,10 +66,8 @@
     },
     methods: {
       async load() {
-        await this.$ajax.publicRequest(this.uri)
-          .then((data) => {
-            this.$set(this.schema, 'fields', _.form(this.$t, data));
-          });
+        const data = await this.$ajax.publicRequest(this.uri);
+        this.$set(this.schema, 'fields', _.form(this.$t, data));
       },
       successRoute() {
         if (typeof this.success_route === 'function') {
@@ -79,7 +77,7 @@
       },
       async onSubmit() {
         await this.$ajax.publicRequest(this.uri, 'POST', this.model).then((response) => {
-          const type = response.status === true ? 'sucess' : 'error';
+          const type = response.status === true ? 'success' : 'error';
           this.$notify({
             title: this.$t('flashes.request.title'),
             text: this.$t(`flashes.request.${type}`),

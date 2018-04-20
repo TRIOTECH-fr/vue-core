@@ -79,7 +79,7 @@
       },
       async onSubmit() {
         await this.$ajax.publicRequest(`${this.uri}/${this.token}`, 'POST', this.model).then((response) => {
-          const type = response.status === true ? 'sucess' : 'error';
+          const type = response.status === true ? 'success' : 'error';
           this.$notify({
             title: this.$t('flashes.reset.title'),
             text: this.$t(`flashes.reset.${type}`),
