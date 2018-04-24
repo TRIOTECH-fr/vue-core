@@ -33,6 +33,7 @@
 
 <script>
   import VueFormGenerator from '@triotech/vue-core/src/vendor/vue-form-generator';
+  import { Identity } from 'lodash';
 
   export default {
     name: 'AjaxNewComponent',
@@ -109,6 +110,10 @@
       action: {
         type: String,
         default: 'new',
+      },
+      serializer: {
+        type: Function,
+        default: Identity,
       },
     },
     data() {
@@ -201,7 +206,7 @@
         }
         // TODO https://monterail.github.io/vuelidate/
 
-        await this.$ajax.post(`${this.getUri}/${this.action}`, this.model, this.config)
+        await this.$ajax.post(`${this.getUri}/${this.action}`, this.serializer(this.model), this.config)
           .then((data) => {
             if (data.status) {
               this.$notify({

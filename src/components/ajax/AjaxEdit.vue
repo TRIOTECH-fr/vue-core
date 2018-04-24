@@ -27,6 +27,7 @@
 
 <script>
   import VueFormGenerator from '@triotech/vue-core/src/vendor/vue-form-generator';
+  import { Identity } from 'lodash';
 
   export default {
     name: 'AjaxEditComponent',
@@ -105,6 +106,10 @@
       action: {
         type: String,
         default: 'edit',
+      },
+      serializer: {
+        type: Function,
+        default: Identity,
       },
     },
     data() {
@@ -224,7 +229,7 @@
           _.extend(submitData, extraModel);
         }
         if (!_.isEmpty(submitData)) {
-          await this.$ajax.patch(this.editRouteFunc(), submitData, this.config)
+          await this.$ajax.patch(this.editRouteFunc(), this.serializer(submitData), this.config)
             .then((data) => {
               if (data.status) {
                 this.updatePreviousModel();
