@@ -27,7 +27,8 @@
 
 <script>
   import VueFormGenerator from '@triotech/vue-core/src/vendor/vue-form-generator';
-  import { Identity } from 'lodash';
+
+  const Identity = arg => arg;
 
   export default {
     name: 'AjaxEditComponent',
