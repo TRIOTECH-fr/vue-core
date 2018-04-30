@@ -49,7 +49,7 @@
     "eslint-plugin-vue": "qkdreyer/eslint-plugin-vue#fix-407",
     "eventsource-polyfill": "^0.9.6",
     "file-loader": "^1.1.11",
-    "framework7": "^2.2.1",
+    "framework7": "^2.2.5",
     "framework7-icons": "^0.9.1",
     "framework7-vue": "^2.2.1",
     "friendly-errors-webpack-plugin": "github:ooflorent/friendly-errors-webpack-plugin#98baeb9cd181ed0d8754e8a3afc4c4546516651c",
