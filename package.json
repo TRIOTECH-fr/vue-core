@@ -15,7 +15,7 @@
   "dependencies": {
     "autoprefixer": "^8.2.0",
     "axios": "^0.18.0",
-    "babel-core": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.2",
     "babel-loader": "^7.1.4",
     "babel-plugin-istanbul": "^4.1.6",
