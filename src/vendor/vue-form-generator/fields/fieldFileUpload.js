@@ -64,12 +64,13 @@ Vue.component('fieldFileUpload', {
     <div class="custom-file">
       <input
         :multiple="schema.multiple"
+        :required="schema.required"
         :accept="mimeConstraint"
-        @change="onValueChange"
-        type="file"
-        class="custom-file-input"
         :id="getFieldID(schema)"
         :lang="lang"
+        class="custom-file-input"
+        type="file"
+        @change="onValueChange"
       >
       <label class="custom-file-label" :id="getFieldID(schema)">{{ btnText }}</label>
     </div>
