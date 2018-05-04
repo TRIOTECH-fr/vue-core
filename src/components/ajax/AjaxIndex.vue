@@ -191,6 +191,9 @@
           _.each(data, (value, key) => {
             if (key !== 'id') {
               if (_.isObject(value) && !_.isArray(value)) {
+                if (_.isNil(dataRef[key])) {
+                  dataRef[key] = {};
+                }
                 this.refreshData(dataRef[key], value);
               } else {
                 this.$set(dataRef, key, value);
