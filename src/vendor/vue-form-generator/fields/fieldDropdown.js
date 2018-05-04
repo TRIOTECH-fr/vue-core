@@ -48,13 +48,11 @@ Vue.component('fieldDropdown', _.merge({}, parent, {
     },
   },
   created() {
-    this.internalValue = this.realValue;
+    const keys = this._.keys(this._.first(this.schema.choices));
+    const internalValues = this._.map(this._.castArray(this.realValue), (realValue) => this._.mapValues(this._.pick(realValue, keys), String));
 
-    if (this.selectOptions.multiple) {
-      // TODO remove evil fix needed for edition
-      this.internalValue = this._.map(this.realValue, (v) => this._.mapValues(this._.pick(v, this._.keys(this._.first(this.schema.choices))), String));
-      this.setModelValueByPath(this.schema.model, this.trackValue(this.realValue));
-    }
+    this.internalValue = this.selectOptions.multiple ? internalValues : this._.first(internalValues);
+    this.setModelValueByPath(this.schema.model, this.trackValue(this.realValue));
   },
   mounted() {
     this.setRequired();
@@ -88,6 +86,7 @@ Vue.component('fieldDropdown', _.merge({}, parent, {
       }));
     },
     trackValue(values) {
+      if (values === null) return null;
       const { trackBy, multiple } = this.selectOptions;
       const rawValue = this._.map(_.castArray(values), (value) => String(value && trackBy ? value[trackBy] : value));
       return rawValue.length > 0 && !multiple ? this._.first(rawValue) : rawValue;

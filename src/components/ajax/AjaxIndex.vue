@@ -187,7 +187,7 @@
         });
       },
       refreshData(dataRef, data) {
-        if (typeof dataRef !== 'undefined') {
+        if (!_.isNil(dataRef)) {
           _.each(data, (value, key) => {
             if (key !== 'id') {
               if (_.isObject(value) && !_.isArray(value)) {
@@ -212,7 +212,7 @@
           const updatedData = _.differenceObj(items, this.items, true);
           updatedData.forEach((data) => {
             const dataRef = this.items.find(x => x.id === data.id);
-            if (typeof dataRef !== 'undefined') {
+            if (!_.isNil(dataRef)) {
               this.refreshData(dataRef, data);
             } else {
               this.$set(this.items, this.items.length, data);
