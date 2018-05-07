@@ -81,7 +81,7 @@
     "phantomjs-prebuilt": "^2.1.16",
     "popper.js": "^1.14.3",
     "prerender-spa-plugin": "^3.0.0",
-    "qs": "^6.5.1",
+    "qs": "^6.5.2",
     "raven-js": "^3.24.1",
     "rimraf": "^2.6.2",
     "rollup": "^0.57.1",
