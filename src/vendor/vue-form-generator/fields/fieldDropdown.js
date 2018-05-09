@@ -49,7 +49,16 @@ Vue.component('fieldDropdown', _.merge({}, parent, {
   },
   created() {
     const keys = this._.keys(this._.first(this.schema.choices));
-    const internalValues = this._.map(this._.castArray(this.realValue), (realValue) => this._.mapValues(this._.pick(realValue, keys), String));
+    const internalValues = this._.map(this._.castArray(this.realValue), (realValue) => {
+      if (this._.isObject(realValue)) {
+        return this._.mapValues(this._.pick(realValue, keys), String);
+      } else {
+        const trackBy = this.selectOptions.trackBy;
+        const label = this.selectOptions.label;
+        const choice = this._.find(this.schema.choices, {[trackBy]: realValue});
+        return { [trackBy]: String(realValue), [label]: choice && choice[label] };
+      }
+    });
 
     this.internalValue = this.selectOptions.multiple ? internalValues : this._.first(internalValues);
     this.setModelValueByPath(this.schema.model, this.trackValue(this.realValue));
@@ -88,8 +97,9 @@ Vue.component('fieldDropdown', _.merge({}, parent, {
     trackValue(values) {
       if (values === null) return null;
       const { trackBy, multiple } = this.selectOptions;
-      const rawValue = this._.map(_.castArray(values), (value) => String(value && trackBy ? value[trackBy] : value));
+      const rawValue = this._.map(_.castArray(values), (value) => String(this._.isObject(value) && trackBy ? value[trackBy] : value));
       return rawValue.length > 0 && !multiple ? this._.first(rawValue) : rawValue;
     },
   },
 }));
+
