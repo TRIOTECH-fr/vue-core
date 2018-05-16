@@ -73,7 +73,7 @@ const Store = new Vuex.Store({
   plugins: [
     VuexPersistedState(),
     VuexCache,
-    VuexSharedMutations({ sharingKey: 'vuex', predicate: ['shareState'] }),
+    // VuexSharedMutations({ sharingKey: 'vuex', predicate: ['shareState'] }),
     (router => (store) => {
       store.unsync = sync(store, router);
     })(Router),
