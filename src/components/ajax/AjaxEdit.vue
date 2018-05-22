@@ -273,11 +273,8 @@
                 let flashText = '';
 
                 _.each(errors, (errorFields, field) => {
-                  flashTitle = this.$t(`flashes.${this.name}.error.${field}`);
-
-                  _.each(errorFields, (error) => {
-                    flashText = `${error} <br /> ${flashText}`;
-                  });
+                  flashTitle = this.$t(`flashes.${this.name}.error.${field}.title`);
+                  flashText = this.$t(`flashes.${this.name}.error.${field}.text`);
                 });
 
                 this.$notify({
