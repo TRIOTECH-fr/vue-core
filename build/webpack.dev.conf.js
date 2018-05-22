@@ -32,7 +32,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     proxy: config.dev.proxyTable,
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
-      poll: config.dev.poll
+      poll: process.env.POLL || config.dev.poll
     },
     historyApiFallback: {
       index: config.dev.assetsPublicPath
