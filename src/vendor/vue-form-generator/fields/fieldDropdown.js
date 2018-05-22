@@ -56,7 +56,7 @@ Vue.component('fieldDropdown', _.merge({}, parent, {
         const trackBy = this.selectOptions.trackBy;
         const label = this.selectOptions.label;
         const choice = this._.find(this.schema.choices, {[trackBy]: realValue});
-        return { [trackBy]: String(realValue), [label]: choice && choice[label] };
+        return this._.isNil(realValue) ? null : { [trackBy]: String(realValue), [label]: choice && choice[label] };
       }
     });
 
@@ -95,7 +95,7 @@ Vue.component('fieldDropdown', _.merge({}, parent, {
       }));
     },
     trackValue(values) {
-      if (values === null) return null;
+      if (this._.isNil(values)) return null;
       const { trackBy, multiple } = this.selectOptions;
       const rawValue = this._.map(_.castArray(values), (value) => String(this._.isObject(value) && trackBy ? value[trackBy] : value));
       return rawValue.length > 0 && !multiple ? this._.first(rawValue) : rawValue;
