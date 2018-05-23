@@ -30,9 +30,11 @@ Vue.component('fieldDatePicker', {
       }
     },
     datePickerModel(newValue, oldValue) {
-      const formatted = this.format(newValue);
-      if (formatted !== this.format(oldValue)) {
-        this.setModelValueByPath(this.schema.model, formatted);
+      if (newValue !== '') {
+        const formatted = this.format(newValue);
+        if (formatted !== this.format(oldValue)) {
+          this.setModelValueByPath(this.schema.model, formatted);
+        }
       }
     },
   },

@@ -21,7 +21,9 @@ Vue.component('fieldCustomTextArea', {
     },
     textAreaModel(newValue, oldValue) {
       this.textAreaModel = this._.isNull(newValue) ? '' : newValue;
-      this.setModelValueByPath(this.schema.model, newValue);
+      if (this.textAreaModel !== '') {
+        this.setModelValueByPath(this.schema.model, newValue);
+      }
     },
   },
   mounted() {
