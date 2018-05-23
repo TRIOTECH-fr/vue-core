@@ -93,7 +93,7 @@
     "sinon": "^4.5.0",
     "sinon-chai": "^3.0.0",
     "slick-carousel": "^1.8.1",
-    "style-loader": "^0.20.3",
+    "style-loader": "^0.21.0",
     "sw-precache-webpack-plugin": "^0.11.5",
     "sweet-modal-vue": "^2.0.0",
     "trio-icons": "git+https://git.triotech.fr/composer/trio-icons.git",
