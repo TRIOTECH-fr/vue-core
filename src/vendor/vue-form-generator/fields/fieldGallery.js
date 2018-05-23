@@ -42,6 +42,11 @@ Vue.component('fieldGallery', {
     this.galleryModel = this.modelNameToProperty(this.schema.model, this.model);
   },
   methods: {
+    getSelectedImages() {
+      return [{
+        id: this.model.image ? String(this.model.image.id) : null,
+      }];
+    },
     onSelectImage(images) {
       this.galleryModel = images.id;
     },
@@ -55,6 +60,7 @@ Vue.component('fieldGallery', {
     <vue-select-image
       :dataImages="dataImages"
       :is-multiple="isMultiple"
+      :selectedImages="getSelectedImages()"
       @onselectimage="onSelectImage"
       @onselectmultipleimage="onSelectMultipleImage"
     >
