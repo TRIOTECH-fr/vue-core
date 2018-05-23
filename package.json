@@ -114,7 +114,7 @@
     "vue-notification": "^1.3.7",
     "vue-router": "^3.0.1",
     "vue-scrollto": "^2.9.0",
-    "vue-select-image": "^1.2.2",
+    "vue-select-image": "https://github.com/mazipan/vue-select-image.git",
     "vue-slick": "^1.1.12",
     "vue-style-loader": "^4.0.2",
     "vue-template-compiler": "^2.5.13",
