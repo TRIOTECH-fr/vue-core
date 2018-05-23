@@ -1,9 +1,3 @@
-import Vue from 'vue';
-import VueMoment from 'vue-moment';
-import moment from 'moment';
+import moment from './moment/index'
 
-import 'moment/locale/fr';
-
-Vue.use(VueMoment, { moment });
-
-export default window.moment = moment;
+export default moment;
