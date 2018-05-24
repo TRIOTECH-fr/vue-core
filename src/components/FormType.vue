@@ -102,6 +102,8 @@
 </template>
 
 <script>
+  import 'vue-awesome/icons/paper-plane';
+  
   export default {
     name: 'FormTypeComponent',
     props: {
