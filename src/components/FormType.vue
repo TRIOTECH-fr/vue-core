@@ -103,9 +103,13 @@
 
 <script>
   import 'vue-awesome/icons/paper-plane';
-  
+
   export default {
     name: 'FormTypeComponent',
+    model: {
+      prop: 'button',
+      event: 'change',
+    },
     props: {
       hasCounter: {
         type: Boolean,
@@ -140,6 +144,7 @@
       return {
         hasError: false,
         active: 0,
+        internalButton: {},
       };
     },
     computed: {
@@ -148,6 +153,18 @@
       },
       isLastStep() {
         return this.active === this.parts.length;
+      },
+    },
+    watch: {
+      button: {
+        deep: true,
+        immediate: true,
+        handler(nv, ov) {
+          this.$set(this, 'internalButton', nv);
+        },
+      },
+      internalButton(nv) {
+        this.$emit('change', nv);
       },
     },
     methods: {
@@ -202,14 +219,23 @@
           this._.each(parts, (part) => {
             part.isActive = true;
           });
-          this.$set(this.button.next, 'text', 'actions.send');
+
+          // Not update props ...
+          // this.$set(this.button.next, 'text', 'actions.send');
+          this.$set(this.internalButton, 'next.text', 'actions.send');
         } else if (index > parts.length || this.isSimplified) {
           this.send();
           this.$parent.$parent.close();
           this._.each(this.contact, (value, key) => this.$set(this.contact, key, ''));
-          if (this.button) {
-            this.$set(this.button.next, 'text', 'actions.next');
+          // Not update props ...
+          // if (this.button) {
+          //   this.$set(this.button.next, 'text', 'actions.next');
+          // }
+
+          if (this.internalButton) {
+            this.$set(this.internalButton, 'next.text', 'action.next');
           }
+
           index = 0;
           this._.each(parts, (part, idx) => {
             part.isActive = idx === 0;
