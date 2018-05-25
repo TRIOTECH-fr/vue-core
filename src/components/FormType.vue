@@ -31,7 +31,7 @@
                 {{ $t(text.recap) }}
               </template>
               <template v-else>
-                {{ $t(text.intro) }}
+                <div v-html="$t(text.intro)" />
               </template>
             </b-col>
           </b-row>
@@ -62,6 +62,20 @@
                 <textarea v-autosize="true" v-model="contact[part.name]">
                   {{ $t(part.placeholder) }}
                 </textarea>
+              </template>
+              <template v-if="part.formType === 'select'">
+                <vue-multiselect
+                  :id="part.name"
+                  :options="part.options"
+                  :placeholder="$t(`placeholders.${part.name}.${part.multiple ? 'multiple' : 'single'}`)"
+                  :multiple="part.multiple"
+                  :close-on-select="true"
+                  :hide-selected="false"
+                  :clear-on-select="true"
+                  v-model="contact[part.name]"
+                  label="label"
+                  track-by="value"
+                />
               </template>
             </div>
           </template>
@@ -102,10 +116,14 @@
 </template>
 
 <script>
+  import VueMultiselect from 'vue-multiselect';
   import 'vue-awesome/icons/paper-plane';
 
   export default {
     name: 'FormTypeComponent',
+    components: {
+      VueMultiselect,
+    },
     model: {
       prop: 'button',
       event: 'change',
