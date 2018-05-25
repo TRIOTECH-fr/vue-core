@@ -157,6 +157,10 @@
         type: Object,
         default: () => ({}),
       },
+      postUri: {
+        type: String,
+        default: 'public/contact/',
+      },
     },
     data() {
       return {
@@ -187,7 +191,7 @@
     },
     methods: {
       send() {
-        this.$ajax.post('public/contact/', {
+        this.$ajax.post(this.postUri, {
           contact: this._.clone(this.contact),
         }).then((data) => {
           if (data.status) {
