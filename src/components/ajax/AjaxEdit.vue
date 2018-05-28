@@ -282,6 +282,12 @@
                   text: flashText,
                   type: 'warning',
                 });
+              } else if (data.response.data.error.code === 500) {
+                this.$notify({
+                  title: this.$t(`flashes.${this.name}.error_500_title`),
+                  text: this.$t(`flashes.${this.name}.error_500`),
+                  type: 'error',
+                });
               }
             });
         }
