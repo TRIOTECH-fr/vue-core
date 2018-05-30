@@ -2,9 +2,6 @@ import Vue from 'vue';
 import config from '%/config.yml';
 import parameters from '%/parameters.yml';
 
-// TODO generate computed fns from parameters keys
-// TODO handle dot notation for get/set
-
 const Config = new Vue({
   data() {
     return {
@@ -24,10 +21,10 @@ const Config = new Vue({
       return this.data;
     },
     get(key, fallback) {
-      return this._.has(this.data, key) ? this.data[key] : fallback;
+      return this._.get(this.data, key, fallback);
     },
     set(key, value) {
-      this.$set(this.data, key, value);
+      return this._.set(this.data, key, value);
     },
     local(key) {
       return localStorage.getItem(key);
