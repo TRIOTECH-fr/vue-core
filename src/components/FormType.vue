@@ -129,6 +129,10 @@
         type: Object,
         default: () => ({}),
       },
+      config: {
+        type: Object,
+        default: () => ({}),
+      },
     },
     data() {
       return {
@@ -148,7 +152,7 @@
       send() {
         this.$ajax.post('public/contact/', {
           contact: _.clone(this.contact),
-        }).then((data) => {
+        }, this.config).then((data) => {
           if (data.status) {
             this.$notify({ title: this.$t('flashes.contact.sent_title'), text: this.$t('flashes.contact.sent'), type: 'success' });
           } else {
