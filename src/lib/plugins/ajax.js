@@ -198,12 +198,7 @@ const Ajax = new Vue({
 
       return this.$http.request(config)
         .then((res) => {
-          let { data } = res;
-          // eslint-disable-next-line no-underscore-dangle
-          if (data._embedded && data._embedded.items) {
-            // eslint-disable-next-line no-underscore-dangle
-            data = data._embedded.items;
-          }
+          const { data } = res;
           this.$store.data = data;
           this.$store[config.url] = data;
           return data;
