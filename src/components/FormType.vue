@@ -56,6 +56,7 @@
                   :autocomplete="part.name"
                   v-model="contact[part.name]"
                 >
+                <span v-if="part.text">{{ $t(part.text) }}</span>
               </template>
               <template v-if="part.formType === 'textearea'">
                 <!-- TODO fix eslint alert / use attribute placeholder instead ? -->
@@ -451,6 +452,10 @@
           @include input-placeholder {
             color: $grey;
             font-style: italic;
+          }
+
+          &[type="checkbox"] {
+            width: auto;
           }
 
           &:focus {
