@@ -1,9 +1,9 @@
-const fs = require('fs');
-const UglifyJS = require('uglify-es');
+const UglifyJS = require('uglify-es')
+const babel = require('babel-core')
 
 module.exports = function (filePath) {
-  const code = fs.readFileSync(filePath, 'utf-8');
-  const result = UglifyJS.minify(code);
-  if (result.error) return '';
-  return result.code;
-};
+  const { code } = babel.transformFileSync(filePath)
+  const result = UglifyJS.minify(code)
+  if (result.error) return ''
+  return result.code
+}
