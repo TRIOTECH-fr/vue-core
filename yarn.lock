@@ -9652,9 +9652,9 @@ vue-scrollto@^2.9.0:
   dependencies:
     bezier-easing "^2.0.3"
 
-"vue-select-image@https://github.com/mazipan/vue-select-image.git":
+"vue-select-image@github:mazipan/vue-select-image#76808562e249bb0bda515a9ea18fced4435d1925":
   version "1.3.0"
-  resolved "https://github.com/mazipan/vue-select-image.git#cfb13d69175f339ba0a271d81481483fe67e9c15"
+  resolved "https://codeload.github.com/mazipan/vue-select-image/tar.gz/76808562e249bb0bda515a9ea18fced4435d1925"
   dependencies:
     vue "^2.5.13"
 
