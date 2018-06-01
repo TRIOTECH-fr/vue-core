@@ -85,7 +85,7 @@
     "raven-js": "^3.24.1",
     "rimraf": "^2.6.2",
     "rollup": "^0.57.1",
-    "rollup-plugin-uglify": "^3.0.0",
+    "rollup-plugin-uglify": "^4.0.0",
     "sass-loader": "^7.0.1",
     "selenium-server": "^3.11.0",
     "semver": "^5.5.0",
