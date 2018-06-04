@@ -10030,9 +10030,9 @@ vue-autosize@^1.0.2:
     autosize "^4.0.0"
     autosize-input "^0.4.0"
 
-vue-awesome@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/vue-awesome/-/vue-awesome-3.0.0.tgz#0b0b37488dd4b7e4b9a269d0e9173cd5ab65ff0f"
+vue-awesome@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/vue-awesome/-/vue-awesome-3.0.2.tgz#7efe02491b27ebcb91f504fb96d93de8340ff237"
 
 vue-axios@^2.1.1:
   version "2.1.1"
