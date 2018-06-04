@@ -18,79 +18,104 @@
 </template>
 
 <script>
+  import VueFormGenerator from 'vue-form-generator';
   import Multiselect from '../../vue-multiselect';
   import abstractField from './abstractField';
 
   export default {
+    ...VueFormGenerator.component.components.fieldVueMultiSelect,
     components: {
       Multiselect,
     },
-    mixins: [
-      abstractField,
-    ],
+    mixins: abstractField,
     data() {
       return {
-        multiselectModel: null,
+        internalValue: null,
       };
     },
     computed: {
-      multiple() {
-        return this.schema.selectOptions.multiple || false;
-      },
       value: {
         get() {
-          if (this.multiselectModel === null || typeof this.multiselectModel === 'undefined') {
-            return this.multiselectModel;
-          }
-
-          if (this.multiple) {
-            return this.multiselectModel.map(x => parseInt(x.id, 10));
-          }
-
-          return this._.isNaN(parseInt(this.multiselectModel.id, 10))
-            ? this.multiselectModel.id
-            : parseInt(this.multiselectModel.id, 10);
+          return this.internalValue || this.realValue;
         },
       },
+      realValue() {
+        return parent.mixins[0].computed.value.get.call(this);
+      },
+      rawValue() {
+        return this.trackValue(this.internalValue);
+      },
+      selectOptions() {
+        return this._.extend({
+          id: this.schema.id,
+          trackBy: 'id',
+          label: 'label',
+          selectLabel: this.$t('vms.select'),
+          selectGroupLabel: this.$t('vms.select_group'),
+          selectedLabel: this.$t('vms.selected'),
+          deselectLabel: this.$t('vms.deselect'),
+          deselectGroupLabel: this.$t('vms.deselect_group'),
+          placeholder: this.$t('vms.placeholder'),
+          tagPlaceholder: this.$t('vms.tag_placeholder'),
+          noResult: this.$t('vms.no_result'),
+          maxElements: this.$t('vms.max_elements'),
+        }, this.schema.selectOptions);
+      },
+      options() {
+        return parent.computed.options.call(this) || this.schema.choices;
+      },
     },
-    watch: {
-      model(newValue) {
-        if (Object.keys(newValue).length < 1) {
-          this.multiselectModel = null;
+    created() {
+      const keys = this._.keys(this._.first(this.schema.choices));
+      const internalValues = this._.map(this._.castArray(this.realValue), (realValue) => {
+        if (this._.isObject(realValue)) {
+          return this._.mapValues(this._.pick(realValue, keys), String);
         }
-      },
-      multiselectModel(newValue, oldValue) {
-        if (!this._.isUndefined(newValue) && newValue !== oldValue) {
-          this.setModelValueByPath(this.schema.model, this.value);
-        }
-        this.setRequired(this._.size(newValue));
-      },
+        const trackBy = this.selectOptions.trackBy;
+        const label = this.selectOptions.label;
+        const choice = this._.find(this.schema.choices, { [trackBy]: realValue });
+        return this._.isNil(realValue) ? null : { [trackBy]: String(realValue), [label]: choice && choice[label] };
+      });
+
+      this.internalValue = this.selectOptions.multiple ? internalValues : this._.first(internalValues);
+      this.setModelValueByPath(this.schema.model, this.trackValue(this.realValue));
     },
     mounted() {
-      const initialValue = this.modelNameToProperty(this.schema.model, this.model);
-      if (this.schema.required) {
-        this.setRequired();
+      this.setRequired();
+    },
+    updated() {
+      if (this._.isUndefined(this.realValue)) {
+        this.internalValue = this.realValue;
       }
-      if (initialValue) {
-        const findOrFilter = (value, current) => String(current.id) === String((this._.isObject(value) ? value.id : value));
-        if (!this.multiple) {
-          this.multiselectModel = this.schema.choices.find(findOrFilter.bind(this._, initialValue));
-        } else {
-          this.multiselectModel = this._.transform(initialValue, (carry, value) => {
-            carry.push(...this.schema.choices.filter(findOrFilter.bind(this._, value)));
-            return carry;
-          });
-        }
-      }
+      this.setRequired();
     },
     methods: {
-      setRequired(value = 0) {
+      setRequired(attribute = 'required') {
         if (this.schema.required) {
-          this.$el.children[1].children[2].required = value > 0 ? '' : 'required';
+          const required = !this.internalValue || this._.isEmpty(this._.castArray(this.internalValue));
+          // TODO remove required hack (https://github.com/shentao/vue-multiselect/issues/104)
+          const inputNode = this.$el.children[1].children[2];
+          if (required) {
+            inputNode.setAttribute(attribute, attribute);
+          } else {
+            inputNode.removeAttribute(attribute);
+          }
         }
       },
-      onChange() {
-        this.$nextTick(this.$bus.$emit.bind(this.$bus, 't-event.multiselect-change'));
+      updateSelected(value, id) {
+        this.internalValue = value;
+
+        this.setModelValueByPath(this.schema.model, this.rawValue);
+
+        this.$nextTick(this.$bus.$emit.bind(this.$bus, 't-event.multiselect-change', {
+          value: this.value,
+        }));
+      },
+      trackValue(values) {
+        if (this._.isNil(values)) return null;
+        const { trackBy, multiple } = this.selectOptions;
+        const rawValue = this._.map(_.castArray(values), value => String(this._.isObject(value) && trackBy ? value[trackBy] : value));
+        return rawValue.length > 0 && !multiple ? this._.first(rawValue) : rawValue;
       },
     },
   };
