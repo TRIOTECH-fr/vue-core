@@ -4,6 +4,8 @@
     :placeholder="schema.placeholder"
     :required="schema.required"
     :language="languages[language]"
+    :disabled-dates="schema.disabledDates"
+    :highlighted="schema.highlighted"
     input-class="form-control"
   />
 </template>
@@ -24,6 +26,33 @@
       language: {
         type: String,
         default: 'fr',
+      },
+      disabledDates: {
+        type: Object,
+        default: () => ({
+          // to: null, /* Disable all dates up to specific date */
+          // from: null, /* Disable all dates after specific date */
+          // days: [], /* Disable an array of days */
+          // daysOfMonth: [], /* Disable an array of daysOfMonth */
+          // dates: [], /* Disable an array of dates */
+          // ranges: [{ /* Disable dates in exclusive given ranges */
+          //  from: null,
+          //  to: null
+          // }],
+          // customPredictor: (date) => {}, /* Custom function that returns if date is disabled */
+        }),
+      },
+      highlighted: {
+        type: Object,
+        default: () => ({
+          // to: null, /* Highlight all dates up to specific date */
+          // from: null, /* Highlight all dates after specific date */
+          // days: [], /* Highlight an array of days */
+          // daysOfMonth: [], /* Highlight an array of daysOfMonth */
+          // dates: [], /* Highlight an array of dates */
+          // customPredictor: (date) => {}, /* Custom function that returns if date is highlighted */
+          // includeDisabled: false /* Highlight disabled dates */
+        }),
       },
     },
     data() {
