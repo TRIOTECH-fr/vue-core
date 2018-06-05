@@ -8,9 +8,6 @@ const FileSystem = new Vue({
     unavailableError: () => 'FileSystem API is unavailable',
     unhandledError: () => 'FileSystem API is unhandled',
   },
-  created() {
-    this.stat();
-  },
   methods: {
     resolveFileSystem() {
       return (window.cordova ? window.resolveLocalFileSystemURL : window.webkitRequestFileSystem).bind(window);
