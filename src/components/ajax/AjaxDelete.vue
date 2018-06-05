@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import AbstractForm from '../mixins/AbstractForm';
+  import AbstractForm from '../../mixins/AbstractForm';
 
   export default {
     name: 'AjaxDeleteComponent',

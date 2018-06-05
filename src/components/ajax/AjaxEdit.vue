@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import AbstractForm from '../mixins/AbstractForm';
+  import AbstractForm from '../../mixins/AbstractForm';
   import AjaxUpsert from './AjaxUpsert';
 
   export default {
