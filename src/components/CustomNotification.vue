@@ -13,6 +13,7 @@
           <i v-if="props.item.type === 'success'" class="ti ti-fw ti-check-circle"/>
           <i v-else-if="props.item.type === 'error'" class="ti ti-fw ti-close-circle"/>
           <i v-else-if="props.item.type === 'warning'" class="ti ti-fw ti-warning"/>
+          <i v-else-if="props.item.type === 'loading'" class="ti ti-fw ti-spin ti-refresh"/>
           <i v-else class="ti ti-fw ti-info-circle"/>
         </div>
         <div class="custom-template-content">
@@ -66,6 +67,22 @@
       &,
       & > div {
         box-sizing: border-box;
+      }
+
+      &.loading {
+        background-color: $blue;
+        border-color: $dark-blue;
+
+
+        .custom-template-icon,
+        .custom-template-content {
+          color: $white;
+        }
+
+        .custom-template-close {
+          color: $dark-blue;
+          opacity: 1;
+        }
       }
 
       &.success {
