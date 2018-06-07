@@ -132,7 +132,7 @@
     "vuex-persistedstate": "^2.5.2",
     "vuex-router-sync": "^5.0.0",
     "vuex-shared-mutations": "^0.0.3",
-    "webpack": "^4.10.2",
+    "webpack": "^4.11.1",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-cli": "^2.0.14",
     "webpack-dev-server": "^3.1.3",
