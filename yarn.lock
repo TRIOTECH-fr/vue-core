@@ -1914,7 +1914,7 @@ chrome-trace-event@^0.1.1:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/chrome-trace-event/-/chrome-trace-event-0.1.3.tgz#d395af2d31c87b90a716c831fe326f69768ec084"
 
-chromedriver@^2.37.0:
+chromedriver@^2.39.0:
   version "2.39.0"
   resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-2.39.0.tgz#3a80e35633130333897bc3ec9b8c72e854f5e4c4"
   dependencies:
@@ -8595,7 +8595,7 @@ sass-graph@^2.2.4:
     scss-tokenizer "^0.2.3"
     yargs "^7.0.0"
 
-sass-loader@^7.0.1:
+sass-loader@^7.0.3:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/sass-loader/-/sass-loader-7.0.3.tgz#6ca10871a1cc7549f8143db5a9958242c4e4ca2a"
   dependencies:
@@ -10156,6 +10156,10 @@ vue-slick@^1.1.12:
   resolved "https://registry.yarnpkg.com/vue-slick/-/vue-slick-1.1.12.tgz#c0e3ab135c828abc6ff02362935a5275b8c5aeed"
   dependencies:
     slick-carousel "^1.6.0"
+
+vue-slider-component@^2.7.1:
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/vue-slider-component/-/vue-slider-component-2.7.1.tgz#d880ea92d883bb428fbcc67a86afe6b0d3a27621"
 
 vue-socket.io@^2.1.1-b:
   version "2.1.1-b"
