@@ -1,5 +1,5 @@
 <template>
-  <div class="radio-list" :disabled="disabled">
+  <div class="radio-list" :class="schema.listClass" :disabled="disabled">
     <label v-for="item in items" :class="{'is-checked': isItemChecked(item)}">
       <input :id="getFieldID(schema)" type="radio" :disabled="disabled" :name="id" @click="onSelection(item)" :value="getItemValue(item)" :checked="isItemChecked(item)" :class="schema.fieldClasses" :required="schema.required" />
       <span>{{ getItemName(item) }}</span>
