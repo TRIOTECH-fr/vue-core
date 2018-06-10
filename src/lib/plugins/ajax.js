@@ -196,35 +196,33 @@ const Ajax = new Vue({
         config.method = this.httpPost;
       }
 
-      return this.$http.request(config)
-        .then((res) => {
-          const { data } = res;
-          this.$store.data = data;
-          this.$store[config.url] = data;
-          return data;
-        })
-        .catch((error) => {
-          const data = (error.response && error.response.data) || {};
-          if (data.error === 'invalid_grant') {
-            const description = data.error_description;
-            if (description.match(/expired/i) && error.response.status === 401) {
-              delete config.headers;
-              return this.refresh().then(this.asyncRequest.bind(this, config));
-            } else if (!description.match(/password/i) && description.match(/invalid|expired/i) && error.response.status >= 400) {
-              this.unset('oauth');
-              return this.redirect();
-            }
-          } else {
-            // eslint-disable-next-line no-console
-            console.error(error.response && error.response.data && error.response.data.error, {
-              response: error.response,
-              request: error.request,
-              message: error.message,
-              config: error.config,
-            });
+      return this.$http.request(config).then((res) => {
+        const { data } = res;
+        this.$store.data = data;
+        this.$store[config.url] = data;
+        return data;
+      }).catch((error) => {
+        const data = (error.response && error.response.data) || {};
+        if (data.error === 'invalid_grant') {
+          const description = data.error_description;
+          if (description.match(/expired/i) && error.response.status === 401) {
+            delete config.headers;
+            return this.refresh().then(this.asyncRequest.bind(this, config));
+          } else if (!description.match(/password/i) && description.match(/invalid|expired/i) && error.response.status >= 400) {
+            this.unset('oauth');
+            return this.redirect();
           }
-          throw error;
-        });
+        } else {
+          // eslint-disable-next-line no-console
+          console.error(error.response && error.response.data && error.response.data.error, {
+            response: error.response,
+            request: error.request,
+            message: error.message,
+            config: error.config,
+          });
+        }
+        throw error;
+      });
     },
   },
 });
