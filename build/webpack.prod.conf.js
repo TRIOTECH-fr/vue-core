@@ -113,7 +113,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 })
 
 const routes = customConfig.prerender || []
-if (routes.length > 0) {
+if (process.env.NO_PRERENDER === undefined && routes.length > 0) {
   webpackConfig.plugins.push(
     // seo prerending
     new PrerenderSpaPlugin({
