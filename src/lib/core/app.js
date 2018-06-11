@@ -47,7 +47,7 @@ export default new Vue({
         render: h => h(App),
         ...options,
       });
-      if (this.$env.dev) {
+      if (this.$env.dev || window.cordova) {
         window.app = app;
       }
       return app;
