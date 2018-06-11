@@ -47,7 +47,9 @@ export default new Vue({
         render: h => h(App),
         ...options,
       });
-      window.app = app;
+      if (this.$env.dev) {
+        window.app = app;
+      }
       return app;
     },
     autoload,
