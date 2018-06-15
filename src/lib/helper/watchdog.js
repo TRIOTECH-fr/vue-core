@@ -28,7 +28,7 @@ const Watchdog = new Vue({
         const matchAuthor = author => `@${this._.get(author.match(/^(\w+) <([^@]+@\w+\.[^>]+)>$/), '[1]', '')}`;
         const packageContributors = this._.get(Package, 'contributors', []).map(matchAuthor).join(', ');
         const packageAuthor = matchAuthor(this._.get(Package, 'author', ''));
-        const mentions = '@' || packageContributors || packageAuthor;
+        const mentions = packageContributors || packageAuthor;
         const text = `${Package.name} (${mentions})`;
 
         Vue.config.errorHandler = this._.bind((err, vm, info) => {
