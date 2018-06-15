@@ -38,6 +38,7 @@ const Watchdog = new Vue({
             const channel = this.mattermostChannel || config.channel || 'monolog';
             const attachments = [{
               title_link: window.location.href,
+              color: 'danger',
               fields: [{
                 title: 'Message',
                 value: `${err.message} : ${info}`,
