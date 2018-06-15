@@ -32,6 +32,7 @@ const Watchdog = new Vue({
         const text = `${Package.name} (${mentions})`;
 
         Vue.config.errorHandler = this._.bind((err, vm, info) => {
+          console.error(err, vm, info); // eslint-disable-line no-console
           const url = this.mattermostURL || config.url;
           if (url && String(err).indexOf('vuex') === -1) {
             const token = this.mattermostToken || config.token;
