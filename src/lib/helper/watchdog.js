@@ -25,9 +25,7 @@ const Watchdog = new Vue({
     },
     mattermost(config = {}) {
       if (this.$env.prod) {
-        const matchAuthor = (author) => {
-          return '@'+ this._.get(author.match(/^(\w+) <([^@]+@\w+\.[^>]+)>$/), '[1]', '');
-        };
+        const matchAuthor = author => `@${this._.get(author.match(/^(\w+) <([^@]+@\w+\.[^>]+)>$/), '[1]', '')}`;
         const packageContributors = this._.get(Package, 'contributors', []).map(matchAuthor).join(', ');
         const packageAuthor = matchAuthor(this._.get(Package, 'author', ''));
         const mentions = '@' || packageContributors || packageAuthor;
@@ -37,28 +35,28 @@ const Watchdog = new Vue({
           const url = this.mattermostURL || config.url;
           if (url && String(err).indexOf('vuex') === -1) {
             const token = this.mattermostToken || config.token;
-            const channel = this.mattermostChannel || config.channel || 'Monolog';
+            const channel = this.mattermostChannel || config.channel || 'monolog';
             const attachments = [{
-              'title_link': window.location.href,
-              'fields': [{
-                'title': 'Message',
-                'value': `${err.message} : ${info}`,
+              title_link: window.location.href,
+              fields: [{
+                title: 'Message',
+                value: `${err.message} : ${info}`,
               }, {
-                'title': 'URL',
-                'value': window.location.href,
-                'short': true,
+                title: 'URL',
+                value: window.location.href,
+                short: true,
               }, {
-                'title': 'Trace',
-                'value': err.stack,
+                title: 'Trace',
+                value: err.stack,
               }],
-            }]
+            }];
             const payload = {
-                username: 'VueCore',
-                icon_url: 'https://vuejs.org/images/logo.png',
-                channel,
-                text,
-                attachments,
-              };
+              username: 'VueCore',
+              icon_url: 'https://vuejs.org/images/logo.png',
+              channel,
+              text,
+              attachments,
+            };
             this.$ajax.post(`${url}/hooks/${token}`, `payload=${JSON.stringify(payload)}`);
           }
         }, this);
