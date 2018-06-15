@@ -23,7 +23,7 @@ const Watchdog = new Vue({
       Raven.config(Config.get('sentry'));
       Raven.context(this._.bind(app.run, app, config));
     },
-    mattermost(config) {
+    mattermost(config = {}) {
       if (this.$env.prod) {
         const matchAuthor = (author) => {
           return '@'+ this._.get(author.match(/^(\w+) <([^@]+@\w+\.[^>]+)>$/), '[1]', '');
