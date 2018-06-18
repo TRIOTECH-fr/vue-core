@@ -170,7 +170,7 @@
     },
     beforeDestroy() {
       if (!this.loadOnMount && this.refModal !== null) {
-        this.$off(`t-event.t-modal.${this.refModal}.opened`);
+        this.$bus.$off(`t-event.t-modal.${this.refModal}.opened`);
       }
 
       this.$bus.$off(`t-event.ajax-new.${this.name}.submit`);
