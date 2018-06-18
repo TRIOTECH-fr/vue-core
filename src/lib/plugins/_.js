@@ -144,6 +144,11 @@ _.mixin({
           }
         });
       }
+      
+      if (field.textOn && field.textOff) {
+        field.textOn = $t(field.textOn);
+        field.textOff = $t(field.textOff);
+      }
     });
   },
   propsValidator(component, route) {
