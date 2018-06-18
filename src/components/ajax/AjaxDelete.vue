@@ -87,7 +87,7 @@
     },
     beforeDestroy() {
       if (!this.loadOnMount && this.refModal !== null) {
-        this.$off(`t-event.t-modal.${this.refModal}.open`);
+        this.$bus.$off(`t-event.t-modal.${this.refModal}.open`);
       }
     },
     methods: {
