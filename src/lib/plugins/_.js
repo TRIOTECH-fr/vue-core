@@ -137,14 +137,18 @@ _.mixin({
       if (field.choices !== undefined) {
         _.each(field.choices, (choice) => {
           if (choice.label !== undefined) {
-            choice.label = $t(choice.label);
+            if (_.isObject(choice.label) && choice.label.key !== undefined && choice.label.value !== undefined) {
+              choice.label = $t(choice.label.key, { value: choice.label.value });
+            } else {
+              choice.label = $t(choice.label);
+            }
           }
           if (choice.name !== undefined) {
             choice.name = $t(choice.name);
           }
         });
       }
-      
+
       if (field.textOn && field.textOff) {
         field.textOn = $t(field.textOn);
         field.textOff = $t(field.textOff);
