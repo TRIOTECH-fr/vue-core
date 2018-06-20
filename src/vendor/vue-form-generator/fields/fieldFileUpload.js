@@ -67,7 +67,7 @@ Vue.component('fieldFileUpload', {
         :required="schema.required"
         :accept="mimeConstraint"
         :id="getFieldID(schema)"
-        :lang="lang"
+        :lang="$i18n.locale"
         class="custom-file-input"
         type="file"
         @change="onValueChange"
