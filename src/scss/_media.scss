@@ -9,3 +9,15 @@
     @content
   }
 }
+
+@mixin editable-max-height($height) {
+  @media (max-height: $height) {
+    @content
+  }
+}
+
+@mixin editable-min-height($height) {
+  @media (min-height: $height) {
+    @content
+  }
+}
