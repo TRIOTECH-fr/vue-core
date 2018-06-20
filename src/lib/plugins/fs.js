@@ -10,7 +10,8 @@ const FileSystem = new Vue({
   },
   methods: {
     resolveFileSystem() {
-      return (window.cordova ? window.resolveLocalFileSystemURL : window.webkitRequestFileSystem).bind(window);
+      const fs = window.cordova ? window.resolveLocalFileSystemURL : window.webkitRequestFileSystem;
+      return this._.isFunction(fs) ? fs.bind(window) : this._.noop;
     },
     root() {
       return new Promise((resolve, reject) => {
