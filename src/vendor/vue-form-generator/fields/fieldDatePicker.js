@@ -56,7 +56,7 @@ Vue.component('fieldDatePicker', {
     <date-picker
       :placeholder="schema.placeholder"
       :required="schema.required"
-      :language="language"
+      :language="$i18n.locale"
       v-model="datePickerModel"
       input-class="form-control"
     />
