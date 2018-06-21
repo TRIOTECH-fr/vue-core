@@ -49,14 +49,18 @@ Vue.component('fieldDropdown', _.merge({}, parent, {
   },
   created() {
     const keys = this._.keys(this._.first(this.schema.choices));
-    const internalValues = this._.map(this._.castArray(this.realValue), (realValue) => {
+    const internalValues = this._.transform(this._.castArray(this.realValue), (carry, realValue, key) => {
+      let internalValue = null;
       if (this._.isObject(realValue)) {
-        return this._.mapValues(this._.pick(realValue, keys), String);
-      } else {
+        internalValue = this._.mapValues(this._.pick(realValue, keys), String);
+      } else if (!_.isNil(realValue)) {
         const trackBy = this.selectOptions.trackBy;
         const label = this.selectOptions.label;
         const choice = this._.find(this.schema.choices, {[trackBy]: realValue});
-        return this._.isNil(realValue) ? null : { [trackBy]: String(realValue), [label]: choice && choice[label] };
+        internalValue = { [trackBy]: String(realValue), [label]: choice && choice[label] };
+      }
+      if (!this._.isNil(internalValue)) {
+        carry[key] = internalValue;
       }
     });
 
