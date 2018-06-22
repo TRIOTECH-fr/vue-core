@@ -44,7 +44,7 @@
 
 <style lang="scss">
   @import '~@/scss/vars';
-  @import '../scss/media';
+  @import '../scss/bootstrap';
 
   .my-notification-style {
     margin: 10px;
@@ -161,7 +161,7 @@
     }
   }
 
-  @include editable-max-width(575px) {
+  @include media-breakpoint-down(xs) {
     .my-notification-style {
       margin: 0;
       width: 100% !important;

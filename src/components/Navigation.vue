@@ -112,7 +112,7 @@
     }
   }
 
-  @include editable-max-width(768px) {
+  @include media-breakpoint-down(sm) {
     .navigation {
       position: fixed;
       bottom: 0;
