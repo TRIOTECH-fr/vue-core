@@ -2,6 +2,8 @@ import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import autoload from '../core/autoload';
 import _ from '@triotech/vue-core/src/lib/plugins/_';
+import env from '@triotech/vue-core/src/lib/plugins/env';
+
 
 Vue.use(VueI18n);
 
@@ -11,7 +13,7 @@ const I18n = new VueI18n({
     autoload(require.context('json-loader!@triotech/vue-core/src/translations', false, /\.yml$/)),
     autoload(require.context('json-loader!@/translations', false, /\.yml$/)),
   ),
-  silentTranslationWarn: true,
+  silentTranslationWarn: env.dev,
 });
 
 // TODO remove translation doesn't exist alert
