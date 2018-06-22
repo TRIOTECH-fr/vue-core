@@ -226,8 +226,8 @@
 
 <style lang="scss" scoped>
   @import '~@/scss/vars';
-  @import '~@triotech/vue-core/src/scss/media';
-  @import '~@triotech/vue-core/src/scss/compass';
+  @import '../scss/compass';
+  @import '../scss/bootstrap';
   @import 'compass/css3/transform';
   @import 'compass/css3/transition';
   @import 'compass/css3/user-interface';
@@ -417,7 +417,7 @@
     }
   }
 
-  @include editable-min-width(576px) {
+  @include media-breakpoint-up(xs) {
     button.round-btn {
       svg.fa-icon {
         margin-left: 10px;
@@ -425,7 +425,7 @@
     }
   }
 
-  @include editable-max-width(768px) {
+  @include media-breakpoint-down(sm) {
     .form-container {
       .header {
         .row {

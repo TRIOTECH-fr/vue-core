@@ -42,8 +42,8 @@
 </script>
 
 <style lang="scss">
-  @import '~@triotech/vue-core/src/scss/vars';
-  @import '~@triotech/vue-core/src/scss/media';
+  @import '~@/scss/vars';
+  @import '../scss/bootstrap';
 
   .my-notification-style {
     margin: 10px;
@@ -144,7 +144,7 @@
     }
   }
 
-  @include editable-max-width(575px) {
+  @include media-breakpoint-down(xs) {
     .my-notification-style {
       margin: 0;
       width: 100% !important;
