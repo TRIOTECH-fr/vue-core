@@ -133,7 +133,7 @@
     "vuex-i18n": "^1.10.5",
     "vuex-persistedstate": "^2.5.2",
     "vuex-router-sync": "^5.0.0",
-    "vuex-shared-mutations": "^0.0.3",
+    "vuex-shared-mutations": "^0.0.4",
     "webpack": "^4.10.2",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-cli": "^2.0.14",
