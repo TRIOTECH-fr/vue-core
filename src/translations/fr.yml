@@ -52,6 +52,10 @@ flashes:
     title: Connexion
     invalid_grant: Les identifiants de connexion sont incorrects
 
+table:
+  item: Element
+  index: Index
+
 # VueMultiSelect
 vms:
   select: Appuyer sur ENTRER pour sélectionner
