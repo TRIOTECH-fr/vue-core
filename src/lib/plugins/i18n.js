@@ -12,7 +12,7 @@ const I18n = new VueI18n({
     autoload(require.context('json-loader!yaml-loader!../../translations', false, /\.yml$/)),
     autoload(require.context('json-loader!yaml-loader!@/translations', false, /\.yml$/)),
   ),
-  silentTranslationWarn: env.dev,
+  silentTranslationWarn: env.prod,
 });
 
 // TODO remove translation doesn't exist alert
