@@ -47,6 +47,10 @@ actions:
   show: Consulter
   yes: Oui
 
+table:
+  item: Element
+  index: Index
+
 flashes:
   login:
     title: Connexion
