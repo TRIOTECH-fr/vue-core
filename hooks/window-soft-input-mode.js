@@ -29,7 +29,7 @@ function isAndroidStudioProject(root, fs, path) {
 }
 
 module.exports = (ctx) => {
-  console.log('Running: Configuring android:windowSoftInputMode');
+  console.log('Running: Configuring android:windowSoftInputMode'); // eslint-disable-line no-console
 
   const fs = ctx.requireCordovaModule('fs');
   const path = ctx.requireCordovaModule('path');
