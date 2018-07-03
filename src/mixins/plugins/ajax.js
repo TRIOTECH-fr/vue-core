@@ -2,7 +2,7 @@ import moment from 'moment';
 import QS from 'qs';
 import Router from '../../lib/plugins/router';
 
-const AjaxMixin = {
+export default {
   router: Router,
   computed: {
     httpGet: () => 'GET',
@@ -219,5 +219,3 @@ const AjaxMixin = {
     },
   },
 };
-
-export default AjaxMixin;
