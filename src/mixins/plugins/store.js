@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VuexPersistedState from 'vuex-persistedstate';
 import VuexCache from 'vuex-cache';
 import { sync } from 'vuex-router-sync';
-import Router from '../../plugins/router';
+import Router from '../../lib/plugins/router';
 
 export default {
   state: {
