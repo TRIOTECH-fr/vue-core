@@ -5,9 +5,7 @@ import StoreMixin from '../../mixins/plugins/store';
 Vue.use(Vuex);
 
 const Store = new Vuex.Store({
-  mixins: [
-    StoreMixin,
-  ],
+  ...StoreMixin,
 });
 
 Vue.set(Vue.prototype, '$store', Store);
