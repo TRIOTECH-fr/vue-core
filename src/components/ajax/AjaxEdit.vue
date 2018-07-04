@@ -4,7 +4,7 @@
       <i class="ti ti-2x ti-spin ti-refresh"/>
     </slot>
   </div>
-  <form v-else :id="`form-edit-${name}`" @submit.prevent="submit">
+  <form v-else :id="`form-edit-${formIdentifier}`" @submit.prevent="submit">
     <template v-if="schema.fields.length > 0">
       <vue-form-generator
         :schema="schema"
@@ -112,6 +112,10 @@
         type: Function,
         default: Identity,
       },
+      formId: {
+        type: [Number, String],
+        default: null,
+      },
     },
     data() {
       return {
@@ -139,6 +143,9 @@
       },
       getId() {
         return this.id || this.uriOption.id;
+      },
+      formIdentifier() {
+        return this.formId || this.name;
       },
     },
     watch: {

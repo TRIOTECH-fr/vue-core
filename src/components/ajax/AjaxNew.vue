@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form :id="`form-new-${name}`" @submit.prevent="submit">
+    <form :id="`form-new-${formIdentifier}`" @submit.prevent="submit">
       <template v-if="schema.fields.length > 0">
         <vue-form-generator
           :schema="schema"
@@ -116,6 +116,10 @@
         type: Function,
         default: Identity,
       },
+      formId: {
+        type: [Number, String],
+        default: null,
+      },
     },
     data() {
       return {
@@ -137,6 +141,9 @@
           }
         }
         return uri;
+      },
+      formIdentifier() {
+        return this.formId || this.name;
       },
     },
     watch: {

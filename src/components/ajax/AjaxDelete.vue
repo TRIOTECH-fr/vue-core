@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form :id="`form-delete-${name}`" @submit.prevent="submit">
+    <form :id="`form-delete-${formIdentifier}`" @submit.prevent="submit">
       <b-row>
         <b-col>
           <b-button block type="submit" variant="danger">{{ $t('actions.delete') }}</b-button>
@@ -55,6 +55,10 @@
         type: String,
         default: 'delete',
       },
+      formId: {
+        type: [Number, String],
+        default: null,
+      },
     },
     data() {
       return {
@@ -74,6 +78,9 @@
       },
       getId() {
         return this.id || this.uriOption.id;
+      },
+      formIdentifier() {
+        return this.formId || this.name;
       },
     },
     async mounted() {
