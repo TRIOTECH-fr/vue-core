@@ -94,6 +94,7 @@
     "trio-icons": "git+https://git.triotech.fr/composer/trio-icons.git",
     "uglify-es": "^3.3.10",
     "url-loader": "^0.6.2",
+    "velocity-animate": "^1.5.1",
     "voca": "^1.4.0",
     "vue": "^2.5.13",
     "vue-analytics": "^5.9.0",
