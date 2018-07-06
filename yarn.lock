@@ -10426,9 +10426,9 @@ vue-awesome@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/vue-awesome/-/vue-awesome-3.0.3.tgz#1190cf87de74c2bd2b17c0ca2b713ff106875408"
 
-vue-axios@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/vue-axios/-/vue-axios-2.1.1.tgz#6167f2db93065d9bcfc90e65d063ccf34f8b1d63"
+vue-axios@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/vue-axios/-/vue-axios-2.1.2.tgz#80772edb47027f95a0aae5d1acc609e738ae8af4"
 
 vue-cleave@^1.2.2:
   version "1.2.2"
