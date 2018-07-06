@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import _ from 'lodash';
 import moment from 'moment';
+
+import router from '../../vendor/lodash/router';
 import transforms from '../../vendor/lodash/transforms';
 import types from '../../vendor/lodash/types';
 
@@ -15,15 +17,6 @@ _.mixin({
   },
   args(array) {
     return _.reduce(array, (carry, arg, index, args) => _.extend(carry, index % 2 === 1 && { [args[index - 1]]: arg }), {});
-  },
-  propsValidator(component, route) {
-    const params = { ...route.params };
-    return _.transform(params, (carry, prop, key) => {
-      if (!_.isArray(component.props[key].type) && !(prop instanceof component.props[key].type)) {
-        carry[key] = component.props[key].type(prop);
-      }
-      return carry;
-    }, params);
   },
   flatTree(tree = [], key = 'id') {
     const stack = tree;
@@ -44,6 +37,7 @@ _.mixin({
 
     return array;
   },
+  ...router,
   ...transforms,
   ...types,
   Y,
