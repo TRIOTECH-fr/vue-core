@@ -196,8 +196,8 @@ export default {
         return data;
       }).catch((error) => {
         const data = (error.response && error.response.data) || {};
-        if (data.error === 'invalid_grant') {
-          const description = data.error_description;
+        const description = data.error_description;
+        if (data.error === 'invalid_grant' && this._.isString(description)) {
           if (description.match(/expired/i) && error.response.status === 401) {
             delete config.headers;
             return this.refresh().then(this.asyncRequest.bind(this, config));
