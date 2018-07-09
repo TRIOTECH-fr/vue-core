@@ -4,7 +4,7 @@ export default {
   },
   propsValidator(component, route, addRouteQueryInParams = false) {
     let params = { ...route.params };
-    if (this.queryInParams) {
+    if (addRouteQueryInParams) {
       params = _.merge(params, route.query);
     }
 
