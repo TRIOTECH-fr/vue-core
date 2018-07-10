@@ -9,7 +9,7 @@ export default {
     }
 
     return _.transform(params, (carry, prop, key) => {
-      const props = _.reduce(component.mixins, (carry, mixin) => Object.assign(carry, mixin.props), component.props);
+      const props = _.reduce(component.mixins, (carry, mixin) => Object.assign(carry, mixin.props), component.props || {});
       if (!_.isArray(props[key].type) && !(prop instanceof props[key].type)) {
         carry[key] = props[key].type(prop);
       }
