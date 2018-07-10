@@ -5,8 +5,8 @@
         <i class="ti ti-2x ti-spin ti-refresh"/>
       </slot>
     </div>
-    <template :class="{ hidden: !isLoading }">
-      <slot v-if="!isLoading" name="list-header"/>
+    <template v-if="!isLoading">
+      <slot name="list-header"/>
       <template v-if="items.length > 0">
         <div v-if="renderMode === 'table'" class="table-responsive">
           <slot name="table-title"/>
@@ -63,7 +63,7 @@
         </div>
       </template>
       <b-alert v-else-if="init" show>{{ $t(`pages.${entityName}.empty_set`) }}</b-alert>
-      <slot v-if="!isLoading" name="footer"/>
+      <slot name="footer"/>
     </template>
     <slot name="modal"/>
   </div>
@@ -239,4 +239,3 @@
     margin-top: 1rem;
   }
 </style>
-
