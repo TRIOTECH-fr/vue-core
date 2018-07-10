@@ -158,8 +158,9 @@ _.mixin({
   propsValidator(component, route) {
     const params = { ...route.params };
     return _.transform(params, (carry, prop, key) => {
-      if (!_.isArray(component.props[key].type) && !(prop instanceof component.props[key].type)) {
-        carry[key] = component.props[key].type(prop);
+      const props = _.reduce(component.mixins, (carry, mixin) => Object.assign(carry, mixin.props), component.props);
+      if (!_.isArray(props[key].type) && !(prop instanceof props[key].type)) {
+        carry[key] = props[key].type(prop);
       }
       return carry;
     }, params);
