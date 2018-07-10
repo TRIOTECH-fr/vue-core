@@ -154,6 +154,32 @@ const FileSystem = new Vue({
         }).catch(reject);
       });
     },
+    download(data, filename, mime) {
+      const blob = this._.isBlob(data) ? data : new Blob([data], { type: mime || 'application/octet-stream' });
+      // IE
+      if (typeof window.navigator.msSaveBlob !== 'undefined') {
+        window.navigator.msSaveBlob(blob, filename);
+        return;
+      }
+
+      const blobURL = window.URL.createObjectURL(blob);
+      const tempLink = document.createElement('a');
+      tempLink.style.display = 'none';
+      tempLink.href = blobURL;
+      tempLink.setAttribute('download', filename);
+
+      // Safari
+      if (typeof tempLink.download === 'undefined') {
+        tempLink.setAttribute('target', '_blank');
+      }
+
+      document.body.appendChild(tempLink);
+      tempLink.click();
+      document.body.removeChild(tempLink);
+
+      // Firefox
+      setTimeout(window.URL.revokeObjectURL.bind(window.URL, blobURL), 100);
+    },
   },
 });
 
