@@ -25,6 +25,14 @@ const Ajax = new Vue({
     oauthStore() { return this.$store.getters.oauth || {}; },
     oauthConfig() { return this.$config.get('oauth') || {}; },
   },
+  data() {
+    return {
+      cancelToken: null,
+    };
+  },
+  created() {
+    this.cancel();
+  },
   methods: {
     getUploadsUri(location) {
       return this.url(this.build(location), true);
@@ -65,6 +73,12 @@ const Ajax = new Vue({
     },
     build(url, method, data = {}, config = {}) {
       return this._.extend(config, { url, method, data });
+    },
+    cancel(message) {
+      if (this.cancelToken) {
+        this.cancelToken.cancel(message);
+      }
+      this.cancelToken = this.$http.CancelToken.source();
     },
     publicRequest(url = '/', method = this.httpGet, data = {}, config = {}) {
       const conf = this._.merge({
@@ -186,40 +200,40 @@ const Ajax = new Vue({
         config.method = this.httpPost;
       }
 
-      return this.$http.request(config)
-        .then((res) => {
-          let { data } = res;
+      config.cancelToken = this.cancelToken.token;
+
+      return this.$http.request(config).then((res) => {
+        let { data } = res;
+        // eslint-disable-next-line no-underscore-dangle
+        if (data._embedded && data._embedded.items) {
           // eslint-disable-next-line no-underscore-dangle
-          if (data._embedded && data._embedded.items) {
-            // eslint-disable-next-line no-underscore-dangle
-            data = data._embedded.items;
+          data = data._embedded.items;
+        }
+        this.$store.data = data;
+        this.$store[config.url] = data;
+        return data;
+      }).catch((error) => {
+        const data = (error.response && error.response.data) || {};
+        if (data.error === 'invalid_grant') {
+          const description = data.error_description;
+          if (description.match(/expired/i) && error.response.status === 401) {
+            delete config.headers;
+            return this.refresh().then(this.asyncRequest.bind(this, config));
+          } else if (!description.match(/password/i) && description.match(/invalid|expired/i) && error.response.status >= 400) {
+            this.unset('oauth');
+            return this.redirect();
           }
-          this.$store.data = data;
-          this.$store[config.url] = data;
-          return data;
-        })
-        .catch((error) => {
-          const data = (error.response && error.response.data) || {};
-          if (data.error === 'invalid_grant') {
-            const description = data.error_description;
-            if (description.match(/expired/i) && error.response.status === 401) {
-              delete config.headers;
-              return this.refresh().then(this.asyncRequest.bind(this, config));
-            } else if (!description.match(/password/i) && description.match(/invalid|expired/i) && error.response.status >= 400) {
-              this.unset('oauth');
-              return this.redirect();
-            }
-          } else {
-            // eslint-disable-next-line no-console
-            console.error(error.response && error.response.data && error.response.data.error, {
-              response: error.response,
-              request: error.request,
-              message: error.message,
-              config: error.config,
-            });
-          }
-          throw error;
-        });
+        } else if (!this.$http.isCancel(error)) {
+          // eslint-disable-next-line no-console
+          console.error(error.response && error.response.data && error.response.data.error, {
+            response: error.response,
+            request: error.request,
+            message: error.message,
+            config: error.config,
+          });
+        }
+        throw error;
+      });
     },
   },
 });

@@ -33,6 +33,7 @@ const Router = new VueRouter({
 Router.beforeEach((to, from, next) => {
   const vm = this.default.app;
   vm.$nextTick(() => {
+    vm.$ajax.cancel('route:changed');
     _.each(vm.$config.get('firewall'), (data, path) => {
       const store = _.isObject(data) ? data.store : true;
       const state = _.isObject(data) ? data.state : data;
