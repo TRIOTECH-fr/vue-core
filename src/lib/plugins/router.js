@@ -36,6 +36,7 @@ Router.beforeEach((to, from, next) => {
   let push = null;
 
   vm.$nextTick(() => {
+    vm.$ajax.cancel('route:changed');
     vm._.some(vm.$config.get('firewall'), (data, path) => {
       const store = vm._.isObject(data) ? data.store : true;
       const state = vm._.isObject(data) ? data.state : data;

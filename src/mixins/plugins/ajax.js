@@ -25,6 +25,14 @@ export default {
       return this.$config.get('oauth') || {};
     },
   },
+  data() {
+    return {
+      cancelToken: null,
+    };
+  },
+  created() {
+    this.cancel();
+  },
   methods: {
     getUploadsUri(location) {
       return this.url(this.build(location), true);
@@ -66,12 +74,14 @@ export default {
     build(url, method, data = {}, config = {}) {
       return this._.extend(config, { url, method, data });
     },
+    cancel(message) {
+      if (this.cancelToken) {
+        this.cancelToken.cancel(message);
+      }
+      this.cancelToken = this.$http.CancelToken.source();
+    },
     publicRequest(url = '/', method = this.httpGet, data = {}, config = {}) {
-      const conf = this._.merge({
-        method,
-        url,
-        data,
-      }, config);
+      const conf = this._.merge({ method, url, data }, config);
       conf.url = this.url(conf);
       return this.$http.request(conf).then(response => response.data);
     },
@@ -189,6 +199,8 @@ export default {
         config.method = this.httpPost;
       }
 
+      config.cancelToken = this.cancelToken.token;
+
       return this.$http.request(config).then((res) => {
         const { data } = res;
         this.$store.data = data;
@@ -201,7 +213,8 @@ export default {
           if (description.match(/expired/i) && error.response.status === 401) {
             delete config.headers;
             return this.refresh().then(this.asyncRequest.bind(this, config));
-          } else if (!description.match(/password/i) && description.match(/invalid|expired/i) && error.response.status >= 400) {
+          }
+          if (!description.match(/password/i) && description.match(/invalid|expired/i) && error.response.status >= 400) {
             this.unset('oauth');
             return this.redirect();
           }
