@@ -218,7 +218,7 @@ export default {
             this.unset('oauth');
             return this.redirect();
           }
-        } else {
+        } else if (!this.$http.isCancel(error)) {
           // eslint-disable-next-line no-console
           console.error(error.response && error.response.data && error.response.data.error, {
             response: error.response,
