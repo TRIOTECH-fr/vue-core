@@ -32,8 +32,12 @@ const Router = new VueRouter({
 // https://router.vuejs.org/en/advanced/navigation-guards.html
 Router.beforeEach((to, from, next) => {
   const vm = this.default.app;
-  vm.$nextTick(() => {
+  
+  if (vm.$ajax) {
     vm.$ajax.cancel('route:changed');
+  }
+  
+  vm.$nextTick(() => {
     _.each(vm.$config.get('firewall'), (data, path) => {
       const store = _.isObject(data) ? data.store : true;
       const state = _.isObject(data) ? data.state : data;
