@@ -277,7 +277,6 @@
 
 <style lang="scss" scoped>
   @import '~@/scss/vars';
-  @import '../scss/compass';
   @import '../scss/bootstrap';
   @import 'compass/css3/transform';
   @import 'compass/css3/transition';

@@ -67,7 +67,6 @@
 <style lang="scss" scoped>
   @import '~@/scss/vars';
   @import '../scss/bootstrap';
-  @import '../scss/compass';
   @import 'compass/css3/transition';
 
   .navigation {
