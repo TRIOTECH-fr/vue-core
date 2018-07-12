@@ -1,20 +1,22 @@
 const fs = require('fs')
 const path = require('path')
-const utils = require('./utils')
 const webpack = require('webpack')
-const config = require('../config')
 const merge = require('webpack-merge')
-const baseWebpackConfig = require('./webpack.base.conf')
+const yaml = require('js-yaml')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
-const loadMinified = require('./load-minified')
 const PrerenderSpaPlugin = require('prerender-spa-plugin')
+
+const utils = require('./utils')
+const requires = require('./requires')
+const loadMinified = require('./load-minified')
+const baseWebpackConfig = require('./webpack.base.conf')
+const config = require('../config')
 // const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
-const yaml = require('js-yaml')
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -111,7 +113,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // modules intermediate caching step
     // new HardSourceWebpackPlugin()
   ]
-})
+}, requires.rootBuild(path.basename(__filename)))
 
 const routes = customConfig.prerender || []
 if (process.env.NO_PRERENDER === undefined && routes.length > 0) {

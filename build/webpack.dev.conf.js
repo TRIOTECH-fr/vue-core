@@ -1,13 +1,15 @@
 const fs = require('fs')
 const path = require('path')
-const utils = require('./utils')
 const webpack = require('webpack')
-const config = require('../config')
 const merge = require('webpack-merge')
-const baseWebpackConfig = require('./webpack.base.conf')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
+
+const baseWebpackConfig = require('./webpack.base.conf')
+const utils = require('./utils')
+const requires = require('./requires')
+const config = require('../config')
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   mode: 'development',
@@ -57,7 +59,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     }),
     new FriendlyErrorsPlugin()
   ]
-})
+}, requires.rootBuild(path.basename(__filename)))
 
 module.exports = new Promise((resolve, reject) => {
   portfinder.basePort = process.env.PORT || config.dev.port

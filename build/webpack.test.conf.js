@@ -1,8 +1,10 @@
 // This is the webpack config used for unit tests.
 
-const utils = require('./utils')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
+
+const utils = require('./utils')
+const requires = require('./requires')
 const baseConfig = require('./webpack.base.conf')
 
 const webpackConfig = merge(baseConfig, {
@@ -24,7 +26,7 @@ const webpackConfig = merge(baseConfig, {
       'process.env': require('../config/test.env')
     })
   ]
-})
+}, requires.rootBuild(path.basename(__filename)))
 
 // no need for app entry during tests
 delete webpackConfig.entry
