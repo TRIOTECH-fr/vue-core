@@ -37,6 +37,17 @@ exports.cssLoaders = function (options) {
       })
     }
 
+    if (loader === 'sass') {
+      loaders.push({
+        loader: 'sass-resources-loader',
+        options: {
+          resources: [
+            path.resolve(process.cwd(), 'node_modules/compass-mixins/lib/compass/functions/_lists.scss')
+          ],
+        }
+      })
+    }
+
     // Extract CSS when that option is specified
     // (which is the case during production build)
     if (options.extract) {
