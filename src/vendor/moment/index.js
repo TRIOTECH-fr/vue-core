@@ -6,4 +6,4 @@ import 'moment/locale/fr';
 
 Vue.use(VueMoment, { moment });
 
-export default window.moment = moment;
+export default moment;
