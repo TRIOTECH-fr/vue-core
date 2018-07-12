@@ -50,7 +50,8 @@ const webpackConfig = merge(baseWebpackConfig, {
           mangle: {
             safari10: true
           }
-        }
+        },
+        extractComments: true
       })
     ]
   },
