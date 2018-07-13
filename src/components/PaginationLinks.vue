@@ -88,8 +88,13 @@
     },
     methods: {
       generateLink(page) {
-        const { to } = this;
-        return this._.isObject(to) ? this._.merge({}, this.to, { query: { page } }) : page;
+        let { to } = this;
+
+        if (this._.isString(to)) {
+          to = { to }
+        }
+
+        return this._.merge({}, to, { query: { page } });
       },
     },
   };
