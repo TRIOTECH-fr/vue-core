@@ -65,6 +65,7 @@ exports.cssLoaders = function (options) {
     scss: generateLoaders('sass', {
       includePaths: [
         path.resolve(process.cwd(), 'node_modules/compass-mixins/lib')
+        path.resolve(process.cwd(), 'node_modules/bootstrap/scss/bootstrap.scss'),
       ]
     }),
     stylus: generateLoaders('stylus'),
