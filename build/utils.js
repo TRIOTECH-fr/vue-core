@@ -41,12 +41,12 @@ exports.cssLoaders = function (options) {
       loaders.push({
         loader: 'sass-resources-loader',
         options: {
-          resources: config.sass_resources.map(resource => {
+          resources: (config.sass_resources || [
+            'node_modules/compass-mixins/lib/compass/functions/_lists.scss',
+            'node_modules/bootstrap/scss/bootstrap.scss'
+          ]).map(resource => {
             return path.resolve(process.cwd(), resource)
-          }) || [
-            path.resolve(process.cwd(), 'node_modules/compass-mixins/lib/compass/functions/_lists.scss'),
-            path.resolve(process.cwd(), 'node_modules/bootstrap/scss/bootstrap.scss')
-          ]
+          })
         }
       })
     }
