@@ -1,8 +1,8 @@
 'use strict'
 
 const path = require('path')
-const config = require('../config')
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
+const config = require('../config')
 const pkg = require('../package.json')
 
 exports.assetsPath = function (_path) {
@@ -42,8 +42,9 @@ exports.cssLoaders = function (options) {
         loader: 'sass-resources-loader',
         options: {
           resources: [
-            path.resolve(process.cwd(), 'node_modules/compass-mixins/lib/compass/functions/_lists.scss')
-          ],
+            path.resolve(process.cwd(), 'node_modules/compass-mixins/lib/compass/functions/_lists.scss'),
+            path.resolve(process.cwd(), 'node_modules/bootstrap/scss/bootstrap.scss')
+          ]
         }
       })
     }
@@ -65,7 +66,6 @@ exports.cssLoaders = function (options) {
     scss: generateLoaders('sass', {
       includePaths: [
         path.resolve(process.cwd(), 'node_modules/compass-mixins/lib')
-        path.resolve(process.cwd(), 'node_modules/bootstrap/scss/bootstrap.scss'),
       ]
     }),
     stylus: generateLoaders('stylus'),
