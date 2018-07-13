@@ -2,7 +2,6 @@ const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-const yaml = require('js-yaml')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
@@ -15,18 +14,12 @@ const utils = require('./utils')
 const requires = require('./requires')
 const loadMinified = require('./load-minified')
 const baseWebpackConfig = require('./webpack.base.conf')
-const config = require('../config')
+const config = require('./config')
 // const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
   : require('../config/prod.env')
-
-const customConfig = ['config/config.yml', 'config/parameters.yml'].reduce((carry, file) => {
-  const filePath = path.join(process.cwd(), file)
-  const data = fs.existsSync(filePath) ? yaml.safeLoad(fs.readFileSync(filePath, 'utf8')) : {}
-  return merge(carry, data)
-}, {})
 
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
@@ -115,7 +108,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   ]
 }, requires.rootBuild(path.basename(__filename)))
 
-const routes = customConfig.prerender || []
+const routes = config.prerender || []
 if (process.env.NO_PRERENDER === undefined && routes.length > 0) {
   webpackConfig.plugins.push(
     // seo prerending

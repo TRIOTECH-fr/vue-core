@@ -2,7 +2,7 @@
 
 const path = require('path')
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
-const config = require('../config')
+const config = require('./config')
 const pkg = require('../package.json')
 
 exports.assetsPath = function (_path) {
@@ -41,7 +41,9 @@ exports.cssLoaders = function (options) {
       loaders.push({
         loader: 'sass-resources-loader',
         options: {
-          resources: [
+          resources: config.sass_resources.map(resource => {
+            return path.resolve(process.cwd(), resource)
+          }) || [
             path.resolve(process.cwd(), 'node_modules/compass-mixins/lib/compass/functions/_lists.scss'),
             path.resolve(process.cwd(), 'node_modules/bootstrap/scss/bootstrap.scss')
           ]
