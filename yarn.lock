@@ -6105,6 +6105,10 @@ lazy-cache@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/lazy-cache/-/lazy-cache-1.0.4.tgz#a1d78fc3a50474cb80845d3b3b6e1da49a446e8e"
 
+lazy-value@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/lazy-value/-/lazy-value-1.0.0.tgz#06e2088790b3c72f7b16c5427be2c83ea302ce38"
+
 lcid@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/lcid/-/lcid-1.0.0.tgz#308accafa0bc483a3867b4b6f2b9506251d1b835"
@@ -10934,7 +10938,7 @@ vue-autosize@^1.0.2:
     autosize "^4.0.0"
     autosize-input "^0.4.0"
 
-vue-awesome@^3.0.3:
+vue-awesome@^3.0.5:
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/vue-awesome/-/vue-awesome-3.0.5.tgz#27322e17c690d357306c8ecbcdf427db93826f44"
 
@@ -11077,11 +11081,12 @@ vue2-animate@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/vue2-animate/-/vue2-animate-2.0.0.tgz#f4f54ac48f56ba5109ce864b9666630fe794eda2"
 
-vue2-google-maps@^0.9.7:
-  version "0.9.8"
-  resolved "https://registry.yarnpkg.com/vue2-google-maps/-/vue2-google-maps-0.9.8.tgz#6f3a1e12a9f585905d200e23d094c293849b8e7c"
+vue2-google-maps@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/vue2-google-maps/-/vue2-google-maps-0.10.0.tgz#a46ad54ae5d4f1261014f7e6dc0e2221438ee565"
   dependencies:
     babel-runtime "^5.8.0"
+    lazy-value "^1.0.0"
     marker-clusterer-plus "^2.1.4"
 
 vue@^2.5.16:
