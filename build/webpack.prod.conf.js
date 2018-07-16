@@ -97,9 +97,9 @@ const webpackConfig = merge(baseWebpackConfig, {
     ]),
     // service worker caching
     new SWPrecacheWebpackPlugin({
-      cacheId: 'Triotech',
-      filename: 'service-worker.js',
-      staticFileGlobs: ['web/**/*.{js,html,css}'],
+      cacheId: 'vue-core',
+      dontCacheBustUrlsMatching: /\.\w{20}\./,
+      staticFileGlobs: [`${config.build.assetsRoot}/**/*.{js,html,css}`],
       minify: true,
       stripPrefix: 'web/'
     })
@@ -113,7 +113,7 @@ if (process.env.NO_PRERENDER === undefined && routes.length > 0) {
   webpackConfig.plugins.push(
     // seo prerending
     new PrerenderSpaPlugin({
-      staticDir: path.join(process.cwd(), 'web'),
+      staticDir: config.build.assetsRoot,
       routes
     })
   )
