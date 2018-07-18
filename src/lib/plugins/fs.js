@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import Y from '../helper/y';
 
 const FileSystem = new Vue({
   name: 'FileSystem',
@@ -9,12 +8,10 @@ const FileSystem = new Vue({
     unavailableError: () => 'FileSystem API is unavailable',
     unhandledError: () => 'FileSystem API is unhandled',
   },
-  created() {
-    this.stat();
-  },
   methods: {
     resolveFileSystem() {
-      return (window.cordova ? window.resolveLocalFileSystemURL : window.webkitRequestFileSystem).bind(window);
+      const fs = window.cordova ? window.resolveLocalFileSystemURL : window.webkitRequestFileSystem;
+      return this._.isFunction(fs) ? fs.bind(window) : this._.noop;
     },
     root() {
       return new Promise((resolve, reject) => {
@@ -79,6 +76,7 @@ const FileSystem = new Vue({
                     });
                   }
                   file.buffer = reader.result;
+                  // eslint-disable-next-line no-console
                   console.debug('fs.read', { name, withBuffer }, `${self.$moment().diff(moment) / 1000}s`);
                   return resolve(file);
                 };
@@ -102,17 +100,18 @@ const FileSystem = new Vue({
               fileWriter.onerror = (event) => {
                 this.unlink(name).then(reject.bind(this, event.target.error)).catch(reject);
               };
-              Y(next => (bytesWritten, callback) => {
+              this._.Y(next => (bytesWritten, callback) => {
                 const totalSize = buffer.byteLength;
                 const blockSize = Math.min(this.blockSize, totalSize - bytesWritten);
                 const nextSize = bytesWritten + blockSize;
                 fileWriter.write(new Blob([new Uint8Array(buffer.slice(bytesWritten, nextSize))]));
                 fileWriter.onwrite = () => {
-                  // eslint-disable-next-line
+                  // eslint-disable-next-line no-console, no-mixed-operators
                   console.debug(name, 100 * nextSize / totalSize, nextSize === fileWriter.length);
                   if (nextSize < totalSize) {
                     next(nextSize, callback);
-                  } else if (_.isFunction(callback)) {
+                  } else if (this._.isFunction(callback)) {
+                    // eslint-disable-next-line no-console
                     console.debug('fs.write', { name, totalSize }, `${self.$moment().diff(moment) / 1000}s`);
                     callback();
                   }
