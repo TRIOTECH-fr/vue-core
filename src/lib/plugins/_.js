@@ -136,12 +136,9 @@ _.mixin({
 
       if (field.choices !== undefined) {
         _.each(field.choices, (choice) => {
-          if (_.isString(choice.label) && choice.label.indexOf('.') !== -1) {
-            if (_.isObject(choice.label) && choice.label.key !== undefined && choice.label.value !== undefined) {
-              choice.label = $t(choice.label.key, { value: choice.label.value });
-            } else {
-              choice.label = $t(choice.label);
-            }
+          const label = _.has(choice, 'label.key') ? choice.label.key : choice.label;
+          if (_.isString(label) && label.indexOf('.') !== -1) {
+            choice.label = $t(label, { value: _.get(choice, 'label.value') });
           }
           if (_.isString(choice.name) && choice.name.indexOf('.') !== -1) {
             choice.name = $t(choice.name);
