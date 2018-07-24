@@ -34,16 +34,21 @@ export default {
     this.cancel();
   },
   methods: {
-    getUploadsUri(location) {
-      return this.url(this.build(location), true);
-    },
     url(config, withoutEndpoint = false) {
       let url = this._.isObject(config) ? config.url : config;
       const endPoint = withoutEndpoint ? '/' : (this.$config.endpoint || '');
-      if (url && url.indexOf('://') === -1) {
+      if (this._.isString(url) && url.indexOf('://') === -1) {
         url = `${this.$config.host}${endPoint}${url}`;
       }
       return url;
+    },
+    uri(uri) {
+      return this.url(uri, true);
+    },
+    getUploadsUri(location) {
+      // eslint-disable-next-line no-console
+      console.warning('Deprecated method: use vm.$ajax.uri(uri) instead.');
+      return this.url(this.build(location), true);
     },
     encode(input) {
       const format = (stack, key) => (stack ? `${stack}[${key}]` : key);
@@ -81,6 +86,8 @@ export default {
       this.cancelToken = this.$http.CancelToken.source();
     },
     publicRequest(url = '/', method = this.httpGet, data = {}, config = {}) {
+      // eslint-disable-next-line no-console
+      console.warning('Deprecated method: This might get removed');
       const conf = this._.merge({ method, url, data }, config);
       conf.url = this.url(conf);
       return this.$http.request(conf).then(response => response.data);
@@ -104,7 +111,7 @@ export default {
       return this.request(this.build(url, this.httpHead, data, config));
     },
     redirect(uri = '/') {
-      window.location.href = uri;
+      window.location.assign(uri);
     },
     impersonate(userEmail = null, routeRedirect = null) {
       if (this.impersonateEndpoint === false) {
@@ -118,7 +125,7 @@ export default {
       };
 
       if (!userEmail) {
-        const oauth = JSON.parse(JSON.stringify(this.$store.getters.get.oauthUsurpator));
+        const oauth = this._.cloneDeep(this.$store.getters.get.oauthUsurpator);
         this.set({ oauth, oauthUsurpator: null });
         return Promise.resolve().then(redirect);
       }
@@ -127,7 +134,7 @@ export default {
         response.expires_at = (response.expires_in * 1000) + moment();
         response.refresh_token_expires_at = (response.refresh_token_lifetime * 1000) + moment();
 
-        const oauth = JSON.parse(JSON.stringify(this.$store.getters.get.oauth));
+        const oauth = this._.cloneDeep(this.$store.getters.get.oauth);
         this.set({ oauth: response, oauthUsurpator: oauth });
       }).then(redirect);
     },
@@ -173,8 +180,9 @@ export default {
       }
 
       if (!this._.isEmpty(this.oauthStore)) {
-        if (!config.commit && this._.expired(this.oauthStore.expires_at)) {
-          if (this._.expired(this.oauthStore.refresh_token_expires_at)) {
+        const isExpired = time => ((new Date() - time) / 1000 > 0);
+        if (!config.commit && isExpired(this.oauthStore.expires_at)) {
+          if (isExpired(this.oauthStore.refresh_token_expires_at)) {
             this.unset('oauth');
             return this.redirect();
           }

@@ -14,12 +14,12 @@ export default {
   blobToObjectURL(blob) {
     return window.URL.createObjectURL(blob);
   },
-  dataURIToBlob(string) {
-    const [header, base64] = string.split(',');
+  dataURIToBlob(dataURI) {
+    const [header, base64] = dataURI.split(',');
     return this.base64ToBlob(base64, header.replace('data:', '').replace(';base64', ''));
   },
-  base64ToBlob(string, type) {
-    return this.stringToBlob(window.atob(string), type);
+  base64ToBlob(base64, type) {
+    return this.stringToBlob(window.atob(base64), type);
   },
   stringToBlob(string, type) {
     return this.typedArrayToBlob(this.stringToTypedArray(string), type);
