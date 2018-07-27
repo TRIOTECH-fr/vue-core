@@ -12,7 +12,7 @@ const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const loadMinified = require('./load-minified')
 const PrerenderSpaPlugin = require('prerender-spa-plugin')
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -36,10 +36,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
+    new UglifyJsPlugin({
       sourceMap: true,
       extractComments: true
     }),
@@ -113,8 +110,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     // seo prerending
     new PrerenderSpaPlugin(config.build.assetsRoot, config.build.prerender || []),
-    // modules intermediate caching step
-    new HardSourceWebpackPlugin()
   ]
 })
 
