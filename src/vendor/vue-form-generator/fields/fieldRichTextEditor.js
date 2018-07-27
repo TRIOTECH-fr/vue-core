@@ -27,7 +27,7 @@ Vue.component('fieldRichTextEditor', {
   },
   watch: {
     model() {
-      this.vueEditorModel = '';
+      this.vueEditorModel = this.value;
     },
     vueEditorModel(current) {
       if (!this._.isEmpty(current)) {
@@ -36,7 +36,7 @@ Vue.component('fieldRichTextEditor', {
     },
   },
   mounted() {
-    this.vueEditorModel = this.value;
+    this.vueEditorModel = this.value || '';
   },
   template: `
     <vue-editor
