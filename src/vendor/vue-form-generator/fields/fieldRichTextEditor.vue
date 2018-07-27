@@ -41,7 +41,7 @@
     },
     watch: {
       model() {
-        this.vueEditorModel = '';
+        this.vueEditorModel = this.value;
       },
       vueEditorModel(current) {
         if (!this._.isEmpty(current)) {
@@ -50,7 +50,7 @@
       },
     },
     mounted() {
-      this.vueEditorModel = this.value;
+      this.vueEditorModel = this.value || '';
     },
   });
 </script>
