@@ -14,13 +14,15 @@
 
 <script>
   import {VueEditor/*, Quill*/} from 'vue2-editor';
-  import Mixins from './mixins';
+  import abstractField from './abstractField';
 
   export default {
     components: {
       VueEditor,
     },
-    mixins: Mixins,
+    mixins: [
+      abstractField,
+    ],
     data() {
       return {
         vueEditorModel: null,
@@ -52,5 +54,5 @@
     mounted() {
       this.vueEditorModel = this.value || '';
     },
-  });
+  };
 </script>
