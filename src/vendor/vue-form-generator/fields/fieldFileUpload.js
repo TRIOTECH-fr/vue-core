@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import Mixins from './mixins';
 
-window.Mixins = Mixins;
-
 Vue.component('fieldFileUpload', {
   mixins: Mixins,
   props: {
@@ -26,8 +24,8 @@ Vue.component('fieldFileUpload', {
     },
   },
   watch: {
-    data(newValue, OldValue) {
-      if (newValue !== OldValue) {
+    data(newValue, oldValue) {
+      if (newValue !== oldValue) {
         this.setModelValueByPath(this.schema.model, newValue);
       }
     },
@@ -36,11 +34,20 @@ Vue.component('fieldFileUpload', {
     this.updateButtonText();
   },
   updated() {
+    this.resetInputNode();
     this.updateButtonText();
   },
   methods: {
+    resetInputNode() {
+      const initialValue = this.modelNameToProperty(this.schema.model, this.model);
+
+      if (!initialValue && this.$refs.file) {
+        this.$refs.file.value = '';
+      }
+    },
     updateButtonText() {
       const initialValue = this.modelNameToProperty(this.schema.model, this.model);
+
       const buttonText = initialValue ? (_.get(initialValue, 'name') || _.get(initialValue, 'original_filename') || _.get(initialValue, 'file_name')) : this.$t('actions.choose_file');
       if (this.btnText !== buttonText) {
         this.btnText = buttonText;
@@ -68,6 +75,7 @@ Vue.component('fieldFileUpload', {
         :accept="mimeConstraint"
         :id="getFieldID(schema)"
         :lang="$i18n.locale"
+        ref="file"
         class="custom-file-input"
         type="file"
         @change="onValueChange"
