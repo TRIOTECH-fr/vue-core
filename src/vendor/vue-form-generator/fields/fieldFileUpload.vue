@@ -1,6 +1,7 @@
 <template>
   <div class="custom-file">
     <input
+      ref="file"
       :multiple="schema.multiple"
       :accept="mimeConstraint"
       :id="getFieldID(schema)"
@@ -41,8 +42,8 @@
       },
     },
     watch: {
-      data(newValue, OldValue) {
-        if (newValue !== OldValue) {
+      data(newValue, oldValue) {
+        if (newValue !== oldValue) {
           this.setModelValueByPath(this.schema.model, newValue);
         }
       },
@@ -51,9 +52,17 @@
       this.updateButtonText();
     },
     updated() {
+      this.resetInputNode();
       this.updateButtonText();
     },
     methods: {
+      resetInputNode() {
+        const initialValue = this.modelNameToProperty(this.schema.model, this.model);
+
+        if (!initialValue && this.$refs.file) {
+          this.$refs.file.value = '';
+        }
+      },
       updateButtonText() {
         const initialValue = this.modelNameToProperty(this.schema.model, this.model);
         const buttonText = initialValue ? (this._.get(initialValue, 'name') || this._.get(initialValue, 'original_filename') || this._.get(initialValue, 'file_name')) : this.$t('actions.choose_file');
