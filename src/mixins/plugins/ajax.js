@@ -5,28 +5,31 @@ import Router from '../../lib/plugins/router';
 export default {
   router: Router,
   computed: {
-    httpGet: () => 'GET',
-    httpPost: () => 'POST',
-    httpPut: () => 'PUT',
-    httpPatch: () => 'PATCH',
-    httpDelete: () => 'DELETE',
-    httpHead: () => 'HEAD',
+    http() {
+      return this._.mapKeys(['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'], this._.toLower);
+    },
+    oauthTokenTypes() {
+      return this._.mapKeys(['Bearer'], this._.toLower);
+    },
+    oauthGrantTypes() {
+      return this._.mapKeys(['password', 'refresh_token'], this._.camelCase);
+    },
+    oauthStore() {
+      return this.$store.getters.oauth || {};
+    },
+    oauthConfig() {
+      return this.$config.get('oauth', {});
+    },
     oauthTokenEndpoint() {
       return this.oauthConfig.token_endpoint || 'oauth/v2/token';
     },
     impersonateEndpoint() {
       return this.oauthConfig.impersonate_endpoint || 'api/private/impersonate';
     },
-    oauthTokenType: () => 'Bearer',
-    oauthStore() {
-      return this.$store.getters.oauth || {};
-    },
-    oauthConfig() {
-      return this.$config.get('oauth') || {};
-    },
   },
   data() {
     return {
+      pendingRefresh: false,
       cancelToken: null,
     };
   },
@@ -80,28 +83,28 @@ export default {
       }
       this.cancelToken = this.$http.CancelToken.source();
     },
-    publicRequest(url = '/', method = this.httpGet, data = {}, config = {}) {
+    publicRequest(url = '/', method = this.http.get, data = {}, config = {}) {
       const conf = this._.merge({ method, url, data }, config);
       conf.url = this.url(conf);
       return this.$http.request(conf).then(response => response.data);
     },
     get(url, data, config) {
-      return this.request(this.build(url, this.httpGet, data, config));
+      return this.request(this.build(url, this.http.get, data, config));
     },
     post(url, data, config) {
-      return this.request(this.build(url, this.httpPost, data, config));
+      return this.request(this.build(url, this.http.post, data, config));
     },
     put(url, data, config) {
-      return this.request(this.build(url, this.httpPut, data, config));
+      return this.request(this.build(url, this.http.put, data, config));
     },
     patch(url, data, config) {
-      return this.request(this.build(url, this.httpPatch, data, config));
+      return this.request(this.build(url, this.http.patch, data, config));
     },
     delete(url, data, config) {
-      return this.request(this.build(url, this.httpDelete, data, config));
+      return this.request(this.build(url, this.http.delete, data, config));
     },
     head(url, data, config) {
-      return this.request(this.build(url, this.httpHead, data, config));
+      return this.request(this.build(url, this.http.head, data, config));
     },
     redirect(uri = '/') {
       window.location.href = uri;
@@ -133,20 +136,30 @@ export default {
     },
     login(data, persistSession = true) {
       return this.oauth(this._.extend({
-        grant_type: 'password',
+        grant_type: this.oauthGrantTypes.password,
       }, data), persistSession);
     },
     refresh() {
-      return this.oauth({
-        grant_type: 'refresh_token',
-        refresh_token: this.oauthStore.refresh_token,
-      });
+      if (this.pendingRefresh) {
+        return new Promise((resolve) => {
+          this.pendingRefresh.push(resolve);
+        });
+      } else {
+        this.pendingRefresh = [];
+        return this.oauth({
+          grant_type: this.oauthGrantTypes.refreshToken,
+          refresh_token: this.oauthStore.refresh_token,
+        }).then(() => {
+          this.pendingRefresh.forEach(Function.prototype.call, Function.prototype.call);
+          this.pendingRefresh = false;
+        });
+      }
     },
     oauth(data, commit = true) {
-      return this.request(this.build(this.oauthTokenEndpoint, this.httpPost, this._.extend({
+      return this.request(this.build(this.oauthTokenEndpoint, this.http.post, this._.extend({
         client_id: this.oauthConfig.client_id,
         client_secret: this.oauthConfig.client_secret,
-      }, data), { commit })).then((response) => {
+      }, data))).then((response) => {
         response.expires_at = (response.expires_in * 1000) + moment();
         response.refresh_token_expires_at = (response.refresh_token_lifetime * 1000) + moment();
         if (commit) {
@@ -172,8 +185,8 @@ export default {
         config.headers = [];
       }
 
-      if (!this._.isEmpty(this.oauthStore)) {
-        if (!config.commit && this._.expired(this.oauthStore.expires_at)) {
+      if (!this._.isEmpty(this.oauthStore) && config.url.indexOf(this.oauthTokenEndpoint) === -1) {
+        if (this._.expired(this.oauthStore.expires_at)) {
           if (this._.expired(this.oauthStore.refresh_token_expires_at)) {
             this.unset('oauth');
             return this.redirect();
@@ -181,11 +194,9 @@ export default {
           return this.refresh().then(this.asyncRequest.bind(this, config));
         }
 
-        if (config.url.indexOf(this.oauthTokenEndpoint) === -1) {
-          config.headers = this._.extend({
-            Authorization: `${this.oauthTokenType} ${this.oauthStore.access_token}`,
-          }, config.headers);
-        }
+        config.headers = this._.extend({
+          Authorization: `${this.oauthTokenTypes.bearer} ${this.oauthStore.access_token}`,
+        }, config.headers);
       }
 
       if (config.stringify) {
@@ -196,7 +207,7 @@ export default {
       if (multiPart) {
         config.data = this.encode(config.data);
         config.headers['X-Http-Method-Override'] = config.method;
-        config.method = this.httpPost;
+        config.method = this.http.post;
       }
 
       config.cancelToken = this.cancelToken.token;
