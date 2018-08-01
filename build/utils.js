@@ -37,16 +37,11 @@ exports.cssLoaders = function (options) {
       })
     }
 
-    if (loader === 'sass') {
+    if (loader === 'sass' && config.sass_resources) {
       loaders.push({
         loader: 'sass-resources-loader',
         options: {
-          resources: (config.sass_resources || [
-            'node_modules/compass-mixins/lib/compass/functions/_lists.scss',
-            'node_modules/bootstrap/scss/bootstrap.scss'
-          ]).map(resource => {
-            return path.resolve(process.cwd(), resource)
-          })
+          resources: config.sass_resources.map(resource => path.resolve(process.cwd(), resource))
         }
       })
     }
