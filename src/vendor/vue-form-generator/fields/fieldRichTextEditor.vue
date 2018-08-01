@@ -36,7 +36,7 @@
           placeholder: '',
           disabled: false,
           customModules: [],
-          editorToolbar: VueEditor.data().modules.toolbar,
+          editorToolbar: null,
           editorOptions: {},
         }, this.schema.options);
       },
