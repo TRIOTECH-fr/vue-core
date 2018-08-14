@@ -12,13 +12,10 @@ exports.assetsPath = function (_path) {
   return path.posix.join(assetsSubDirectory, _path)
 }
 
-exports.cssLoaders = function (options) {
-  options = options || {}
-
+exports.cssLoaders = function (options = {}) {
   const cssLoader = {
     loader: 'css-loader',
     options: {
-      minimize: process.env.NODE_ENV === 'production',
       sourceMap: options.sourceMap
     }
   }
@@ -74,13 +71,13 @@ exports.cssLoaders = function (options) {
 exports.styleLoaders = function (options) {
   const output = []
   const loaders = exports.cssLoaders(options)
-  for (const extension in loaders) {
-    const loader = loaders[extension]
+  Object.entries(loaders).forEach((entry) => {
+    const [extension, loader] = entry
     output.push({
       test: new RegExp(`\\.${extension}$`),
       use: loader
     })
-  }
+  })
   return output
 }
 

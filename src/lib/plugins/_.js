@@ -45,4 +45,4 @@ _.mixin({
 
 Vue.set(Vue.prototype, '_', _);
 
-export default window._ = _;
+export default _;

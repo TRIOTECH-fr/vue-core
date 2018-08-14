@@ -1,12 +1,13 @@
-const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+// eslint-disable-next-line import/no-extraneous-dependencies
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin')
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const ImageminPlugin = require('imagemin-webpack-plugin').default
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const PrerenderSpaPlugin = require('prerender-spa-plugin')
 
@@ -47,6 +48,15 @@ const webpackConfig = merge(baseWebpackConfig, {
           }
         },
         extractComments: true
+      }),
+      new OptimizeCssnanoPlugin({
+        sourceMap: config.build.productionSourceMap,
+        cssnanoOptions: {
+          preset: 'default',
+          discardComments: {
+            removeAll: true
+          }
+        }
       })
     ]
   },
@@ -58,13 +68,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     // extract css into its own file
     new MiniCSSExtractPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css')
-    }),
-    // Compress extracted CSS. We are using this plugin so that possible
-    // duplicated CSS from different components can be deduped.
-    new OptimizeCSSAssetsPlugin({
-      cssProcessorOptions: {
-        safe: true
-      }
     }),
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
@@ -95,6 +98,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       }
     ]),
+    new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i }),
     // service worker caching
     new SWPrecacheWebpackPlugin({
       cacheId: 'vue-core',

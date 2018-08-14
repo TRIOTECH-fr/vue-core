@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import _ from 'lodash';
+import env from './env';
 import autoload from '../core/autoload';
-import env from '@triotech/vue-core/src/lib/plugins/env';
 
 Vue.use(VueI18n);
 

@@ -1,4 +1,4 @@
-import PaginationLinks from '../components/PaginationLinks';
+import PaginationLinks from '../components/PaginationLinks.vue';
 
 export default {
   components: {

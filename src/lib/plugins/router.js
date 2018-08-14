@@ -34,7 +34,7 @@ const Router = new VueRouter({
 Router.beforeEach((to, from, next) => {
   const vm = Router.app;
   let push = null;
-  
+
   if (vm.$ajax) {
     vm.$ajax.cancel('route:changed');
   }

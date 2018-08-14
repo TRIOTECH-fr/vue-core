@@ -1,3 +1,3 @@
-import VueSlider from 'vue-slider-component'
+import VueSlider from 'vue-slider-component';
 
 export default VueSlider;

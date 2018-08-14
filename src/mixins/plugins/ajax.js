@@ -144,16 +144,16 @@ export default {
         return new Promise((resolve) => {
           this.pendingRefresh.push(resolve);
         });
-      } else {
-        this.pendingRefresh = [];
-        return this.oauth({
-          grant_type: this.oauthGrantTypes.refreshToken,
-          refresh_token: this.oauthStore.refresh_token,
-        }).then(() => {
-          this.pendingRefresh.forEach(Function.prototype.call, Function.prototype.call);
-          this.pendingRefresh = false;
-        });
       }
+
+      this.pendingRefresh = [];
+      return this.oauth({
+        grant_type: this.oauthGrantTypes.refreshToken,
+        refresh_token: this.oauthStore.refresh_token,
+      }).then(() => {
+        this.pendingRefresh.forEach(Function.prototype.call, Function.prototype.call);
+        this.pendingRefresh = false;
+      });
     },
     oauth(data, commit = true) {
       return this.request(this.build(this.oauthTokenEndpoint, this.http.post, this._.extend({

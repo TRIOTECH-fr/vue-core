@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
+// eslint-disable-next-line
 import App from '@/App';
 import _ from '../plugins/_';
 import I18n from '../plugins/i18n';
