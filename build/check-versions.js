@@ -2,8 +2,8 @@
 
 const chalk = require('chalk')
 const semver = require('semver')
-const packageConfig = require('../package.json')
 const shell = require('shelljs')
+const packageConfig = require('../package.json')
 
 function exec (cmd) {
   return require('child_process').execSync(cmd).toString().trim()
@@ -17,7 +17,13 @@ const versionRequirements = [
   }
 ]
 
-if (shell.which('npm')) {
+if (shell.which('yarn')) {
+  versionRequirements.push({
+    name: 'yarn',
+    currentVersion: exec('yarn --version'),
+    versionRequirement: packageConfig.engines.yarn
+  })
+} else if (shell.which('npm')) {
   versionRequirements.push({
     name: 'npm',
     currentVersion: exec('npm --version'),
