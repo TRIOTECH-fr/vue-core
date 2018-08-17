@@ -82,7 +82,7 @@
     "ora": "^3.0.0",
     "phantomjs-prebuilt": "^2.1.16",
     "popper.js": "^1.14.3",
-    "prerender-spa-plugin": "^3.0.0",
+    "prerender-spa-plugin": "https://github.com/qkdreyer/prerender-spa-plugin.git",
     "pug": "^2.0.3",
     "qs": "^6.5.1",
     "raven-js": "^3.24.1",

@@ -8784,9 +8784,9 @@ prepend-http@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-2.0.0.tgz#e92434bfa5ea8c19f41cdfd401d741a3c819d897"
 
-prerender-spa-plugin@^3.0.0:
+"prerender-spa-plugin@https://github.com/qkdreyer/prerender-spa-plugin.git":
   version "3.3.0"
-  resolved "https://registry.yarnpkg.com/prerender-spa-plugin/-/prerender-spa-plugin-3.3.0.tgz#9327fa7af416a3e9a49d0ef7ed27bbcc72c14740"
+  resolved "https://github.com/qkdreyer/prerender-spa-plugin.git#d8904555b5abb0813b6ded0a14120b944554f3cb"
   dependencies:
     "@prerenderer/prerenderer" "^0.7.2"
     "@prerenderer/renderer-puppeteer" "^0.2.0"
