@@ -11359,8 +11359,8 @@ void-elements@^2.0.0, void-elements@^2.0.1:
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
 
 vue-analytics@^5.10.2:
-  version "5.12.3"
-  resolved "https://registry.yarnpkg.com/vue-analytics/-/vue-analytics-5.12.3.tgz#599bd05f9e69efd51645e9e74add81d8a26a88ea"
+  version "5.14.0"
+  resolved "https://registry.yarnpkg.com/vue-analytics/-/vue-analytics-5.14.0.tgz#b1936d72859893d06e6f0f459c94e29f5d681379"
 
 vue-async-computed@^3.3.1:
   version "3.4.1"
