@@ -1,6 +1,6 @@
-@import '~bootstrap/scss/_functions.scss';
-@import '~bootstrap/scss/_variables.scss';
-@import '~bootstrap/scss/mixins/_breakpoints.scss';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins/breakpoints';
 
 // mixins
 // - media-breakpoint-up
@@ -9,8 +9,8 @@
 // - media-breakpoint-only
 
 // arguments
-// - xs
-// - sm
-// - md
-// - lg
-// - xl
+// - xs <576px
+// - sm ≥576px
+// - md ≥768px
+// - lg ≥992px
+// - xl ≥1200px
