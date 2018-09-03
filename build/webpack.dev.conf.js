@@ -37,7 +37,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       poll: process.env.POLL || config.dev.poll
     },
     historyApiFallback: {
-      index: config.dev.assetsPublicPath
+      index: config.dev.assetsPublicPath,
+      disableDotRule: true
     }
   },
   plugins: [
