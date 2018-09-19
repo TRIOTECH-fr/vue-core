@@ -166,5 +166,10 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "devDependencies": {
+    "@commitlint/cli": "^7.1.2",
+    "@commitlint/config-conventional": "^7.1.2",
+    "@commitlint/prompt-cli": "^7.1.2"
+  }
 }
