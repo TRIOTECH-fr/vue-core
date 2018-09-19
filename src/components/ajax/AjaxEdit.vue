@@ -1,17 +1,17 @@
 <template>
   <div v-if="loading" class="text-center mb-3">
     <slot name="loader">
-      <i class="ti ti-2x ti-spin ti-refresh"/>
+      <i class="ti ti-2x ti-spin ti-refresh" />
     </slot>
   </div>
   <form v-else :id="`form-edit-${formIdentifier}`" @submit.prevent="submit">
     <template v-if="schema.fields.length > 0">
       <vue-form-generator
+        :key="formUniqueId"
         :schema="schema"
         :model="model"
         :options="{ validationAfterLoad: true, validationAfterChanged: true }"
         :class="formClass"
-        :key="formUniqueId"
       />
       <b-row>
         <b-col>
@@ -20,13 +20,14 @@
       </b-row>
     </template>
     <div v-else class="text-center">
-      <i class="ti ti-2x ti-spin ti-refresh"/>
+      <i class="ti ti-2x ti-spin ti-refresh" />
     </div>
   </form>
 </template>
 
 <script>
   import VueFormGenerator from '@triotech/vue-core/src/vendor/vue-form-generator';
+  import AbstractAjax from '@triotech/vue-core/src/mixins/AbstractAjax';
 
   const Identity = arg => arg;
 
@@ -35,6 +36,9 @@
     components: {
       'vue-form-generator': VueFormGenerator.component,
     },
+    mixins: [
+      AbstractAjax,
+    ],
     props: {
       additionnalRoute: {
         type: String,
@@ -237,66 +241,36 @@
           _.extend(submitData, extraModel);
         }
         if (!_.isEmpty(submitData)) {
-          await this.$ajax.patch(this.editRouteFunc(), this.serializer(submitData), this.config)
-            .then((data) => {
-              if (data.status) {
-                this.updatePreviousModel();
-                this.$notify({
-                  title: this.$t(`flashes.${this.name}.edit_title`),
-                  text: this.$t(`flashes.${this.name}.edit`),
-                  type: 'success',
+          await this.$ajax.patch(this.editRouteFunc(), this.serializer(submitData), this.config).then((data) => {
+            if (data.status) {
+              this.updatePreviousModel();
+              this.$notify({
+                title: this.$t(`flashes.${this.name}.edit_title`),
+                text: this.$t(`flashes.${this.name}.edit`),
+                type: 'success',
+              });
+              if (this.closeModal) {
+                this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
+              }
+              this.$bus.$emit(`t-event.edit-submit.${this.name}.success`);
+            } else {
+              this.$notify({
+                title: this.$t(`flashes.${this.name}.edit_title`),
+                text: this.$t(`flashes.${this.name}.not_edit`),
+                type: 'error',
+              });
+            }
+
+            if (this.refreshAjaxIndex) {
+              if (this._.isArray(this.refAjaxIndex)) {
+                this._.each(this.refAjaxIndex, (refAjaxIndex) => {
+                  this.$bus.$emit(`t-event.ajax-index.${refAjaxIndex}.refresh`);
                 });
-                if (this.closeModal) {
-                  this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
-                }
-                this.$bus.$emit(`t-event.edit-submit.${this.name}.success`);
               } else {
-                this.$notify({
-                  title: this.$t(`flashes.${this.name}.edit_title`),
-                  text: this.$t(`flashes.${this.name}.not_edit`),
-                  type: 'error',
-                });
+                this.$bus.$emit(`t-event.ajax-index.${this.refAjaxIndex}.refresh`);
               }
-
-              if (this.refreshAjaxIndex) {
-                if (this._.isArray(this.refAjaxIndex)) {
-                  this._.each(this.refAjaxIndex, (refAjaxIndex) => {
-                    this.$bus.$emit(`t-event.ajax-index.${refAjaxIndex}.refresh`);
-                  });
-                } else {
-                  this.$bus.$emit(`t-event.ajax-index.${this.refAjaxIndex}.refresh`);
-                }
-              }
-            }, (data) => {
-              if (data.response.data.code === 400) {
-                const errors = _.reduce(data.response.data.errors.children, (carry, value, key) => {
-                  if (value.errors) {
-                    carry[key] = value.errors;
-                  }
-                  return carry;
-                }, {});
-
-                let flashTitle = '';
-                let flashText = '';
-
-                _.each(errors, (errorFields, field) => {
-                  flashTitle = this.$t(`flashes.${this.name}.error.${field}.title`);
-                  flashText = this.$t(`flashes.${this.name}.error.${field}.text`);
-                });
-
-                this.$notify({
-                  title: flashTitle,
-                  text: flashText,
-                  type: 'warning',
-                });
-              } else if (data.response.data.error.code === 500) {
-                this.$notify({
-                  title: this.$t(`flashes.${this.name}.error_500_title`),
-                  text: this.$t(`flashes.${this.name}.error_500`),
-                  type: 'error',
-                });
-              }
-            });
+            }
+          }).catch(this.catchHandler);
         }
         return false;
       },

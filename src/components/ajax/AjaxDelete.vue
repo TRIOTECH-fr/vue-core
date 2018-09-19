@@ -12,12 +12,16 @@
 
 <script>
   import VueFormGenerator from '@triotech/vue-core/src/vendor/vue-form-generator';
+  import AbstractAjax from '@triotech/vue-core/src/mixins/AbstractAjax';
 
   export default {
     name: 'AjaxDeleteComponent',
     components: {
       'vue-form-generator': VueFormGenerator.component,
     },
+    mixins: [
+      AbstractAjax,
+    ],
     props: {
       id: {
         type: [Number, String],
@@ -120,42 +124,34 @@
         });
       },
       async submit() {
-        await this.$ajax.delete(`${this.getUri}/${this.getId}/${this.action}`, this.getId)
-          .then((data) => {
-            if (data.status) {
-              this.$notify({
-                title: this.$t(`flashes.${this.name}.delete_title`),
-                text: this.$t(`flashes.${this.name}.delete`),
-                type: 'success',
-              });
-              this.$bus.$emit(`t-event.ajax-delete.${this.name}.success`);
-            } else {
-              this.$notify({
-                title: this.$t(`flashes.${this.name}.delete_title`),
-                text: this.$t(`flashes.${this.name}.not_delete`),
-                type: 'error',
-              });
-              this.$bus.$emit(`t-event.ajax-delete.${this.name}.error`);
-            }
+        await this.$ajax.delete(`${this.getUri}/${this.getId}/${this.action}`, this.getId).then((data) => {
+          if (data.status) {
+            this.$notify({
+              title: this.$t(`flashes.${this.name}.delete_title`),
+              text: this.$t(`flashes.${this.name}.delete`),
+              type: 'success',
+            });
+            this.$bus.$emit(`t-event.ajax-delete.${this.name}.success`);
+          } else {
+            this.$notify({
+              title: this.$t(`flashes.${this.name}.delete_title`),
+              text: this.$t(`flashes.${this.name}.not_delete`),
+              type: 'error',
+            });
+            this.$bus.$emit(`t-event.ajax-delete.${this.name}.error`);
+          }
 
-            if (this.refreshAjaxIndex) {
-              if (this._.isArray(this.refAjaxIndex)) {
-                this._.each(this.refAjaxIndex, (refAjaxIndex) => {
-                  this.$bus.$emit(`t-event.ajax-index.${refAjaxIndex}.refresh`);
-                });
-              } else {
-                this.$bus.$emit(`t-event.ajax-index.${this.refAjaxIndex}.refresh`);
-              }
-            }
-          }, (errors) => {
-            if (errors.response.status === 400) {
-              this.$notify({
-                title: this.$t(`flashes.${this.name}.request_error_title`),
-                text: errors.response.data.errors.errors[0],
-                type: 'warning',
+          if (this.refreshAjaxIndex) {
+            if (this._.isArray(this.refAjaxIndex)) {
+              this._.each(this.refAjaxIndex, (refAjaxIndex) => {
+                this.$bus.$emit(`t-event.ajax-index.${refAjaxIndex}.refresh`);
               });
+            } else {
+              this.$bus.$emit(`t-event.ajax-index.${this.refAjaxIndex}.refresh`);
             }
-          });
+          }
+        }).catch(this.catchHandler);
+
         if (this.closeModal) {
           this.$bus.$emit(`t-event.t-modal.${this.refModal}.close`);
         }
@@ -167,4 +163,3 @@
 
 <style lang="scss" scoped>
 </style>
-
