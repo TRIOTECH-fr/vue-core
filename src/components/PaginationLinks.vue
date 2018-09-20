@@ -94,7 +94,7 @@
           to = { to }
         }
 
-        const query = this.$route.query;
+        const query = this._.cloneDeep(this.$route.query);
         query.page = page;
         return this._.merge({}, to, { query });
       },
