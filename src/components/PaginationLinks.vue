@@ -94,7 +94,9 @@
           to = { to }
         }
 
-        return this._.merge({}, to, { query: { page } });
+        const query = this.$route.query;
+        query.page = page;
+        return this._.merge({}, to, { query });
       },
     },
   };
