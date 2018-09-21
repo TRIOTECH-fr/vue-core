@@ -35,8 +35,6 @@
   import VueFormGenerator from '@triotech/vue-core/src/vendor/vue-form-generator';
   import AbstractAjax from '@triotech/vue-core/src/mixins/AbstractAjax';
 
-  const Identity = arg => arg;
-
   export default {
     name: 'AjaxNewComponent',
     components: {
@@ -118,7 +116,7 @@
       },
       serializer: {
         type: Function,
-        default: Identity,
+        default: _.identity,
       },
       formId: {
         type: [Number, String],
