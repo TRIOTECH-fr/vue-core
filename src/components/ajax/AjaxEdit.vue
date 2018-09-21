@@ -114,6 +114,10 @@
         type: Function,
         default: _.identity,
       },
+      unserializer: {
+        type: Function,
+        default: _.identity,
+      },
       formId: {
         type: [Number, String],
         default: null,
@@ -222,7 +226,7 @@
           data.entity.file = data.entity.file_name;
         }
 
-        this.$set(this, 'model', _.clearModelForForm(data.entity, data.form, this.defaultModelValues || {}));
+        this.$set(this, 'model', _.clearModelForForm(this.unserializer(data.entity), data.form, this.defaultModelValues || {}));
         this.updatePreviousModel();
         this.loading = false;
 
