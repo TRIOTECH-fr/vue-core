@@ -10,8 +10,7 @@
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
-    "commitmsg": "commitlint -E GIT_PARAMS"
+    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
     "@babel/core": "^7.1.0",
@@ -70,7 +69,7 @@
     "friendly-errors-webpack-plugin": "^1.7.0",
     "hard-source-webpack-plugin": "^0.12.0",
     "html-webpack-plugin": "^3.2.0",
-    "husky": "^0.14.3",
+    "husky": "^1.0.0-rc.15",
     "icomoon-cli": "^1.3.0",
     "imagemin-webpack-plugin": "^2.2.0",
     "inject-loader": "^4.0.1",
