@@ -41,7 +41,7 @@ _.mixin({
   ...transforms,
   ...types,
   Y,
-});
+}).noConflict();
 
 Vue.set(Vue.prototype, '_', _);
 
