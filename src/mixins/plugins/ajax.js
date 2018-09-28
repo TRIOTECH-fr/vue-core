@@ -1,4 +1,3 @@
-import moment from 'moment';
 import QS from 'qs';
 import Router from '../../lib/plugins/router';
 
@@ -109,6 +108,9 @@ export default {
     redirect(uri = '/') {
       window.location.href = uri;
     },
+    expires(delay) {
+      return delay * 1000 + this.$moment() || Number.MAX_SAFE_INTEGER;
+    },
     impersonate(userEmail = null, routeRedirect = null) {
       if (this.impersonateEndpoint === false) {
         return false;
@@ -121,17 +123,19 @@ export default {
       };
 
       if (!userEmail) {
-        const oauth = JSON.parse(JSON.stringify(this.$store.getters.get.oauthUsurpator));
+        const { oauthUsurpator } = this.get();
+        const oauth = this._.clone(oauthUsurpator);
         this.set({ oauth, oauthUsurpator: null });
         return Promise.resolve().then(redirect);
       }
 
       return this.get(`${this.impersonateEndpoint}/${userEmail}`).then((response) => {
-        response.expires_at = (response.expires_in * 1000) + moment();
-        response.refresh_token_expires_at = (response.refresh_token_lifetime * 1000) + moment();
+        response.expires_at = this.expires(response.expires_in);
+        response.refresh_token_expires_at = this.expires(response.refresh_token_lifetime);
 
-        const oauth = JSON.parse(JSON.stringify(this.$store.getters.get.oauth));
-        this.set({ oauth: response, oauthUsurpator: oauth });
+        const { oauth } = this.get();
+        const oauthUsurpator = this._.clone(oauth);
+        this.set({ oauth: response, oauthUsurpator });
       }).then(redirect);
     },
     login(data, persistSession = true) {
@@ -160,8 +164,8 @@ export default {
         client_id: this.oauthConfig.client_id,
         client_secret: this.oauthConfig.client_secret,
       }, data))).then((response) => {
-        response.expires_at = (response.expires_in * 1000) + moment();
-        response.refresh_token_expires_at = (response.refresh_token_lifetime * 1000) + moment();
+        response.expires_at = this.expires(response.expires_in);
+        response.refresh_token_expires_at = this.expires(response.refresh_token_lifetime);
         if (commit) {
           this.set({ oauth: response });
         } else {

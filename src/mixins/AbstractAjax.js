@@ -82,7 +82,7 @@ export default {
       const { method } = this;
       const fn = this.$ajax[method];
 
-      if (!this._.isFunction(fn) || (method !== this.$ajax.httpGet.toLowerCase() && this._.isEmpty(ajaxModel))) {
+      if (!this._.isFunction(fn) || (method !== this.$ajax.http.get.toLowerCase() && this._.isEmpty(ajaxModel))) {
         return false;
       }
 

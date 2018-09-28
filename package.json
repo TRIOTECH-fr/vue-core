@@ -2,7 +2,10 @@
   "name": "@triotech/vue-core",
   "version": "1.0.0",
   "description": "Triotech Vue Core",
-  "author": "qkdreyer <quentin.dreyer@triotech.fr>",
+  "author": "Triotech <contact@triotech.fr> (https://www.triotech.fr)",
+  "contributors": [
+    "qkdreyer <quentin.dreyer@triotech.fr>"
+  ],
   "license": "EUPL-1.2",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
@@ -32,6 +35,7 @@
     "@commitlint/config-conventional": "^7.1.2",
     "@commitlint/prompt-cli": "^7.1.2",
     "@intervolga/optimize-cssnano-plugin": "^1.0.6",
+    "@triotech/commitlint": "git+https://git.triotech.fr/composer/commitlint.git",
     "autoprefixer": "^9.1.1",
     "axios": "^0.18.0",
     "babel-eslint": "^9.0.0",
