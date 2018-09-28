@@ -13513,10 +13513,10 @@ vue-meta@^1.5.0:
     lodash.isplainobject "^4.0.6"
     object-assign "^4.1.1"
 
-vue-moment@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/vue-moment/-/vue-moment-3.2.0.tgz#28cd2b313831ae83953f646ac4785a2cc724e412"
-  integrity sha1-KM0rMTgxroOVP2RqxHhaLMck5BI=
+vue-moment@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/vue-moment/-/vue-moment-4.0.0.tgz#20809d1e7d7fca63d556fb8d008b95993d32f5ea"
+  integrity sha512-lNkEPuA3i3A4q4TDSwOXoRF4Y2vHHdaTOSvpPyGgxoFQP8n4sUh6jU5aJj3FIMlXo5UaHLPIz5hvvpvYx9Wj0w==
   dependencies:
     moment "^2.11.1"
 
