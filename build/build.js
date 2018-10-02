@@ -3,7 +3,10 @@
 require('./check-versions')()
 
 process.env.NODE_ENV = 'production'
-process.on('unhandledRejection', console.log.bind(console))
+process.on('unhandledRejection', (err) => {
+  console.error(err.name, ':', err.message)
+  process.exit(1)
+})
 
 const ora = require('ora')
 const rm = require('rimraf')
