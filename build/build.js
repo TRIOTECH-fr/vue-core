@@ -3,6 +3,10 @@
 require('./check-versions')()
 
 process.env.NODE_ENV = 'production'
+process.on('unhandledRejection', (err) => {
+  console.error(err.name, ':', err.message)
+  process.exit(1)
+})
 
 const ora = require('ora')
 const rm = require('rimraf')
@@ -33,7 +37,7 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), (err) =>
       '  Tip: built files are meant to be served over an HTTP server.\n' +
       '  Opening index.html over file:// won\'t work.\n'
     ))
-    
+
     process.exit(stats.compilation.errors && stats.compilation.errors.length)
   })
 })
