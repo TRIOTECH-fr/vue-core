@@ -2,15 +2,15 @@ import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import _ from 'lodash';
 import Env from './env';
-import autoload from '../core/autoload';
+import Autoload from '../helpers/autoload';
 
 Vue.use(VueI18n);
 
 const I18n = new VueI18n({
   locale: 'fr',
   messages: _.merge(
-    autoload(require.context('json-loader!yaml-loader!../../translations', false, /\.yml$/)),
-    autoload(require.context('json-loader!yaml-loader!@/translations', false, /\.yml$/)),
+    Autoload(require.context('json-loader!yaml-loader!../translations', false, /\.yml$/)),
+    Autoload(require.context('json-loader!yaml-loader!@/translations', false, /\.yml$/)),
   ),
   silentTranslationWarn: Env.prod,
 });
@@ -20,7 +20,7 @@ const I18n = new VueI18n({
 
 // TODO replace vue-i18n with vuex-i18n (https://github.com/dkfbasel/vuex-i18n)
 // import VueI18n from 'vuex-i18n';
-// import Store from '@/lib/core/Store';
+// import Store from './store';
 // Vue.use(VueXI18n.plugin, Store, {
 //   onTranslationNotFound: (locale, key) => {
 //     console.warn(`i18nx :: Key '${key}' not found for locale '${locale}'`);

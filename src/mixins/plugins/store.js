@@ -1,8 +1,10 @@
 import Vue from 'vue';
 import VuexPersistedState from 'vuex-persistedstate';
 import VuexCache from 'vuex-cache';
-import { sync } from 'vuex-router-sync';
-import Router from '../../lib/plugins/router';
+import {
+  sync
+} from 'vuex-router-sync';
+import Router from '../../plugins/router';
 
 export default {
   state: {
@@ -53,16 +55,24 @@ export default {
     },
   },
   actions: {
-    set({ commit }, data) {
+    set({
+      commit
+    }, data) {
       commit('set', data);
     },
-    add({ commit }, data) {
+    add({
+      commit
+    }, data) {
       commit('add', data);
     },
-    unset({ commit }, data) {
+    unset({
+      commit
+    }, data) {
       commit('unset', data);
     },
-    reset({ commit }) {
+    reset({
+      commit
+    }) {
       commit('unset');
     },
   },

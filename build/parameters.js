@@ -3,7 +3,7 @@ const yaml = require('js-yaml')
 const _ = require('lodash')
 
 // TODO SyntaxError: Unexpected token export
-// const Y = require('../src/lib/helper/y')
+// const Y = require('../src/helpers/y')
 
 const Y = f => (...args) => f(Y(f))(...args)
 const parametersDistPath = './config/parameters.yml.dist'

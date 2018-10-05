@@ -15,7 +15,9 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   mode: 'development',
   cache: true,
   module: {
-    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
+    rules: utils.styleLoaders({
+      sourceMap: config.dev.cssSourceMap
+    })
   },
   // cheap-module-eval-source-map is faster for development
   devtool: '#cheap-module-source-map',
@@ -27,9 +29,10 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     port: process.env.PORT || config.dev.port,
     disableHostCheck: true,
     open: config.dev.autoOpenBrowser,
-    overlay: config.dev.errorOverlay
-      ? { warnings: false, errors: true }
-      : false,
+    overlay: config.dev.errorOverlay ? {
+      warnings: false,
+      errors: true
+    } : false,
     publicPath: config.dev.assetsPublicPath,
     proxy: config.dev.proxyTable,
     quiet: true, // necessary for FriendlyErrorsPlugin
@@ -78,9 +81,8 @@ module.exports = new Promise((resolve, reject) => {
         compilationSuccessInfo: {
           messages: [`Your application is running here: http://${require(path.join(process.cwd(), 'package.json')).name}.localhost:${port}`]
         },
-        onErrors: config.dev.notifyOnErrors
-          ? utils.createNotifierCallback()
-          : undefined
+        onErrors: config.dev.notifyOnErrors ?
+          utils.createNotifierCallback() : console.log.bind(console)
       }))
 
       resolve(devWebpackConfig)

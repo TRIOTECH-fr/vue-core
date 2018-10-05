@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import StoreMixin from '../../mixins/plugins/store';
+import StoreMixin from '../mixins/plugins/store';
 
 Vue.use(Vuex);
 

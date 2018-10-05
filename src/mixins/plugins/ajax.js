@@ -1,5 +1,5 @@
 import QS from 'qs';
-import Router from '../../lib/plugins/router';
+import Router from '../../plugins/router';
 
 export default {
   router: Router,
@@ -74,7 +74,11 @@ export default {
       return this;
     },
     build(url, method, data = {}, config = {}) {
-      return this._.extend(config, { url, method, data });
+      return this._.extend(config, {
+        url,
+        method,
+        data
+      });
     },
     cancel(message) {
       if (this.cancelToken) {
@@ -83,7 +87,11 @@ export default {
       this.cancelToken = this.$http.CancelToken.source();
     },
     publicRequest(url = '/', method = this.http.get, data = {}, config = {}) {
-      const conf = this._.merge({ method, url, data }, config);
+      const conf = this._.merge({
+        method,
+        url,
+        data
+      }, config);
       conf.url = this.url(conf);
       return this.$http.request(conf).then(response => response.data);
     },
@@ -123,9 +131,14 @@ export default {
       };
 
       if (!userEmail) {
-        const { oauthUsurpator } = this.get();
+        const {
+          oauthUsurpator
+        } = this.get();
         const oauth = this._.clone(oauthUsurpator);
-        this.set({ oauth, oauthUsurpator: null });
+        this.set({
+          oauth,
+          oauthUsurpator: null
+        });
         return Promise.resolve().then(redirect);
       }
 
@@ -133,9 +146,14 @@ export default {
         response.expires_at = this.expires(response.expires_in);
         response.refresh_token_expires_at = this.expires(response.refresh_token_lifetime);
 
-        const { oauth } = this.get();
+        const {
+          oauth
+        } = this.get();
         const oauthUsurpator = this._.clone(oauth);
-        this.set({ oauth: response, oauthUsurpator });
+        this.set({
+          oauth: response,
+          oauthUsurpator
+        });
       }).then(redirect);
     },
     login(data, persistSession = true) {
@@ -167,7 +185,9 @@ export default {
         response.expires_at = this.expires(response.expires_in);
         response.refresh_token_expires_at = this.expires(response.refresh_token_lifetime);
         if (commit) {
-          this.set({ oauth: response });
+          this.set({
+            oauth: response
+          });
         } else {
           // TODO handle rememberMe
           // this.$store._mutations.set[0](this.get(), data)
@@ -217,7 +237,9 @@ export default {
       config.cancelToken = this.cancelToken.token;
 
       return this.$http.request(config).then((res) => {
-        const { data } = res;
+        const {
+          data
+        } = res;
         this.$store.data = data;
         this.$store[config.url] = data;
         return data;

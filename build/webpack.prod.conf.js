@@ -18,9 +18,9 @@ const baseWebpackConfig = require('./webpack.base.conf')
 const config = require('./config')
 // const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 
-const env = process.env.NODE_ENV === 'testing'
-  ? require('../config/test.env')
-  : require('../config/prod.env')
+const env = process.env.NODE_ENV === 'testing' ?
+  require('../config/test.env') :
+  require('../config/prod.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
@@ -73,9 +73,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: process.env.NODE_ENV === 'testing'
-        ? 'index.html'
-        : config.build.index,
+      filename: process.env.NODE_ENV === 'testing' ?
+        'index.html' : config.build.index,
       template: 'index.html',
       inject: true,
       minify: {
@@ -91,14 +90,14 @@ const webpackConfig = merge(baseWebpackConfig, {
         './service-worker-prod.js'))}</script>`
     }),
     // copy custom static assets
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(process.cwd(), 'static'),
-        to: config.build.assetsSubDirectory,
-        ignore: ['.*']
-      }
-    ]),
-    new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i }),
+    new CopyWebpackPlugin([{
+      from: path.resolve(process.cwd(), 'static'),
+      to: config.build.assetsSubDirectory,
+      ignore: ['.*']
+    }]),
+    new ImageminPlugin({
+      test: /\.(jpe?g|png|gif|svg)$/i
+    }),
     // service worker caching
     new SWPrecacheWebpackPlugin({
       cacheId: 'vue-core',
@@ -141,7 +140,9 @@ if (config.build.productionGzip) {
 }
 
 if (config.build.bundleAnalyzerReport) {
-  const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+  const {
+    BundleAnalyzerPlugin
+  } = require('webpack-bundle-analyzer')
   webpackConfig.plugins.push(new BundleAnalyzerPlugin())
 }
 

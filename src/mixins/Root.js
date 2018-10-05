@@ -1,19 +1,24 @@
 import Vue from 'vue';
-import { mapActions, mapGetters } from 'vuex';
+import {
+  mapActions,
+  mapGetters
+} from 'vuex';
 // eslint-disable-next-line
 import App from '@/App';
 import _ from '../plugins/_';
 import I18n from '../plugins/i18n';
 import Router from '../plugins/router';
 import Store from '../plugins/store';
-import autoload from './autoload';
+import Autoload from '../helpers/autoload';
 
 Vue.config.performance = true;
 Vue.config.productionTip = false;
 
 Vue.mixin({
   metaInfo() {
-    const { name } = this.$options;
+    const {
+      name
+    } = this.$options;
     let metaInfo = {};
     const regex = new RegExp(/(index|show|edit|delete)?page$/i);
     if (name && name.match(regex)) {
@@ -35,24 +40,17 @@ Vue.mixin({
   },
 });
 
-autoload(require.context('../plugins', false, /\.js$/));
+Autoload(require.context('../plugins', false, /\.js$/));
 
-export default new Vue({
-  methods: {
-    run(options = {}) {
-      const app = new Vue({
-        el: '#app',
-        i18n: I18n,
-        router: Router,
-        store: Store,
-        render: h => h(App),
-        ...options,
-      });
-      if (this.$env.dev || window.cordova) {
-        window.app = app;
-      }
-      return app;
-    },
-    autoload,
+export default {
+  el: '#app',
+  i18n: I18n,
+  router: Router,
+  store: Store,
+  render: h => h(App),
+  mounted() {
+    if (this._.get(window, 'app.constructor.name') === 'HTMLDivElement' && (this.$env.dev || window.cordova)) {
+      window.app = this;
+    }
   },
-});
+};
