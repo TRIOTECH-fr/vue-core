@@ -15,7 +15,7 @@ const Entity = {
     list(options = {}) {
       return this.exec('list', null, {}, options);
     },
-    create(data = {}, options = {}, parameters = {}) {
+    create(data = {}, options = {}, parameters = null) {
       return this.exec('create', parameters, data, options);
     },
     read(parameters = {}, options = {}) {
