@@ -12,22 +12,25 @@ const Entity = {
     }),
   },
   methods: {
-    list(options = {}) {
-      return this.exec('list', null, {}, options);
+    list(config = {}) {
+      return this.exec('list', config);
     },
-    create(data = {}, options = {}, parameters = null) {
-      return this.exec('create', parameters, data, options);
+    create(config = {}) {
+      return this.exec('create', config);
     },
-    read(parameters = {}, options = {}) {
-      return this.exec('read', parameters, {}, options);
+    read(config = {}) {
+      return this.exec('read', config);
     },
-    update(parameters = {}, data = {}, options = {}) {
-      return this.exec('update', parameters, data, options);
+    update(config = {}) {
+      return this.exec('update', config);
     },
-    delete(parameters = {}, options = {}) {
-      return this.exec('delete', parameters, {}, options);
+    delete(config = {}) {
+      return this.exec('delete', config);
     },
-    exec(type = null, parameters = {}, data = {}, options = {}) {
+    exec(type = null, config = {}) {
+      const parameters = config.parameters || null
+      const data = config.data || {};
+      const options = config.options || {};
       return new Promise(async (resolve, reject) => {
         // eslint-disable-next-line no-underscore-dangle
         if (this.options._isVue || options._isVue) {
@@ -125,18 +128,18 @@ const Entity = {
         return resolve(response);
       });
     },
-    custom(method, config) {
-      if (!config.overridenMethod) {
+    custom(method, custom) {
+      if (!custom.overridenMethod) {
         // eslint-disable-next-line no-console
         console.warn('missing config.overridenMethod');
       }
-      this[method] = (arg1, arg2, arg3) => {
-        if (config.uri) {
-          this.options.uri = config.uri;
-        } else if (config.appendUri) {
-          this.options.uri = `${this.options.uri}/${config.appendUri}`;
+      this[method] = (config = {}) => {
+        if (custom.uri) {
+          this.options.uri = custom.uri;
+        } else if (custom.appendUri) {
+          this.options.uri = `${this.options.uri}/${custom.appendUri}`;
         }
-        return this.exec(config.overridenMethod, arg1, arg2, arg3);
+        return this.exec(custom.overridenMethod, config);
       };
     },
     compileURI(parameters = {}, options = {}) {
