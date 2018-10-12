@@ -134,10 +134,13 @@ const Entity = {
         console.warn('missing config.overridenMethod');
       }
       this[method] = (config = {}) => {
+        if (!config.options) {
+          config.options = {};
+        }
         if (custom.uri) {
-          this.options.uri = custom.uri;
+          config.options.uri = custom.uri;
         } else if (custom.appendUri) {
-          this.options.uri = `${this.options.uri}/${custom.appendUri}`;
+          config.options.uri = `${this.options.uri}/${custom.appendUri}`;
         }
         return this.exec(custom.overridenMethod, config);
       };
