@@ -125,6 +125,20 @@ const Entity = {
         return resolve(response);
       });
     },
+    custom(method, config) {
+      if (!config.overridenMethod) {
+        // eslint-disable-next-line no-console
+        console.warn('missing config.overridenMethod');
+      }
+      this[method] = (arg1, arg2, arg3) => {
+        if (config.uri) {
+          this.options.uri = config.uri;
+        } else if (config.appendUri) {
+          this.options.uri = `${this.options.uri}/${config.appendUri}`;
+        }
+        return this.exec(config.overridenMethod, arg1, arg2, arg3);
+      };
+    },
     compileURI(parameters = {}, options = {}) {
       const {
         uri,
