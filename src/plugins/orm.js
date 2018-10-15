@@ -83,6 +83,9 @@ const Entity = {
         let response = null;
         try {
           response = await fn.call(this, compiledURI, data, axios);
+          if (!response) {
+            throw 'Invalid response';
+          }
         } catch (error) {
           return reject(error);
         }
