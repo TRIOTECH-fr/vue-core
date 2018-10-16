@@ -61,11 +61,7 @@ const FileSystem = new Vue({
         this.root().then((dirEntry) => {
           dirEntry.getFile(name, {}, (fileEntry) => {
             fileEntry.file((file) => {
-              if (file.size === 0) {
-                fileEntry.remove(() => {
-                  reject(new Error(`${name} exists but is empty`));
-                });
-              } else if (withBuffer) {
+              if (withBuffer) {
                 const reader = new FileReader();
                 reader.onloadend = () => {
                   if (reader.error) {
@@ -77,7 +73,10 @@ const FileSystem = new Vue({
                   }
                   file.buffer = reader.result;
                   // eslint-disable-next-line no-console
-                  console.debug('fs.read', { name, withBuffer }, `${self.$moment().diff(moment) / 1000}s`);
+                  console.debug('fs.read', {
+                    name,
+                    withBuffer,
+                  }, `${self.$moment().diff(moment) / 1000}s`);
                   return resolve(file);
                 };
                 reader.onerror = fileEntry.remove;
@@ -90,12 +89,16 @@ const FileSystem = new Vue({
         }, reject);
       });
     },
-    write(name, buffer) {
+    write(name, data = '') {
       const self = this;
       const moment = this.$moment();
+      const buffer = this._.isArrayBuffer(data) ? data : this._.stringToArrayBuffer(data);
+
       return new Promise((resolve, reject) => {
         this.root().then((dirEntry) => {
-          dirEntry.getFile(name, { create: true }, (fileEntry) => {
+          dirEntry.getFile(name, {
+            create: true
+          }, (fileEntry) => {
             fileEntry.createWriter((fileWriter) => {
               fileWriter.onerror = (event) => {
                 this.unlink(name).then(reject.bind(this, event.target.error)).catch(reject);
@@ -112,7 +115,10 @@ const FileSystem = new Vue({
                     next(nextSize, callback);
                   } else if (this._.isFunction(callback)) {
                     // eslint-disable-next-line no-console
-                    console.debug('fs.write', { name, totalSize }, `${self.$moment().diff(moment) / 1000}s`);
+                    console.debug('fs.write', {
+                      name,
+                      totalSize
+                    }, `${self.$moment().diff(moment) / 1000}s`);
                     callback();
                   }
                 };
@@ -135,7 +141,7 @@ const FileSystem = new Vue({
     unlink(name) {
       return new Promise((resolve, reject) => {
         this.root().then((dirEntry) => {
-          dirEntry.getFile(name, { }, (fileEntry) => {
+          dirEntry.getFile(name, {}, (fileEntry) => {
             fileEntry.remove(resolve, reject);
           }, reject);
         }, reject);
@@ -146,15 +152,23 @@ const FileSystem = new Vue({
         this.root().then((dirEntry) => {
           const dirReader = dirEntry.createReader();
           dirReader.readEntries((fileEntries) => {
-            fileEntries.forEach((fileEntry) => {
-              fileEntry.remove(resolve, reject);
-            });
+            if (this._.isEmpty(fileEntries)) {
+              resolve(null);
+            } else {
+              Promise.all(fileEntries.map(fileEntry => {
+                return new Promise((removeResolve, removeReject) => {
+                  fileEntry.remove(removeResolve, removeReject);
+                });
+              })).then(resolve).catch(reject);
+            }
           }, reject);
         }).catch(reject);
       });
     },
     download(data, filename, mime) {
-      const blob = this._.isBlob(data) ? data : new Blob([data], { type: mime || 'application/octet-stream' });
+      const blob = this._.isBlob(data) ? data : new Blob([data], {
+        type: mime || 'application/octet-stream'
+      });
       // IE
       if (typeof window.navigator.msSaveBlob !== 'undefined') {
         window.navigator.msSaveBlob(blob, filename);
