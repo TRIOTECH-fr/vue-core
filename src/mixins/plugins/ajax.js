@@ -22,6 +22,24 @@ export default {
     oauthTokenEndpoint() {
       return this.oauthConfig.token_endpoint || 'oauth/v2/token';
     },
+    oauthTokenPositions() {
+      return this._.mapKeys(['headers', 'query_string', 'body'], this._.camelCase);
+    },
+    oauthAccessToken() {
+      return new Promise((resolve, reject) => {
+        if (this._.expired(this.oauthStore.expires_at)) {
+          if (this._.expired(this.oauthStore.refresh_token_expires_at)) {
+            this.unset('oauth');
+
+            return reject(new Error('Refresh token expired'));
+          }
+
+          return this.refresh().then(resolve);
+        }
+
+        return resolve(this.oauthStore.access_token);
+      });
+    },
     impersonateEndpoint() {
       return this.oauthConfig.impersonate_endpoint || 'api/private/impersonate';
     },
@@ -68,10 +86,6 @@ export default {
         }
         return form;
       })(new FormData(), this._.isString(input) ? QS.parse(input) : input);
-    },
-    sync() {
-      this.wait = true;
-      return this;
     },
     build(url, method, data = {}, config = {}) {
       return this._.extend(config, {
@@ -175,6 +189,8 @@ export default {
       }).then(() => {
         this.pendingRefresh.forEach(Function.prototype.call, Function.prototype.call);
         this.pendingRefresh = false;
+
+        return this.oauthStore.access_token;
       });
     },
     oauth(data, commit = true) {
@@ -195,32 +211,41 @@ export default {
         return response;
       });
     },
-    request(config = {}) {
-      const promise = this.wait ? this.syncRequest(config) : this.asyncRequest(config);
-      this.wait = null;
-      return promise;
-    },
-    async syncRequest(config) {
-      return this.asyncRequest(config);
-    },
-    asyncRequest(config) {
+    async request(config = {}) {
       config.url = this.url(config);
       if (!config.headers) {
         config.headers = [];
       }
 
       if (!this._.isEmpty(this.oauthStore) && config.url.indexOf(this.oauthTokenEndpoint) === -1) {
-        if (this._.expired(this.oauthStore.expires_at)) {
-          if (this._.expired(this.oauthStore.refresh_token_expires_at)) {
-            this.unset('oauth');
-            return this.redirect();
-          }
-          return this.refresh().then(this.asyncRequest.bind(this, config));
+        let accessToken;
+
+        try {
+          accessToken = await this.oauthAccessToken;
+        } catch (error) {
+          return this.redirect();
         }
 
-        config.headers = this._.extend({
-          Authorization: `${this.oauthTokenTypes.bearer} ${this.oauthStore.access_token}`,
-        }, config.headers);
+        switch (config.tokenPosition) {
+          case this.oauthTokenPositions.body:
+            config.data = this._.extend({
+              access_token: accessToken,
+            }, config.data);
+            break;
+
+          case this.oauthTokenPositions.queryString:
+            config.params = this._.extend({
+              access_token: accessToken,
+            }, config.params);
+            break;
+
+          case this.oauthTokenPositions.headers:
+          default:
+            config.headers = this._.extend({
+              Authorization: `${this.oauthTokenTypes.bearer} ${accessToken}`,
+            }, config.headers);
+            break;
+        }
       }
 
       if (config.stringify) {
