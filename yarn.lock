@@ -8368,8 +8368,6 @@ map-age-cleaner@^0.1.1:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/map-age-cleaner/-/map-age-cleaner-0.1.2.tgz#098fb15538fd3dbe461f12745b0ca8568d4e3f74"
   integrity sha512-UN1dNocxQq44IhJyMI4TU8phc2m9BddacHRPRjKGLYaF0jqd3xLz0jS0skpAU9WgYyoR4gHtUpzytNBS385FWQ==
-  dependencies:
-    p-defer "^1.0.0"
 
 map-cache@^0.2.2:
   version "0.2.2"
@@ -13448,9 +13446,9 @@ vue-eslint-parser@^3.2.1:
     lodash "^4.17.10"
 
 vue-form-generator@^2.2.2:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/vue-form-generator/-/vue-form-generator-2.3.0.tgz#b35de569851490577259f0c710128e1d8d30f717"
-  integrity sha512-R9ayoZ3rSJAtdU/cmiPT3gzTzXcJLI5McTSRp66s5LeQQl0FhFK3ytqDqKqhTasiPoU3DLgmjqO0ueltugxovg==
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/vue-form-generator/-/vue-form-generator-2.3.1.tgz#3bde1570c36110372e72bd5fb85dcf227702b21e"
+  integrity sha512-Wi7gerkVTS+ZTsuQtdVkmTIXao2YD3eVZrr6Owq5AjQ5ELbTEqbQ3JpXzVX1XVIJnFCEYpmZoLiqkrE4GbEpcg==
 
 vue-functional-data-merge@^2.0.5:
   version "2.0.7"

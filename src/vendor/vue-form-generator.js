@@ -6,7 +6,7 @@ import '../scss/_vfg.scss';
 const fields = Autoload(require.context('./vue-form-generator/fields', false, /^\.\/field[\w-_]+\.vue$/));
 
 Object.entries(fields).forEach(([name, module]) => {
-  VueFormGenerator.component.components[name] = module.default;
+  VueFormGenerator.component.components.formGroup.components[name] = module.default;
 });
 
 export default VueFormGenerator;
