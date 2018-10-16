@@ -83,14 +83,11 @@ const Entity = {
         let response = null;
         try {
           response = await fn.call(this, compiledURI, data, axios);
-          if (!response) {
-            throw 'Invalid response';
-          }
         } catch (error) {
           return reject(error);
         }
 
-        if (handleCache) {
+        if (handleCache && this._.isPlainObject(response)) {
           const time = Number(new Date());
 
           if (type === 'list' && extendedOptions.invalidate !== false) {
