@@ -1,6 +1,7 @@
 <template>
   <multiselect
     v-model="multiselectModel"
+    v-attributes="'input'"
     :multiple="multiple"
     :options="schema.choices"
     :select-label="$t('vms.select')"
@@ -23,7 +24,7 @@
   import abstractField from './abstractField';
 
   export default {
-    ...VueFormGenerator.component.components.fieldVueMultiSelect,
+    ...VueFormGenerator.component.components.formGroup.components.fieldVueMultiSelect,
     components: {
       Multiselect,
     },

@@ -1,6 +1,7 @@
 <template>
   <vue-editor
     v-model="vueEditorModel"
+    v-attributes="'input'"
     :id="options.id"
     :use-custom-image-handler="options.useCustomImageHandler"
     :placeholder="options.placeholder"

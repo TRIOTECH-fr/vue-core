@@ -1,13 +1,14 @@
 <template>
   <input
-    :id="getFieldID(schema)"
-    type="checkbox"
     v-model="value"
+    v-attributes="'input'"
+    :id="getFieldID(schema)"
     :autocomplete="schema.autocomplete"
     :disabled="disabled"
     :name="schema.inputName"
     :class="schema.fieldClasses"
     :required="schema.required"
+    type="checkbox"
   />
 </template>
 
@@ -15,6 +16,6 @@
   import VueFormGenerator from 'vue-form-generator';
 
   export default {
-    ...VueFormGenerator.component.components.fieldCheckbox,
+    ...VueFormGenerator.component.components.formGroup.components.fieldCheckbox,
   };
 </script>

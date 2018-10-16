@@ -1,6 +1,7 @@
 <template>
   <div class="custom-file">
     <input
+      v-attributes="'input'"
       ref="file"
       :multiple="schema.multiple"
       :accept="mimeConstraint"

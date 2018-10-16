@@ -1,6 +1,7 @@
 <template>
   <date-picker
     v-model="datePickerModel"
+    v-attributes="'input'"
     :placeholder="schema.placeholder"
     :required="schema.required"
     :language="languages[language]"

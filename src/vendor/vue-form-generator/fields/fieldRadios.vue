@@ -1,7 +1,18 @@
 <template>
   <div class="radio-list" :class="schema.listClasses" :disabled="disabled">
     <label v-for="item in items" :class="{'is-checked': isItemChecked(item)}">
-      <input :id="getFieldID(schema)" type="radio" :disabled="disabled" :name="id" @click="onSelection(item)" :value="getItemValue(item)" :checked="isItemChecked(item)" :class="schema.fieldClasses" :required="schema.required" />
+      <input
+        v-attributes="'input'"
+        :id="getFieldID(schema)"
+        :disabled="disabled"
+        :name="id"
+        :value="getItemValue(item)"
+        :checked="isItemChecked(item)"
+        :class="schema.fieldClasses"
+        :required="schema.required"
+        type="radio"
+        @click="onSelection(item)"
+      />
       <span>{{ getItemName(item) }}</span>
     </label>
   </div>
@@ -11,6 +22,6 @@
   import VueFormGenerator from 'vue-form-generator';
 
   export default {
-    ...VueFormGenerator.component.components.fieldRadios,
+    ...VueFormGenerator.component.components.formGroup.components.fieldRadios,
   };
 </script>
