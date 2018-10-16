@@ -274,7 +274,7 @@ export default {
         if (data.error === 'invalid_grant' && this._.isString(description)) {
           if (description.match(/expired/i) && error.response.status === 401) {
             delete config.headers;
-            return this.refresh().then(this.asyncRequest.bind(this, config));
+            return this.refresh().then(this.request.bind(this, config));
           }
           if (!description.match(/password/i) && description.match(/invalid|expired/i) && error.response.status >= 400) {
             this.unset('oauth');
