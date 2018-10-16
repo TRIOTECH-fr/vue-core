@@ -13393,7 +13393,7 @@ vue-analytics@^5.10.2:
   resolved "https://registry.yarnpkg.com/vue-analytics/-/vue-analytics-5.16.0.tgz#82e88703a0678cba076d51acacd6569bc8f7d54c"
   integrity sha512-WOdI1Ot/Tq3xHIIu3a5hiLawMrQeHsgqwcvHdZb5CNV4IM3RWZ3rw1gCnsAGbSWGPQw88mjkY9wuG5CXmfsssA==
 
-vue-async-computed@^3.3.1:
+vue-async-computed@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/vue-async-computed/-/vue-async-computed-3.4.1.tgz#b3923c177b38ab80cb767bbc09cca3dbbb25dd48"
   integrity sha512-+nuT0vUGjMwpDf50/3E29gIcJEgAk3i7cP03CCjffptb7FsXjzVyJfLd5yqjMhmma4ovW5Wkh3blNRpWUG/amg==
