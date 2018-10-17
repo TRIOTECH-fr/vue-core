@@ -10,7 +10,7 @@ const Y = f => (...args) => f(Y(f))(...args);
 
 _.mixin({
   access: (object, key, defaults) => object[key] || _.extend(object, {
-    [key]: defaults
+    [key]: defaults,
   })[key],
   encode: string => window.encodeURIComponent(string),
   expired: time => (moment() - time) / 1000 > 0,
@@ -19,7 +19,7 @@ _.mixin({
   },
   args(array) {
     return _.reduce(array, (carry, arg, index, args) => _.extend(carry, index % 2 === 1 && {
-      [args[index - 1]]: arg
+      [args[index - 1]]: arg,
     }), {});
   },
   flatTree(tree = [], key = 'id') {
@@ -41,6 +41,10 @@ _.mixin({
 
     return array;
   },
+  date(date, format = 'L') {
+    return moment(date).format(format);
+  },
+  nl2br: str => str.replace(/(?:\r\n|\r|\n)/g, '<br>'),
   ...router,
   ...transforms,
   ...types,
