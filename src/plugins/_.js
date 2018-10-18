@@ -5,6 +5,7 @@ import moment from 'moment';
 import router from '../vendor/lodash/router';
 import transforms from '../vendor/lodash/transforms';
 import types from '../vendor/lodash/types';
+import bootstrap from '../vendor/lodash/bootstrap';
 
 const Y = f => (...args) => f(Y(f))(...args);
 
@@ -52,5 +53,6 @@ _.mixin({
 }).noConflict();
 
 Vue.set(Vue.prototype, '_', _);
+Vue.set(_, 'bootstrap', bootstrap);
 
 export default _;
