@@ -9,6 +9,7 @@
     :close-on-select="true"
     :hide-selected="false"
     :clear-on-select="true"
+    :allow-empty="!showAll"
     label="label"
     select-label=""
     selected-label=""
@@ -62,6 +63,16 @@
         type: String,
         default: 'options',
       },
+      showAll: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    data() {
+      return {
+        options: [],
+        value: null,
+      };
     },
     computed: {
       id() {
@@ -73,23 +84,20 @@
       enum() {
         return this._.upperFirst(this._.camelCase(this.name)) + this.enumSuffix;
       },
-      value() {
-        return this.filter.value || null;
-      },
-      options() {
-        return this.filter.options || [];
-      },
       updateStoreOptions() {
         return this.updateStore.bind(this, 'options');
       },
-      updateStoreValue() {
+      updateStoreValue(value) {
         return this.updateStore.bind(this, 'value');
       },
-      ...mapState({
-        filter(state) {
-          return state.filters[this.name] || {};
-        },
-      }),
+      emptyValue() {
+        return { label: this.$t('form.show_all'), value: null };
+      },
+    },
+    created() {
+      if (this.showAll) {
+        this.value = this.emptyValue;
+      }
     },
     mounted() {
       this.$bus.$once(this.event('filters.data'), this.sync);
@@ -101,17 +109,19 @@
       sync(filters) {
         const { id } = this;
         const filter = this._.find(filters, { id }) || {};
-        let { choices } = filter;
+        let options = filter.choices;
 
-        if (!choices) {
+        if (!options) {
           return;
-        } else if (this._.isObject(choices)) {
-          choices = this._.toArray(choices);
+        } else if (this._.isObject(options)) {
+          options = this._.toArray(options);
         }
 
-        this.updateStoreOptions(this._.each(choices, (choice) => {
-          choice.name = this.name;
-        }));
+        if (this.showAll) {
+          options.unshift(this.emptyValue);
+        }
+
+        this.options = this._.map(options, (option) => this._.extend(option, { name: this.name }));
 
         if (this.enumeration) {
           if (this.$enum.enums.length > 0) {
@@ -122,20 +132,22 @@
         }
       },
       update() {
-        this.updateStoreOptions(this._.each(this.options, (choice) => {
+        this.options = this._.map(this.options, (option) => {
           const enumeration = this.enumeration === true ? this.enum : this.enumeration;
-          choice.label = this.$enum.trans(choice.value, enumeration);
-        }));
+          if (option.value) {
+            option.label = this.$enum.trans(option.value, enumeration);
+          }
+          return option;
+        })
       },
       onSelect() {
         this.$nextTick(this.$parent.$emit.bind(this.$parent, this.event('update')));
       },
       updateStore(key, value) {
-        const { filters } = this.get();
-        const filter = this._.access(filters, this.name, {});
-        // TODO fix vuex mutation error
-        filter[key] = value;
-        this.set({ filters });
+        if (key === 'value') {
+          this.value = value;
+        }
+        this.$emit('change', this.name, value);
       },
     },
   };

@@ -3,7 +3,12 @@
     <b-container fluid>
       <b-row>
         <b-col v-for="(item, idx) in items" :key="idx" :sm="12 / rows">
-          <ajax-filter :name="item.name" :enumeration="item.enumeration" />
+          <ajax-filter
+            :name="item.name"
+            :enumeration="item.enumeration"
+            :show-all="item.show_all"
+            @change="onChange"
+          />
         </b-col>
       </b-row>
     </b-container>
@@ -53,6 +58,19 @@
       filter() {
         return this._.template(this.filterTemplate);
       },
+      computedFilters() {
+        return this._.reduce(this.filters, (carry, filter, name) => {
+          if (this._.get(filter, 'value')) {
+            carry[this.filter({ name })] = filter.value;
+          }
+          return carry;
+        }, {});
+      },
+    },
+    data() {
+      return {
+        filters: {},
+      };
     },
     mounted() {
       this.fetch().then(this.update);
@@ -66,29 +84,15 @@
         return [this.entity, name].join('.');
       },
       fetch() {
-        const { state } = this.$store;
-        const { entity } = this;
-        if (!state[entity]) {
-          state[entity] = {};
-        }
-        if (state[entity].filters === true) {
-          return Promise.resolve();
-        }
-
         return this.$ajax.get(this.uri).then((data) => {
           this.$bus.$emit(this.event('filters.data'), data);
         });
       },
-      filters() {
-        return this._.reduce(this.$store.state.filters, (carry, filter, name) => {
-          if (filter.value) {
-            carry[this.filter({ name })] = filter.value.value;
-          }
-          return carry;
-        }, {});
-      },
       update() {
-        this.$bus.$emit(this.event('fetch'), this._.param(this.filters()));
+        this.$bus.$emit(this.event('fetch'), this._.param(this.computedFilters));
+      },
+      onChange(name, value) {
+        this.$set(this.filters, name, value);
       },
     },
   };

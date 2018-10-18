@@ -26,6 +26,7 @@ form:
   female: Femme
   image: Image
   link: Lien
+  show_all: Voir tous
 
 actions:
   cancel: Annuler
