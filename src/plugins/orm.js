@@ -145,6 +145,10 @@ const Entity = {
         return this.exec(custom.overridenMethod, config);
       };
     },
+    invalidate() {
+      const hash = window.btoa(this.options.uri.replace(/{([\s\S]+?)\}/, ''));
+      return this.unset(`orm.${hash}`);
+    },
     compileURI(parameters = {}, options = {}) {
       const {
         uri,
