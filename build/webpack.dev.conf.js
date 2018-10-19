@@ -63,7 +63,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     }),
     new FriendlyErrorsPlugin()
   ]
-}, requires.rootBuild(path.basename(__filename)))
+}, requires.root(path.join('build', path.basename(__filename))))
 
 module.exports = new Promise((resolve, reject) => {
   portfinder.basePort = process.env.PORT || config.dev.port

@@ -1,11 +1,13 @@
 'use strict'
+const path = require('path');
 
-exports.rootBuild = function (filename, fallback = {}) {
-  let build = null;
+exports.root = function (filename, fallback = {}) {
+  let data = null;
+
   try {
-    build = require(`../../../../build/${filename}`)
+    data = require(path.resolve(process.cwd(), filename))
   } catch (err) {
-    build = fallback;
+    data = fallback;
   }
-  return build;
+  return data;
 }

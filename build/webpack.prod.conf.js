@@ -109,7 +109,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // modules intermediate caching step
     // new HardSourceWebpackPlugin()
   ]
-}, requires.rootBuild(path.basename(__filename)))
+}, requires.root(path.join('build', path.basename(__filename))))
 
 const routes = config.prerender || []
 if (process.env.NO_PRERENDER === undefined && routes.length > 0) {

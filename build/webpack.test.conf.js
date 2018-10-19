@@ -26,7 +26,7 @@ const webpackConfig = merge(baseConfig, {
       'process.env': require('../config/test.env')
     })
   ]
-}, requires.rootBuild(path.basename(__filename)))
+}, requires.root(path.join('build', path.basename(__filename))))
 
 // no need for app entry during tests
 delete webpackConfig.entry
