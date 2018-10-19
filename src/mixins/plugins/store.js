@@ -6,6 +6,8 @@ import {
 } from 'vuex-router-sync';
 import Router from '../../plugins/router';
 
+const strict = process.env.VUEX_STRICT || process.env.NODE_ENV !== 'production';
+
 export default {
   state: {
     filters: {},
@@ -84,5 +86,5 @@ export default {
       store.unsync = sync(store, router);
     })(Router),
   ],
-  strict: process.env.NODE_ENV !== 'production',
+  strict,
 };
