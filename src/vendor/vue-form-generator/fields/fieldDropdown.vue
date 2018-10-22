@@ -13,8 +13,8 @@
     track-by="id"
     @input="onChange"
   >
-    <slot name="noResult">$t('vms.no_result')</slot>
-    <slot name="maxElements">$t('vms.max_elements')</slot>
+    <slot name="noResult">{{ $t('vms.no_result') }}</slot>
+    <slot name="maxElements">{{ $t('vms.max_elements') }}</slot>
   </multiselect>
 </template>
 
