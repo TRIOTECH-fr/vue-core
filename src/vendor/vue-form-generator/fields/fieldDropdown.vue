@@ -1,6 +1,6 @@
 <template>
   <multiselect
-    v-model="multiselectModel"
+    v-model="internalValue"
     v-attributes="'input'"
     :multiple="multiple"
     :options="schema.choices"
