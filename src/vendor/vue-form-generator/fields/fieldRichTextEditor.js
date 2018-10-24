@@ -35,20 +35,39 @@ Vue.component('fieldRichTextEditor', {
       }
     },
   },
+  methods: {
+    onVueEditorTextChange() {
+      const { vueEditorHidden } = this.$refs;
+      if (vueEditorHidden) {
+        vueEditorHidden.value = this.vueEditorModel.length > 0 ? 'true' : '';
+      }
+    },
+  },
   mounted() {
     this.vueEditorModel = this.value || '';
+    this.onVueEditorTextChange();
   },
   template: `
-    <vue-editor
-      v-model="vueEditorModel"
-      :id="options.id"
-      :use-custom-image-handler="options.useCustomImageHandler"
-      :placeholder="options.placeholder"
-      :disabled="options.disabled"
-      :custom-modules="options.customModules"
-      :editor-toolbar="options.editorToolbar"
-      :editor-options="options.editorOptions"
-      style="display: inline-grid;"
-    />
+    <div>
+      <input
+        type="text"
+        ref="vueEditorHidden"
+        required="options.required"
+        tabindex="-1"
+        style="position: absolute; outline: none; border: 0; z-index: -1; height: 0; font-size: 1px;"
+      />
+      <vue-editor
+        v-model="vueEditorModel"
+        :id="options.id"
+        :use-custom-image-handler="options.useCustomImageHandler"
+        :placeholder="options.placeholder"
+        :disabled="options.disabled"
+        :custom-modules="options.customModules"
+        :editor-toolbar="options.editorToolbar"
+        :editor-options="options.editorOptions"
+        @text-change="onVueEditorTextChange"
+        style="display: inline-grid;"
+      />
+    </div>
   `,
 });
