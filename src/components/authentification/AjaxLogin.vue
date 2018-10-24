@@ -84,7 +84,7 @@
                 }
               });
 
-              this.$set(this.schema, 'fields', _.form(this.$t, data));
+              this.$set(this.schema, 'fields', this._.form(this.$t, data));
               this.$bus.$emit('t-event.load-form.login.success');
             });
         }

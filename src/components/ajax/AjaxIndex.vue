@@ -212,7 +212,7 @@
               this.$delete(this.items, _.findIndex(this.items, data));
             });
           }
-          const updatedData = _.differenceObj(items, this.items, true);
+          const updatedData = this._.differenceObj(items, this.items, true);
           updatedData.forEach((data) => {
             const dataRef = this.items.find(x => x.id === data.id);
             if (!_.isNil(dataRef)) {

@@ -67,7 +67,7 @@
     methods: {
       async load() {
         const data = await this.$ajax.publicRequest(this.uri);
-        this.$set(this.schema, 'fields', _.form(this.$t, data));
+        this.$set(this.schema, 'fields', this._.form(this.$t, data));
       },
       successRoute() {
         if (typeof this.success_route === 'function') {

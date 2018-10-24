@@ -117,7 +117,7 @@
         // eslint-disable-next-line no-unused-vars
         const data = await this.$ajax.get(`${this.getUri}/${this.getId}/${this.action}`);
         // TODO handle isDeletable
-        // this.schema.fields = this.schema.fields.concat(_.form(this.$t, data));
+        // this.schema.fields = this.schema.fields.concat(this._.form(this.$t, data));
 
         this.$nextTick(() => {
           this.$bus.$emit(`t-event.ajax-delete.${this.name}.loaded`);

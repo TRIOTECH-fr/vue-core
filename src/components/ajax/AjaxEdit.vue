@@ -218,7 +218,7 @@
         this.$set(this, 'model', this.defaultModelValues || {});
 
         const data = await this.$ajax.get(this.editRouteFunc(), {}, this.config);
-        this.schema.fields = _.form(this.$t, data.form);
+        this.schema.fields = this._.form(this.$t, data.form);
         this.applyFilterOnSchema();
 
         // TODO find how to handle file properties
@@ -226,7 +226,7 @@
           data.entity.file = data.entity.file_name;
         }
 
-        this.$set(this, 'model', _.clearModelForForm(this.unserializer(data.entity), data.form, this.defaultModelValues || {}));
+        this.$set(this, 'model', this._.clearModelForForm(this.unserializer(data.entity), data.form, this.defaultModelValues || {}));
         this.updatePreviousModel();
         this.loading = false;
 
@@ -238,7 +238,7 @@
         this.previousModel = JSON.parse(JSON.stringify(this.model));
       },
       async submit(extraModel) {
-        const submitData = _.differenceObj(this.model, this.previousModel);
+        const submitData = this._.differenceObj(this.model, this.previousModel);
         if (!(extraModel instanceof Event)) {
           _.extend(submitData, extraModel);
         }

@@ -203,7 +203,13 @@
         this.$set(this, 'model', this.defaultModelValues || {});
 
         const data = await this.$ajax.get(`${this.getUri}/${this.action}`, {}, this.config);
-        this.$set(this.schema, 'fields', _.form(this.$t, data));
+        const form = this._.isPlainObject(data) ? data.form : data;
+
+        if (this._.isPlainObject(data)) {
+          this.$set(this, 'model', this._.clearModelForForm(data.entity, form, this.defaultModelValues || {}));
+        }
+
+        this.$set(this.schema, 'fields', this._.form(this.$t, form));
         this.applyFilterOnSchema();
 
         this.$nextTick(() => {

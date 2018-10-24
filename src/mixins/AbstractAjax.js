@@ -2,6 +2,11 @@ export default {
   methods: {
     catchHandler(error) {
       const { status, data } = error.response;
+      
+      if (!data.errors) {
+        return;
+      }
+
       let text = status === 400 ? _.reduce(_.transform(data.errors.children, (carry, value, key) => {
         if (value.errors) {
           carry[key] = value.errors;
