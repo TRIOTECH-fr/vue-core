@@ -54,10 +54,13 @@ Vue.component('fieldDatePicker', {
   },
   template: `
     <date-picker
+      v-model="datePickerModel"    
+      v-attributes="'input'"
       :placeholder="schema.placeholder"
       :required="schema.required"
       :language="$i18n.locale"
-      v-model="datePickerModel"
+      :disabled-dates="schema.disabledDates"
+      :highlighted="schema.highlighted"
       input-class="form-control"
     />
   `,

@@ -3,7 +3,7 @@ import VueFormGenerator from 'vue-form-generator';
 import Multiselect from '../../vue-multiselect';
 import Mixins from './mixins';
 
-const parent = _.clone(VueFormGenerator.component.components.fieldVueMultiSelect);
+const parent = _.clone(VueFormGenerator.component.components.formGroup.components.fieldVueMultiSelect);
 
 Vue.component('fieldDropdown', _.merge({}, parent, {
   components: {

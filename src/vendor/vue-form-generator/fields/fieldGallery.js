@@ -58,6 +58,7 @@ Vue.component('fieldGallery', {
   },
   template: `
     <vue-select-image
+      v-attributes="'input'"
       :dataImages="dataImages"
       :is-multiple="isMultiple"
       :selectedImages="getSelectedImages()"

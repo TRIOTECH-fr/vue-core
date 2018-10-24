@@ -57,7 +57,8 @@ Vue.component('fieldRichTextEditor', {
         style="position: absolute; outline: none; border: 0; z-index: -1; height: 0; font-size: 1px;"
       />
       <vue-editor
-        v-model="vueEditorModel"
+        v-model="vueEditorModel"    
+        v-attributes="'input'"
         :id="options.id"
         :use-custom-image-handler="options.useCustomImageHandler"
         :placeholder="options.placeholder"

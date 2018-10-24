@@ -70,14 +70,15 @@ Vue.component('fieldFileUpload', {
   template: `
     <div class="custom-file">
       <input
+        v-attributes="'input'"
+        ref="file"
         :multiple="schema.multiple"
         :required="schema.required"
         :accept="mimeConstraint"
         :id="getFieldID(schema)"
         :lang="$i18n.locale"
-        ref="file"
-        class="custom-file-input"
         type="file"
+        class="custom-file-input"
         @change="onValueChange"
       >
       <label class="custom-file-label" :id="getFieldID(schema)">{{ btnText }}</label>
