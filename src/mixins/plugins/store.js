@@ -36,7 +36,7 @@ export default {
       const vm = this._vm; // eslint-disable-line no-underscore-dangle
       let keys = data;
       if (vm._.isUndefined(keys)) {
-        keys = vm._.keys(this.state);
+        keys = vm._.keys(vm._.omit(this.state, 'route'));
       } else if (!vm._.isArray(keys)) {
         keys = [keys];
       }
