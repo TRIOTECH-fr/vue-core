@@ -140,7 +140,7 @@ const Entity = {
         if (custom.uri) {
           config.options.uri = custom.uri;
         } else if (custom.appendUri) {
-          config.options.uri = `${this.options.uri}/${custom.appendUri}`;
+          config.options.uri = `${this.options.uri.replace(/\/$/, '')}/${custom.appendUri}`;
         }
         return this.exec(custom.overridenMethod, config);
       };
