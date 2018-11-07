@@ -259,7 +259,9 @@ export default {
         config.method = this.http.post;
       }
 
-      config.cancelToken = this.cancelToken.token;
+      if (!config.cancelToken) {
+        config.cancelToken = this.cancelToken.token;
+      }
 
       return this.$http.request(config).then((res) => {
         const {
