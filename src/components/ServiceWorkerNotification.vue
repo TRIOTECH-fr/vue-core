@@ -1,7 +1,7 @@
 <template>
   <div v-if="serviceWorkerUpdated" class="service-worker-updated text-center">
     <u @click="reload">
-      {{ $t('service_worker_updated') }}
+      {{ text }}
     </u>
     <span class="position-absolute" @click="serviceWorkerUpdated = false">✕</span>
   </div>
@@ -10,6 +10,14 @@
 <script>
   export default {
     name: 'ServiceWorkerNotificationComponent',
+    props: {
+      text: {
+        type: String,
+        default() {
+          return this.$t('service_worker_updated');
+        },
+      },
+    },
     data() {
       return {
         serviceWorkerUpdated: false,
