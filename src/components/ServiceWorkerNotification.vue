@@ -42,6 +42,10 @@
   .service-worker-updated {
     line-height: 50px;
 
+    * {
+      cursor: pointer;
+    }
+
     .position-absolute {
       right: 0;
       padding: 0 15px;
