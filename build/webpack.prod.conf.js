@@ -102,7 +102,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     new SWPrecacheWebpackPlugin({
       cacheId: 'vue-core',
       dontCacheBustUrlsMatching: /\.\w{20}\./,
-      staticFileGlobs: [`${config.build.assetsRoot}/**/*.{js,html,css}`],
+      mergeStaticsConfig: true,
+      staticFileGlobsIgnorePatterns: [/\.map$/],
       minify: true,
       stripPrefix: 'web/'
     })
