@@ -43,6 +43,7 @@ actions:
   move_down: Descendre
   move_up: Monter
   no: Non
+  reload: Recharger
   reset: Réinitialiser
   save: Enregistrer
   show: Consulter
