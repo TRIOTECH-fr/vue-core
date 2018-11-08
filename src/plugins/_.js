@@ -24,7 +24,7 @@ _.mixin({
     }), {});
   },
   flatTree(tree = [], key = 'id') {
-    const stack = tree;
+    const stack = this.clone(tree);
     const array = [];
     const hashMap = {};
     while (stack.length > 0) {
