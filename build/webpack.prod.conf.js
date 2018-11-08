@@ -87,13 +87,16 @@ const webpackConfig = merge(baseWebpackConfig, {
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency',
       serviceWorkerLoader: `<script>${loadMinified(path.join(__dirname,
-        './service-worker-prod.js'))}</script>`
+        'service-worker-prod.js'))}</script>`
     }),
     // copy custom static assets
     new CopyWebpackPlugin([{
-      from: path.resolve(process.cwd(), 'static'),
+      from: path.resolve(process.cwd(), config.build.assetsSubDirectory),
       to: config.build.assetsSubDirectory,
       ignore: ['.*']
+    }, {
+      from: path.join(__dirname, './service-worker-extra.js'),
+      to: path.join(config.build.assetsSubDirectory, 'js'),
     }]),
     new ImageminPlugin({
       test: /\.(jpe?g|png|gif|svg)$/i
@@ -101,11 +104,15 @@ const webpackConfig = merge(baseWebpackConfig, {
     // service worker caching
     new SWPrecacheWebpackPlugin({
       cacheId: 'vue-core',
-      dontCacheBustUrlsMatching: /\.\w{20}\./,
+      dontCacheBustUrlsMatching: /\.(\w{7}|\w{20})\./,
       mergeStaticsConfig: true,
       staticFileGlobsIgnorePatterns: [/\.map$/],
+      maximumFileSizeToCacheInBytes: 5242880,
       minify: true,
-      stripPrefix: 'web/'
+      stripPrefix: 'web/',
+      importScripts: [
+        path.join(config.build.assetsSubDirectory, 'js', 'service-worker-extra.js'),
+      ],
     })
     // modules intermediate caching step
     // new HardSourceWebpackPlugin()
