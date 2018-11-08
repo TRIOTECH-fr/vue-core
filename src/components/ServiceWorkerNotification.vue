@@ -23,10 +23,6 @@
           return this.$t('service_worker_updated');
         },
       },
-      browserNotification: {
-        type: Boolean,
-        default: false,
-      },
       updateInterval: {
         type: Number,
         default: 3600,
@@ -38,17 +34,17 @@
     },
     computed: {
       notification: () => window.Notification,
-      browserNotificationEnabled() {
-        return this.browserNotification && !!this.notification;
+      hasNotification() {
+        return !!this.notification;
       },
-      browserNotificationDefault() {
-        return this.browserNotificationEnabled && this.notification.permission === 'default';
+      isNotificationDefault() {
+        return this.hasNotification && this.notification.permission === 'default';
       },
-      browserNotificationGranted() {
-        return this.browserNotificationEnabled && this.notification.permission === 'granted';
+      isNotificationGranted() {
+        return this.hasNotification && this.notification.permission === 'granted';
       },
-      browserNotificationDenied() {
-        return this.browserNotificationEnabled && this.notification.permission === 'denied';
+      isNotificationDenied() {
+        return this.hasNotification && this.notification.permission === 'denied';
       },
     },
     data() {
@@ -58,23 +54,22 @@
       };
     },
     async created() {
-      if (this.browserNotificationDefault) {
-        await Notification.requestPermission();
+      if (this.isNotificationDefault) {
+        await this.notification.requestPermission();
       }
 
       window.serviceWorkerUpdated = async () => {
         const registration = await navigator.serviceWorker.getRegistration();
         this.serviceWorker = registration.active;
 
-        if (this.browserNotificationGranted) {
+        if (this.isNotificationGranted) {
           const options = {
             body: this.text,
             tag: 'update',
             icon: `/static/img/icons/android-chrome-512x512.png`,
-            // data: window.location.href,
           };
 
-          if ('actions' in Notification.prototype) {
+          if ('actions' in this.notification.prototype) {
             options.actions = [{
               action: 'reload',
               title: this.$t('actions.reload'),
