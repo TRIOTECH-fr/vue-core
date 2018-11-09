@@ -1,16 +1,16 @@
 <template>
   <div class="navigation">
     <router-link :to="index" class="btn btn-back">
-      <i class="ti ti-2x ti-dashboard" />
-      <span>{{ $t('actions.list') }}</span>
+      <i class="ti ti-2x ti-fw ti-dashboard" />
+      <div class="text">{{ $t('actions.list') }}</div>
     </router-link>
     <router-link v-if="previous" :to="previous" class="btn btn-nav btn-prev">
-      <i class="ti ti-2x ti-arrow-left" />
-      <span>{{ $t('actions.prev') }}</span>
+      <i class="ti ti-2x ti-fw ti-arrow-left" />
+      <div class="text">{{ $t('actions.prev') }}</div>
     </router-link>
     <router-link v-if="next" :to="next" class="btn btn-nav btn-next">
-      <span>{{ $t('actions.next') }}</span>
-      <i class="ti ti-2x ti-arrow-right" />
+      <div class="text">{{ $t('actions.next') }}</div>
+      <i class="ti ti-2x ti-fw ti-arrow-right" />
     </router-link>
   </div>
 </template>
@@ -73,14 +73,12 @@
     .btn {
       position: fixed;
       background-color: $orange;
-      width: 60px;
+      width: auto;
       color: $white;
       border-radius: 0;
-      padding: 20px 10px;
+      padding: 20px;
       z-index: 10;
       overflow: hidden;
-
-      @include transition(width .2s, background-color .2s);
 
       &.btn-back {
         top: calc(50vh - 95px);
@@ -95,18 +93,17 @@
       }
 
       &:hover {
-        width: 150px;
-        background-color: $orange;
-
-        span {
-          display: inline-block;
+        div.text {
+          margin: 0 20px;
+          font-size: 15px;
         }
       }
 
-      span {
-        display: none;
+      div.text {
+        font-size: 0;
+        display: inline-block;
 
-        @include transition(opacity .2s);
+        @include transition(font-size .2s, opacity .2s);
       }
     }
   }
