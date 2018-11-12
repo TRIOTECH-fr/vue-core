@@ -89,7 +89,7 @@ const FileSystem = new Vue({
         }, reject);
       });
     },
-    write(name, data = '') {
+    write(name, data = '', options = {}) {
       const self = this;
       const moment = this.$moment();
       const buffer = this._.isArrayBuffer(data) ? data : this._.stringToArrayBuffer(data);
@@ -109,6 +109,15 @@ const FileSystem = new Vue({
                 const nextSize = bytesWritten + blockSize;
                 fileWriter.write(new Blob([new Uint8Array(buffer.slice(bytesWritten, nextSize))]));
                 fileWriter.onwrite = () => {
+                  const {
+                    onWriteProgress
+                  } = options;
+                  if (this._.isFunction(onWriteProgress)) {
+                    onWriteProgress(new ProgressEvent('write', {
+                      loaded: nextSize,
+                      total: totalSize,
+                    }));
+                  }
                   // eslint-disable-next-line no-console, no-mixed-operators
                   console.debug(name, 100 * nextSize / totalSize, nextSize === fileWriter.length);
                   if (nextSize < totalSize) {
@@ -118,7 +127,7 @@ const FileSystem = new Vue({
                     console.debug('fs.write', {
                       name,
                       totalSize
-                    }, `${self.$moment().diff(moment) / 1000}s`);
+                    }, `${this.$moment().diff(moment) / 1000}s`);
                     callback();
                   }
                 };
