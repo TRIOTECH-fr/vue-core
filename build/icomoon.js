@@ -1,14 +1,17 @@
 const fs = require('fs-extra')
 const path = require('path')
 const pipeline = require('icomoon-cli')
-const { argv } = require('yargs')
+const {
+  argv
+} = require('yargs')
 const rimraf = require('rimraf')
 
 const log = (...args) => console.log('[icomoon]', ...args)
 const icomoon = argv.d || argv.directory || 'icomoon'
 const tmp = argv.t || argv.tmp || 'tmp'
-const outputFont = argv.o || argv.output || 'static/fonts'
-const outputScss = argv.o || argv.output || 'src/scss'
+const outputFontDir = argv.ofd || argv.outputFontDir || 'static/fonts'
+const outputScssDir = argv.osd || argv.outputScssDir || 'src/scss'
+const outputScssFile = argv.osf || argv.outputScssFile || '_icons.scss'
 const selection = argv.s || argv.selection || 'selection.json'
 const visible = argv.v || argv.visible || false
 const options = {
@@ -36,21 +39,24 @@ log(`Detected ${options.icons.length} icon(s) from ${icomoon} folder`)
 
 pipeline({
   ...options,
-  whenFinished (result) {
+  whenFinished() {
     const name = selectionParameters.preferences.fontPref.metadata.fontFamily
-    if (!fs.existsSync(outputFont)) {
-      fs.mkdirSync(outputFont)
+    if (!fs.existsSync(outputFontDir)) {
+      fs.mkdirSync(outputFontDir)
     }
     ['eot', 'svg', 'ttf', 'woff'].forEach((ext) => {
-      fs.copyFileSync(`${tmp}/fonts/${name}.${ext}`, `${outputFont}/${name}.${ext}`)
+      fs.copyFileSync(`${tmp}/fonts/${name}.${ext}`, `${outputFontDir}/${name}.${ext}`)
     })
-    log(`Successfully imported icomoon fonts in ${outputFont} folder`)
+    log(`Successfully imported icomoon fonts in ${outputFontDir} folder`)
 
-    if (!fs.existsSync(outputScss)) {
-      fs.mkdirSync(outputScss)
+    if (!fs.existsSync(outputScssDir)) {
+      fs.mkdirSync(outputScssDir)
     }
-    fs.copyFileSync(`${tmp}/style.css`, `${outputScss}/_icons.scss`)
-    log(`Successfully imported icomoon style in ${outputScss} folder`)
+    const outputScssFilePath = path.join(outputScssDir, outputScssFile);
+    fs.copyFileSync(`${tmp}/style.css`, outputScssFilePath);
+    const outputScssFileContents = fs.readFileSync(outputScssFilePath, 'utf8');
+    fs.writeFileSync(outputScssFilePath, outputScssFileContents.replace(/fonts/g, `/${outputFontDir}`), 'utf8');
+    log(`Successfully imported icomoon stylesheet in ${outputScssFilePath} file`)
 
     rimraf.sync(tmp)
   }
