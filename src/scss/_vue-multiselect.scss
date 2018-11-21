@@ -10,15 +10,8 @@
 
 .multiselect--active {
   z-index: 110 !important;
-}
-
-.multiselect__input {
-  display: block !important;
-  position: absolute;
-  background-color: transparent;
-  font-size: 0;
-}
-
-.multiselect--active input.multiselect__input {
-  font-size: 16px;
+  
+  .multiselect__input {
+    width: 100% !important;
+  }
 }
