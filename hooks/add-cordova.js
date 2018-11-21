@@ -13,13 +13,17 @@ module.exports = (ctx) => {
     if (readError) {
       deferred.reject(readError);
     } else {
-      fs.writeFile(indexPath, indexData.replace(/<\/script>/, cordovaScript), 'utf-8', (writeError) => {
-        if (writeError) {
-          deferred.reject(writeError);
-        } else {
-          deferred.resolve();
-        }
-      });
+      if (indexData.indexOf(cordovaScript) === -1) {
+        fs.writeFile(indexPath, indexData.replace(/<\/script>/, cordovaScript), 'utf-8', (writeError) => {
+          if (writeError) {
+            deferred.reject(writeError);
+          } else {
+            deferred.resolve();
+          }
+        });
+      } else {
+        deferred.resolve();
+      }
     }
   });
 
