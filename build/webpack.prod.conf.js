@@ -4,7 +4,7 @@ const merge = require('webpack-merge')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 // eslint-disable-next-line import/no-extraneous-dependencies
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin')
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
 const ImageminPlugin = require('imagemin-webpack-plugin').default
@@ -38,11 +38,11 @@ const webpackConfig = merge(baseWebpackConfig, {
   optimization: {
     minimize: true,
     minimizer: [
-      new UglifyJsPlugin({
+      new TerserPlugin({
         cache: true,
         parallel: true,
         sourceMap: config.build.productionSourceMap,
-        uglifyOptions: {
+        terserOptions: {
           mangle: {
             safari10: true
           }
