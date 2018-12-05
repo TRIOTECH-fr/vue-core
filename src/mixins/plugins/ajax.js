@@ -259,7 +259,7 @@ export default {
         config.method = this.http.post;
       }
 
-      if (!config.cancelToken) {
+      if (this._.isUndefined(config.cancelToken)) {
         config.cancelToken = this.cancelToken.token;
       }
 
