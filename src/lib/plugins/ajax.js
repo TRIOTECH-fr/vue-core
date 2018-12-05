@@ -215,7 +215,9 @@ const Ajax = new Vue({
         config.method = this.http.post;
       }
 
-      config.cancelToken = this.cancelToken.token;
+      if (this._.isUndefined(config.cancelToken)) {
+        config.cancelToken = this.cancelToken.token;
+      }
 
       return this.$http.request(config).then((res) => {
         let { data } = res;
