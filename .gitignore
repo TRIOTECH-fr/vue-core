@@ -3,3 +3,5 @@
 /test/e2e/reports/
 *-debug.log*
 *-error.log*
+.commitlintrc.js
+.huskyrc.js
