@@ -13432,9 +13432,9 @@ vue-autosize@^1.0.2:
     autosize-input "^0.4.0"
 
 vue-awesome@^3.0.5:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/vue-awesome/-/vue-awesome-3.2.0.tgz#885a64eab6fba6f51ba9b6565f2747ac0e35a2cc"
-  integrity sha512-wQf8Baxo3d8ijwxYRhYrbnMtw27B9IVc3fSEN/NIWWgJTBvaT3chfpVnVaXanOMBmSR/tmsjgtYvrQMIZt2edA==
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/vue-awesome/-/vue-awesome-3.3.1.tgz#028fce4e2ef1775cff13c077679efc5fdd5a922f"
+  integrity sha512-AybgLXfguWCIJaqZ1qD0gfEA31W0psKk3Nmou7QIssuQaEETHuELXMKW4vCg2c+i52iLPBaqDNQLlKWVcY8xnw==
 
 vue-axios@^2.1.1:
   version "2.1.4"
