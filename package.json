@@ -101,7 +101,7 @@
     "qs": "^6.5.1",
     "raven-js": "^3.24.1",
     "rimraf": "^2.6.2",
-    "rollup": "^0.68.2",
+    "rollup": "^1.0.0",
     "sass-loader": "^7.0.3",
     "sass-resources-loader": "^2.0.0",
     "selenium-server": "^3.11.0",
