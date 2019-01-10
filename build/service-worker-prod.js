@@ -15,7 +15,7 @@
 
   window.addEventListener('load', () => {
     if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || isLocalhost)) {
-      navigator.serviceWorker.register('service-worker.js').then((registration) => {
+      navigator.serviceWorker.register('/service-worker.js').then((registration) => {
         // updatefound is fired if service-worker.js changes.
         registration.onupdatefound = function () {
           // updatefound is also fired the very first time the SW is installed,
@@ -42,13 +42,13 @@
                   throw new Error('The installing service worker became redundant.')
 
                 default:
-                  // Ignore
+                // Ignore
               }
             }
           }
         }
         if (window.serviceWorkerUpdateInterval) {
-          window.setInterval(registration.update.bind(registration), window.serviceWorkerUpdateInterval);
+          window.setInterval(registration.update.bind(registration), window.serviceWorkerUpdateInterval)
         }
       }).catch((e) => {
         console.error('Error during service worker registration:', e)
@@ -57,7 +57,7 @@
       navigator.serviceWorker.onmessage = (event) => {
         const {
           action
-        } = event.data;
+        } = event.data
         if (action === 'reload') {
           window.location.reload()
         }
