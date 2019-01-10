@@ -91,7 +91,7 @@ export default {
       return this._.extend(config, {
         url,
         method,
-        data
+        data,
       });
     },
     cancel(message) {
@@ -104,7 +104,7 @@ export default {
       const conf = this._.merge({
         method,
         url,
-        data
+        data,
       }, config);
       conf.url = this.url(conf);
       return this.$http.request(conf).then(response => response.data);
@@ -145,13 +145,11 @@ export default {
       };
 
       if (!userEmail) {
-        const {
-          oauthUsurpator
-        } = this.get();
+        const { oauthUsurpator } = this.get();
         const oauth = this._.clone(oauthUsurpator);
         this.set({
           oauth,
-          oauthUsurpator: null
+          oauthUsurpator: null,
         });
         return Promise.resolve().then(redirect);
       }
@@ -160,13 +158,11 @@ export default {
         response.expires_at = this.expires(response.expires_in);
         response.refresh_token_expires_at = this.expires(response.refresh_token_lifetime);
 
-        const {
-          oauth
-        } = this.get();
+        const { oauth } = this.get();
         const oauthUsurpator = this._.clone(oauth);
         this.set({
           oauth: response,
-          oauthUsurpator
+          oauthUsurpator,
         });
       }).then(redirect);
     },
@@ -201,9 +197,7 @@ export default {
         response.expires_at = this.expires(response.expires_in);
         response.refresh_token_expires_at = this.expires(response.refresh_token_lifetime);
         if (commit) {
-          this.set({
-            oauth: response
-          });
+          this.set({ oauth: response });
         } else {
           // TODO handle rememberMe
           // this.$store._mutations.set[0](this.get(), data)
@@ -264,14 +258,27 @@ export default {
       }
 
       return this.$http.request(config).then((res) => {
-        const {
-          data
-        } = res;
+        const { data } = res;
         this.$store.data = data;
         this.$store[config.url] = data;
         return data;
-      }).catch((error) => {
-        const data = (error.response && error.response.data) || {};
+      }).catch(async (error) => {
+        let data = (error.response && error.response.data) || {};
+        if (this._.isBlob(data)) {
+          const blobParser = blob => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = (progressEvent) => {
+              let { result } = progressEvent.target;
+              if (error.response.headers['content-type'] === 'application/json') {
+                result = JSON.parse(result);
+              }
+              resolve(result);
+            };
+            reader.onerror = reject;
+            reader.readAsText(blob);
+          });
+          data = await blobParser(data);
+        }
         const description = data.error_description;
         if (data.error === 'invalid_grant' && this._.isString(description)) {
           if (description.match(/expired/i) && error.response.status === 401) {
