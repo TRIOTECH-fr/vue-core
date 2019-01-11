@@ -287,7 +287,7 @@ export default {
           }
           if (!description.match(/password/i) && description.match(/invalid|expired/i) && error.response.status >= 400) {
             this.unset('oauth');
-            return this.redirect();
+            this.redirect();
           }
         } else if (!this.$http.isCancel(error)) {
           // eslint-disable-next-line no-console
