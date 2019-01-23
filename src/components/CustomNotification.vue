@@ -72,82 +72,52 @@
       &.loading {
         background-color: $blue;
         border-color: $dark-blue;
-
-
-        .custom-template-icon,
-        .custom-template-content {
-          color: $white;
-        }
-
-        .custom-template-close {
-          color: $dark-blue;
-          opacity: 1;
-        }
       }
 
       &.success {
         background-color: $green;
         border-color: $dark-green;
-
-
-        .custom-template-icon,
-        .custom-template-content {
-          color: $white;
-        }
-
-        .custom-template-close {
-          color: $dark-green;
-          opacity: 1;
-        }
       }
 
       &.error {
         background-color: $red;
         border-color: $dark-red;
-
-        .custom-template-icon,
-        .custom-template-content {
-          color: $white;
-        }
-
-        .custom-template-close {
-          color: $dark-red;
-          opacity: 1;
-        }
       }
 
       &.warning {
         background-color: $orange;
         border-color: $dark-orange;
+      }
+
+      &.default {
+        color: $grey;
 
         .custom-template-icon,
-        .custom-template-content {
-          color: $white;
-        }
-
         .custom-template-close {
-          color: $dark-orange;
-          opacity: 1;
+          color: $grey;
         }
       }
 
       .custom-template-icon {
-        color: $light-grey;
+        color: $white;
         font-size: 32px;
         padding: 0 10px;
       }
 
       .custom-template-close {
+        color: $white;
+        opacity: 1;
         align-self: baseline;
         font-size: 16px;
-        opacity: 0.2;
         cursor: pointer;
 
         &:hover {
           opacity: 0.8;
         }
       }
+
       .custom-template-content {
+        color: $white;
         padding: 10px;
         flex: 1 0;
 
