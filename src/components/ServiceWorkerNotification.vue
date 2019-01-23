@@ -1,9 +1,9 @@
 <template>
-  <div v-if="serviceWorkerHeader" class="service-worker-updated text-center">
+  <div v-if="serviceWorkerHeader" :class="['service-worker-updated', 'text-center', { 'is-absolute' : isAbsolute }]">
     <u @click="onReloadClick">
       {{ text }}
     </u>
-    <span class="position-absolute" @click="serviceWorkerHeader = false">✕</span>
+    <span class="close-notification" @click="serviceWorkerHeader = false">✕</span>
   </div>
 </template>
 
@@ -31,6 +31,16 @@
         type: Boolean,
         default: false,
       },
+      isAbsolute: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    data() {
+      return {
+        serviceWorker: null,
+        serviceWorkerHeader: false,
+      };
     },
     computed: {
       notification: () => window.Notification,
@@ -47,12 +57,6 @@
         return this.hasNotification && this.notification.permission === 'denied';
       },
     },
-    data() {
-      return {
-        serviceWorker: null,
-        serviceWorkerHeader: false,
-      };
-    },
     async created() {
       if (this.isNotificationDefault) {
         await this.notification.requestPermission();
@@ -60,13 +64,16 @@
 
       window.serviceWorkerUpdated = async () => {
         const registration = await navigator.serviceWorker.getRegistration();
-        this.serviceWorker = registration.active;
+
+        if (registration) {
+          this.serviceWorker = registration.active;
+        }
 
         if (this.isNotificationGranted) {
           const options = {
             body: this.text,
             tag: 'update',
-            icon: `/static/img/icons/android-chrome-512x512.png`,
+            icon: '/static/img/icons/android-chrome-512x512.png',
           };
 
           if ('actions' in this.notification.prototype) {
@@ -93,24 +100,41 @@
     methods: {
       onReloadClick() {
         window.location.reload();
-      }
-    }
+      },
+    },
   };
 </script>
 
 <style lang="scss">
   @import '~@/scss/vars';
+  @import 'compass/css3/box-shadow';
 
   .service-worker-updated {
     line-height: 50px;
+
+    &.is-absolute {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 10000;
+      background: $extra-light-grey;
+      min-width: 450px;
+      border: 1px solid $extra-light-grey;
+      text-align: left !important;
+      padding: 10px 20px;
+
+      @include box-shadow(-1px 1px 6px $light-grey);
+    }
+
+    .close-notification {
+      position: absolute;
+      right: 20px;
+      top: 0;
+    }
 
     * {
       cursor: pointer;
     }
 
-    .position-absolute {
-      right: 0;
-      padding: 0 15px;
-    }
   }
 </style>
