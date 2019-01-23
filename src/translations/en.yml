@@ -1,0 +1,71 @@
+form:
+  username: Username
+  email: Email
+  login: Login
+  password: Password
+  remember_me: Remember me
+  label: Label
+  name: Name
+  address: Address
+  street: Street
+  street_comp: Additional address
+  city: City
+  postal_code: Postal code
+  country: Country
+  zip_code: Zip code
+  company: Company
+  iban: IBAN
+  bic: BIC
+  last_name: Last name
+  first_name: First name
+  mail: Email
+  phone: Phone
+  date: Date
+  gender: Gender
+  male: Man
+  female: Woman
+  image: Image
+  link: Link
+  show_all: Show all
+
+actions:
+  cancel: Cancel
+  continue: Continue
+  choose_file: Choose file
+  create: Create
+  delete: Delete
+  duplicate: Duplicate
+  edit: Edit
+  go_back: Go back
+  loading: Loading ...
+  login: Login
+  logout: Logout
+  move_down: Move down
+  move_up: Move up
+  no: No
+  reload: Reload
+  reset: Reset
+  save: Save
+  show: Show
+  yes: Yes
+
+table:
+  item: Item
+  index: Index
+
+flashes:
+  login:
+    title: Login
+    invalid_grant: Login credentials are incorrect
+
+# VueMultiSelect
+vms:
+  select: Press ENTER to select
+  selected: Selected
+  deselect: Deselect
+  no_result: No result
+  max_elements: You have selected the maximum number of options. First remove a selected option to select another.
+  placeholder: Choose an option
+  tag_placeholder: Press enter to create a tag
+
+service_worker_updated: A new version is available
