@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export default {
   queryPropsValidator(...args) {
     return this.propsValidator(...args, true);
@@ -8,10 +10,11 @@ export default {
       params = this.merge(params, route.query);
     }
 
-    return this.transform(params, (carry, prop, key) => {
+    return this.transform(params, (carry, param, key) => {
       const props = this.reduce(component.mixins, (mixins, mixin) => Object.assign(mixins, mixin.props), component.props || {});
-      if (!this.isArray(props[key].type) && !(prop instanceof props[key].type)) {
-        carry[key] = props[key].type(prop);
+      const prop = props[_.camelCase(key)];
+      if (prop && !this.isArray(prop.type) && !(param instanceof prop.type)) {
+        carry[key] = prop.type(param);
       }
       return carry;
     }, params);
