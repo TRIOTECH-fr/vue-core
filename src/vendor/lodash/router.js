@@ -12,9 +12,10 @@ export default {
 
     return this.transform(params, (carry, param, key) => {
       const props = this.reduce(component.mixins, (mixins, mixin) => Object.assign(mixins, mixin.props), component.props || {});
-      const prop = props[_.camelCase(key)];
+      const propKey = _.camelCase(key);
+      const prop = props[propKey];
       if (prop && !this.isArray(prop.type) && !(param instanceof prop.type)) {
-        carry[key] = prop.type(param);
+        carry[propKey] = prop.type(param);
       }
       return carry;
     }, params);
