@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export default {
   queryPropsValidator(...args) {
     return this.propsValidator(...args, true);
@@ -12,12 +10,14 @@ export default {
 
     return this.transform(params, (carry, param, key) => {
       const props = this.reduce(component.mixins, (mixins, mixin) => Object.assign(mixins, mixin.props), component.props || {});
-      const propKey = _.camelCase(key);
+      const propKey = this.camelCase(key);
       const prop = props[propKey];
-      if (prop && !this.isArray(prop.type) && !(param instanceof prop.type)) {
-        carry[propKey] = prop.type(param);
+      const propType = prop.type;
+
+      if (prop) {
+        carry[propKey] = propType === Boolean ? /^(true|1)$/i.test(param) : propType(param);
       }
       return carry;
-    }, params);
+    });
   },
 };
