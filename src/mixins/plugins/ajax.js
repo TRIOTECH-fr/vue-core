@@ -184,9 +184,9 @@ export default {
         refresh_token: this.oauthStore.refresh_token,
       }).then(() => {
         this.pendingRefresh.forEach(Function.prototype.call, Function.prototype.call);
-        this.pendingRefresh = false;
-
         return this.oauthStore.access_token;
+      }).finally(() => {
+        this.pendingRefresh = false;
       });
     },
     oauth(data, commit = true) {
@@ -282,7 +282,7 @@ export default {
         const description = data.error_description;
         if (data.error === 'invalid_grant' && this._.isString(description)) {
           if (description.match(/expired/i) && error.response.status === 401) {
-            delete config.headers;
+            delete config.headers.Authorization;
             return this.refresh().then(this.request.bind(this, config));
           }
           if (!description.match(/password/i) && description.match(/invalid|expired/i) && error.response.status >= 400) {
