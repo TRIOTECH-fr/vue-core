@@ -10,7 +10,9 @@ const Ajax = new Vue({
     AjaxMixin,
   ],
   created() {
-    if (this.$env.prod) {
+    if (this.$config.get('timeout')) {
+      this.$http.defaults.timeout = this.$config.get('timeout');
+    } else if (this.$env.prod) {
       this.$http.defaults.timeout = 10000;
     }
   },
