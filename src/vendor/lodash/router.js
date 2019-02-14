@@ -12,7 +12,7 @@ export default {
       const props = this.reduce(component.mixins, (mixins, mixin) => Object.assign(mixins, mixin.props), component.props || {});
       const propKey = this.camelCase(key);
       const prop = props[propKey];
-      const propType = prop.type;
+      const propType = this.isArray(prop.type) ? this.first(prop.type) : prop.type;
 
       if (prop) {
         carry[propKey] = propType === Boolean ? /^(true|1)$/i.test(param) : propType(param);
