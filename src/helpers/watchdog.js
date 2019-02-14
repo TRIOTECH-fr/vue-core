@@ -25,7 +25,7 @@ const Watchdog = new Vue({
     },
     mattermost(config = {}) {
       if (this.$env.prod) {
-        const matchAuthor = author => `@${this._.get(author.match(/^(\w+) <([^@]+@\w+\.[^>]+)>$/), '[1]', '')}`;
+        const matchAuthor = author => `@${this._.get(author.match(/^([\w\s]+) <([^@]+@\w+\.[^>]+)>$/), '[1]', '')}`;
         const packageContributors = this._.get(Package, 'contributors', []).map(matchAuthor).join(', ');
         const packageAuthor = matchAuthor(this._.get(Package, 'author', ''));
         const mentions = packageContributors || packageAuthor;
