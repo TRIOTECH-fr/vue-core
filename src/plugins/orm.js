@@ -82,14 +82,13 @@ const Entity = {
 
         let response = null;
         try {
-          const thenFn = extendedOptions.then || this._.identity;
-          const catchFn = extendedOptions.catch || this._.identity;
+          const thenFn = extendedOptions.then || Promise.resolve.bind(Promise);
+          const catchFn = extendedOptions.catch || Promise.reject.bind(Promise);
           const finallyFn = extendedOptions.finally || this._.identity;
           response = await fn.call(this, compiledURI, data, axios).then(thenFn).catch(catchFn).finally(finallyFn);
         } catch (error) {
           return reject(error);
         }
-
         if (handleCache && this._.isPlainObject(response)) {
           const time = Number(new Date());
 
