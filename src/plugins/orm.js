@@ -28,7 +28,7 @@ const Entity = {
       return this.exec('delete', config);
     },
     exec(type = null, config = {}) {
-      const parameters = config.parameters || null
+      const parameters = config.parameters || null;
       const data = config.data || {};
       const options = config.options || {};
       return new Promise(async (resolve, reject) => {
@@ -82,7 +82,10 @@ const Entity = {
 
         let response = null;
         try {
-          response = await fn.call(this, compiledURI, data, axios);
+          const thenFn = extendedOptions.then || this._.identity;
+          const catchFn = extendedOptions.catch || this._.identity;
+          const finallyFn = extendedOptions.finally || this._.identity;
+          response = await fn.call(this, compiledURI, data, axios).then(thenFn).catch(catchFn).finally(finallyFn);
         } catch (error) {
           return reject(error);
         }
