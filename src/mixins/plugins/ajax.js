@@ -16,6 +16,9 @@ export default {
     oauthStore() {
       return this.$store.getters.oauth || {};
     },
+    oauthUsurpatorStore() {
+      return this.$store.getters.usurpator || {};
+    },
     oauthConfig() {
       return this.$config.get('oauth', {});
     },
@@ -145,7 +148,7 @@ export default {
       };
 
       if (!userEmail) {
-        const { oauthUsurpator } = this.get();
+        const oauthUsurpator = this.oauthUsurpatorStore;
         const oauth = this._.clone(oauthUsurpator);
         this.set({
           oauth,
@@ -158,7 +161,7 @@ export default {
         response.expires_at = this.expires(response.expires_in);
         response.refresh_token_expires_at = this.expires(response.refresh_token_lifetime);
 
-        const { oauth } = this.get();
+        const oauth = this.oauthStore;
         const oauthUsurpator = this._.clone(oauth);
         this.set({
           oauth: response,
@@ -197,7 +200,8 @@ export default {
         response.expires_at = this.expires(response.expires_in);
         response.refresh_token_expires_at = this.expires(response.refresh_token_lifetime);
         if (commit) {
-          this.set({ oauth: response });
+          const oauth = this._.extend(this.oauthStore, response);
+          this.set({ oauth });
         } else {
           // TODO handle rememberMe
           // this.$store._mutations.set[0](this.get(), data)
