@@ -53,9 +53,9 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
+      title: config.title,
       filename: 'index.html',
       template: 'index.html',
-      inject: true,
       serviceWorkerLoader: `<script>${fs.readFileSync(path.join(
         __dirname,
         './service-worker-dev.js'

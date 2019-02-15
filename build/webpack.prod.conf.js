@@ -73,10 +73,9 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: process.env.NODE_ENV === 'testing' ?
-        'index.html' : config.build.index,
+      title: config.title,
+      filename: process.env.NODE_ENV === 'testing' ? 'index.html' : config.build.index,
       template: 'index.html',
-      inject: true,
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -136,11 +135,7 @@ if (config.build.productionGzip) {
   webpackConfig.plugins.push(
     new CompressionWebpackPlugin({
       algorithm: 'gzip',
-      test: new RegExp(
-        `\\.(${
-          config.build.productionGzipExtensions.join('|')
-        })$`
-      ),
+      test: new RegExp(`\\.(${config.build.productionGzipExtensions.join('|')})$`),
       threshold: 10240,
       minRatio: 0.8
     })
