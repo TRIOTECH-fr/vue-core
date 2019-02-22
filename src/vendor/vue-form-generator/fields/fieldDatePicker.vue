@@ -4,6 +4,7 @@
     v-attributes="'input'"
     :placeholder="schema.placeholder"
     :required="schema.required"
+    :disabled="schema.disabled"
     :language="languages[language]"
     :disabled-dates="schema.disabledDates"
     :highlighted="schema.highlighted"
@@ -13,7 +14,7 @@
 
 <script>
   import DatePicker from 'vuejs-datepicker';
-  import * as languages from "vuejs-datepicker/src/locale";
+  import * as languages from 'vuejs-datepicker/src/locale';
   import abstractField from './abstractField';
 
   export default {
