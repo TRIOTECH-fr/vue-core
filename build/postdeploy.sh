@@ -1,6 +1,8 @@
 #!/bin/bash
 clear
 echo "Starting Postdeploy Script :"
+echo "- Checking vendor dependencies..."
+test -f node_modules/jpegtran-bin/vendor/jpegtran || node node_modules/jpegtran-bin/lib/install.js || exit 10
 echo "- Updating config/parameters.yml file..."
 node node_modules/@triotech/vue-core/build/parameters.js || exit 1
 echo "- Building application..."
