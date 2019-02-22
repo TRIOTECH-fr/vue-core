@@ -74,7 +74,8 @@ module.exports = {
           resolve('test'),
           resolve('node_modules/@triotech/vue-core/src'),
           resolve('node_modules/sweet-modal-vue'),
-          resolve('node_modules/vuex-cache')
+          resolve('node_modules/vuex-cache'),
+          resolve('node_modules/vuejs-datepicker/src/locale')
         ]
       },
       {
