@@ -1,3 +1,16 @@
+// https://developer.mozilla.org/fr/docs/Web/API/Element/getAttributeNames#Polyfill
+if (Element.prototype.getAttributeNames === undefined) {
+  Element.prototype.getAttributeNames = function getAttributeNames() {
+    const { attributes } = this;
+    const { length } = attributes;
+    const result = new Array(length);
+    for (let i = 0; i < length; i += 1) {
+      result[i] = attributes[i].name;
+    }
+    return result;
+  };
+}
+
 const createHiddenInput = (element, form) => {
   const input = document.createElement('input');
   input.setAttribute('type', 'hidden');
@@ -52,7 +65,7 @@ const toggle = (enable, form, binding) => {
 const submitListeners = {};
 const { addEventListener } = Element.prototype;
 
-Element.prototype.addEventListener = function eventListenerHook(type, listener, options) {
+Element.prototype.addEventListener = function hookedAddEventListener(type, listener, options) {
   if (this.tagName === 'FORM' && type === 'submit') {
     const key = this.getAttributeNames().join('-');
     submitListeners[key] = {
