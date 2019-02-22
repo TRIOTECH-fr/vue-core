@@ -43,6 +43,7 @@ const Entity = {
         const {
           cache,
           axios,
+          uri,
         } = extendedOptions;
         const compiledURI = this.compileURI(parameters, extendedOptions);
 
@@ -56,9 +57,10 @@ const Entity = {
         }
 
         const fn = this.$ajax[method];
-        const [URI, queryString] = compiledURI.split('?');
-        const hashedURI = window.btoa(URI);
-        const hashedQueryString = window.btoa(queryString);
+        const [compiledBaseURI, compiledQueryString] = compiledURI.split('?');
+        const hashedRawURI = window.btoa(uri);
+        const hashedCompiledURI = window.btoa(compiledBaseURI);
+        const hashedCompiledQueryString = window.btoa(compiledQueryString);
         const isCachedMethod = this.$ajax.http.get.toLowerCase() === method;
         const handleCache = cache && isCachedMethod;
         const {
@@ -73,7 +75,7 @@ const Entity = {
 
         if (handleCache) {
           const cacheDuration = this._.isNumber(cache) ? cache : 3600000;
-          const cacheStore = this._.get(state.orm, `${hashedURI}.${hashedQueryString}`);
+          const cacheStore = this._.get(state.orm, `${hashedRawURI}.${hashedCompiledURI}.${hashedCompiledQueryString}`);
 
           if (this._.isPlainObject(cacheStore) && !this._.expired(cacheStore.time + cacheDuration)) {
             return resolve(cacheStore.response);
@@ -95,7 +97,7 @@ const Entity = {
           if (type === 'list' && extendedOptions.invalidate !== false) {
             // Invalidating Previous Caches if response.total differs
             const criteria = this._.pick(extendedOptions.queryString, 'criteria');
-            const cachedURI = this._.get(state, `orm.${hashedURI}`);
+            const cachedURI = this._.get(state, `orm.${uri}.${hashedCompiledURI}`);
             this._.forIn(this._.keys(this._.pickBy(cachedURI, (cacheEntry, cacheKey) => {
               const cacheQueryString = QS.parse(window.atob(cacheKey));
               const cacheCriteria = this._.pick(cacheQueryString, 'criteria');
@@ -119,7 +121,7 @@ const Entity = {
             })), this._.unset.bind(null, cachedURI));
           }
 
-          this._.set(state, `orm.${hashedURI}.${hashedQueryString}`, {
+          this._.set(state, `orm.${hashedRawURI}.${hashedCompiledURI}.${hashedCompiledQueryString}`, {
             time,
             response,
           });
@@ -148,7 +150,7 @@ const Entity = {
       };
     },
     invalidate() {
-      const hash = window.btoa(this.options.uri.replace(/{([\s\S]+?)\}/, ''));
+      const hash = window.btoa(this.options.uri);
       return this.unset(`orm.${hash}`);
     },
     compileURI(parameters = {}, options = {}) {
