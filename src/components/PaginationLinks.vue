@@ -46,19 +46,19 @@
       },
       first: {
         type: String,
-        default: '&laquo;',
+        default: '«',
       },
       prev: {
         type: String,
-        default: '&lsaquo;',
+        default: '‹',
       },
       next: {
         type: String,
-        default: '&rsaquo;',
+        default: '›',
       },
       last: {
         type: String,
-        default: '&raquo;',
+        default: '»',
       },
       ellipsis: {
         type: String,
@@ -91,7 +91,7 @@
         let { to } = this;
 
         if (this._.isString(to)) {
-          to = { to }
+          to = { to };
         }
 
         const query = this._.cloneDeep(this.$route.query);
