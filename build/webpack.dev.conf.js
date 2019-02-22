@@ -1,14 +1,15 @@
-const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+// eslint-disable-next-line import/no-extraneous-dependencies
 const portfinder = require('portfinder')
 
-const baseWebpackConfig = require('./webpack.base.conf')
 const utils = require('./utils')
 const requires = require('./requires')
+const babelLoader = require('./babel-loader')
+const baseWebpackConfig = require('./webpack.base.conf')
 const config = require('./config')
 
 const devWebpackConfig = merge(baseWebpackConfig, {
@@ -56,10 +57,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       title: config.title,
       filename: 'index.html',
       template: 'index.html',
-      serviceWorkerLoader: `<script>${fs.readFileSync(path.join(
-        __dirname,
-        './service-worker-dev.js'
-      ), 'utf-8')}</script>`
+      serviceWorkerLoader: `<script>${babelLoader(path.join(__dirname, 'service-worker-dev.js'))}</script>`
     }),
     new FriendlyErrorsPlugin()
   ]
@@ -81,8 +79,8 @@ module.exports = new Promise((resolve, reject) => {
         compilationSuccessInfo: {
           messages: [`Your application is running here: http://${require(path.join(process.cwd(), 'package.json')).name}.localhost:${port}`]
         },
-        onErrors: config.dev.notifyOnErrors ?
-          utils.createNotifierCallback() : console.log.bind(console)
+        onErrors: config.dev.notifyOnErrors
+          ? utils.createNotifierCallback() : console.log.bind(console)
       }))
 
       resolve(devWebpackConfig)

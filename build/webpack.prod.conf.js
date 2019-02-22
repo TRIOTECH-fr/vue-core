@@ -13,14 +13,14 @@ const PrerenderSpaPlugin = require('prerender-spa-plugin')
 
 const utils = require('./utils')
 const requires = require('./requires')
-const loadMinified = require('./load-minified')
+const babelLoader = require('./babel-loader')
 const baseWebpackConfig = require('./webpack.base.conf')
 const config = require('./config')
 // const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 
-const env = process.env.NODE_ENV === 'testing' ?
-  require('../config/test.env') :
-  require('../config/prod.env')
+const env = process.env.NODE_ENV === 'testing'
+  ? require('../config/test.env')
+  : require('../config/prod.env')
 
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
@@ -85,8 +85,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency',
-      serviceWorkerLoader: `<script>${loadMinified(path.join(__dirname,
-        'service-worker-prod.js'))}</script>`
+      serviceWorkerLoader: `<script>${babelLoader(path.join(__dirname, 'service-worker-prod.js'), true)}</script>`
     }),
     // copy custom static assets
     new CopyWebpackPlugin([{
@@ -95,7 +94,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       ignore: ['.*']
     }, {
       from: path.join(__dirname, './service-worker-extra.js'),
-      to: path.join(config.build.assetsSubDirectory, 'js'),
+      to: path.join(config.build.assetsSubDirectory, 'js')
     }]),
     new ImageminPlugin({
       test: /\.(jpe?g|png|gif|svg)$/i
@@ -110,8 +109,8 @@ const webpackConfig = merge(baseWebpackConfig, {
       minify: true,
       stripPrefix: 'web/',
       importScripts: [
-        path.join(config.build.assetsSubDirectory, 'js', 'service-worker-extra.js'),
-      ],
+        path.join(config.build.assetsSubDirectory, 'js', 'service-worker-extra.js')
+      ]
     })
     // modules intermediate caching step
     // new HardSourceWebpackPlugin()
