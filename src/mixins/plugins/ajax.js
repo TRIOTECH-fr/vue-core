@@ -60,9 +60,12 @@ export default {
     getUploadsUri(location) {
       return this.url(this.build(location), true);
     },
+    debug(enabled = true) {
+      this.$config.set('endpoint', enabled ? '/app_dev.php/' : '/');
+    },
     url(config, withoutEndpoint = false) {
       let url = this._.isObject(config) ? config.url : config;
-      const endPoint = withoutEndpoint ? '/' : (this.$config.endpoint || '');
+      const endPoint = withoutEndpoint ? '/' : this.$config.endpoint;
       if (url && url.indexOf('://') === -1) {
         url = `${this.$config.host}${endPoint}${url}`;
       }
