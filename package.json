@@ -128,6 +128,7 @@
     "vue-cookie-law": "^1.4.0",
     "vue-cordova": "^0.1.2",
     "vue-form-generator": "^2.2.2",
+    "vue-gtm": "^2.0.0",
     "vue-i18n": "^8.0.0",
     "vue-js-toggle-button": "^1.2.2",
     "vue-loader": "^14.2.2",
