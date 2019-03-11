@@ -12707,10 +12707,10 @@ vuejs-datepicker@^1.5.2:
   resolved "https://registry.yarnpkg.com/vuejs-datepicker/-/vuejs-datepicker-1.5.4.tgz#dacdb5eb5ef44342c67cb59b93a0d5da9c1809b3"
   integrity sha512-AVzgu3pb/fF/Sj3qu8YPnp7KhtsXkm8TSnBEcyYsWb1bMJr5FdPCxuIzISgw5kq0It7HkVJUGXQ4CiCwq9hhww==
 
-vuex-cache@^1.1.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/vuex-cache/-/vuex-cache-1.4.1.tgz#31297f6917e8fbb62736cdfc4ac1e8a027d0eef1"
-  integrity sha512-SIPYr4gZGjLm1XIJ1hqAmvwqkYDuvCiMQqiRGmlbsiLNJfs2FvslHX/KULpBRMYgW6Wf5BReeDugAfdSon+MqA==
+vuex-cache@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/vuex-cache/-/vuex-cache-3.0.0.tgz#717d5a51da2fb3f5cc9c3130397a55d3c1829ef1"
+  integrity sha512-EruZ4ECH47JMbcNXOApIJClkAe6lvrH7tynZhsXJpuVtMtoUPscNPllutPyZ8S5yfS3aYYBvm4x6Za73vUz1Uw==
 
 vuex-i18n@^1.10.5:
   version "1.11.0"
