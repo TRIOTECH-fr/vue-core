@@ -5,6 +5,7 @@ import moment from 'moment';
 import router from '../vendor/lodash/router';
 import transforms from '../vendor/lodash/transforms';
 import types from '../vendor/lodash/types';
+import extend from '../vendor/lodash/extend';
 import bootstrap from '../vendor/lodash/bootstrap';
 
 const Y = f => (...args) => f(Y(f))(...args);
@@ -49,6 +50,7 @@ _.mixin({
   ...router,
   ...transforms,
   ...types,
+  ...extend,
   Y,
 }).noConflict();
 
