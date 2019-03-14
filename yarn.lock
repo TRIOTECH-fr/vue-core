@@ -12557,9 +12557,9 @@ vue-slick@^1.1.12:
     slick-carousel "^1.6.0"
 
 vue-slider-component@^3.0.8:
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/vue-slider-component/-/vue-slider-component-3.0.8.tgz#411c27c4ed14ace06f3e8e0219b00f706e385fcd"
-  integrity sha512-TF12zoOleSNMwetMVYRyIpvCoHML2cN/frAjghcxmtyxNeR4EKtrHzT5aWW2NI4JzjZIxr8EJfZHHYWdjZs/Pg==
+  version "3.0.12"
+  resolved "https://registry.yarnpkg.com/vue-slider-component/-/vue-slider-component-3.0.12.tgz#674552ca917021206cac3304d2ed037cd7328c2d"
+  integrity sha512-nKtWdNUc6/RodKBqU4begfGWHSRetMKxLDIw1tYL6vhFLy6RLMHqkZG8ThaOxkTj+RvSotndjBZ1ESnejFxOWg==
 
 vue-socket.io@^3.0.4:
   version "3.0.7"
