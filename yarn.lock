@@ -12422,6 +12422,11 @@ vue-axios@^2.1.1:
   resolved "https://registry.yarnpkg.com/vue-axios/-/vue-axios-2.1.4.tgz#a9d298f7e876f9a87feb336b37adcbce34ff9f9f"
   integrity sha512-DS8Q+WFT3i7nS0aZ/NMmTPf2yhbtlXhj4QEZmY69au/BshsGzGjC6dXaniZaPQlErP3J3Sv1HtQ4RVrXaUTkxA==
 
+vue-class-component@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.0.1.tgz#7af2225c600667c7042b60712eefdf41dfc6de63"
+  integrity sha512-YIihdl7YmceEOjSwcxLhCXCNA3TKC2FStuMcjtuzhUAgw5x5d1T5gZTmVQHGyOaQsaKffL4GlZzYN3dlMYl53w==
+
 vue-cleave@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/vue-cleave/-/vue-cleave-1.2.2.tgz#857f428c6c92b64ee1c4a82bfba654dea20d71af"
@@ -12537,6 +12542,13 @@ vue-preload-image@^1.0.3:
     node-sass "^4.5.0"
     vue "^2.1.10"
 
+vue-property-decorator@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-8.0.0.tgz#a2e9bb2419b638cbf1614e17b99aa675d6d4e9e4"
+  integrity sha512-aaAO/Wbh+n3sPMOoQ+Rwi9va6vFqZPX13dA8vMycGuS/DOIYC77KxX0gMAPEzzkT4Umya0uSlTvBV5jQvSTyBQ==
+  dependencies:
+    vue-class-component "^7.0.1"
+
 vue-router@^3.0.1:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.2.tgz#dedc67afe6c4e2bc25682c8b1c2a8c0d7c7e56be"
@@ -12557,9 +12569,12 @@ vue-slick@^1.1.12:
     slick-carousel "^1.6.0"
 
 vue-slider-component@^3.0.8:
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/vue-slider-component/-/vue-slider-component-3.0.8.tgz#411c27c4ed14ace06f3e8e0219b00f706e385fcd"
-  integrity sha512-TF12zoOleSNMwetMVYRyIpvCoHML2cN/frAjghcxmtyxNeR4EKtrHzT5aWW2NI4JzjZIxr8EJfZHHYWdjZs/Pg==
+  version "3.0.13"
+  resolved "https://registry.yarnpkg.com/vue-slider-component/-/vue-slider-component-3.0.13.tgz#00fc61badc3b49551c1ae9ad5734ec6c2dbd524c"
+  integrity sha512-ucSwFBgqgEV78XZ/kmBHz0yoYNcMLygz/PPsP9qKUMhf6fidCmdhjgDsibKe80hE534Sd3/ktwsd+BKlYedUeg==
+  dependencies:
+    vue "^2.6.6"
+    vue-property-decorator "^8.0.0"
 
 vue-socket.io@^3.0.4:
   version "3.0.7"
@@ -12610,10 +12625,10 @@ vue2-google-maps@^0.10.0:
     babel-runtime "^5.8.0"
     marker-clusterer-plus "^2.1.4"
 
-vue@^2.1.10, vue@^2.5.16:
-  version "2.6.8"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.8.tgz#f21cbc536bfc14f7d1d792a137bb12f69e60ea91"
-  integrity sha512-+vp9lEC2Kt3yom673pzg1J7T1NVGuGzO9j8Wxno+rQN2WYVBX2pyo/RGQ3fXCLh2Pk76Skw/laAPCuBuEQ4diw==
+vue@^2.1.10, vue@^2.5.16, vue@^2.6.6:
+  version "2.6.9"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.9.tgz#415c1cc1a5ed00c8f0acdd0a948139d12b7ea6b3"
+  integrity sha512-t1+tvH8hybPM86oNne3ZozCD02zj/VoZIiojOBPJLjwBn7hxYU5e1gBObFpq8ts1NEn1VhPf/hVXBDAJ3X5ljg==
 
 vuejs-datepicker@^1.5.2:
   version "1.5.4"
