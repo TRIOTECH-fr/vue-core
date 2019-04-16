@@ -35,16 +35,12 @@ Router.beforeEach((to, from, next) => {
   const vm = Router.app;
   let push = null;
 
-  if (vm.$ajax) {
-    vm.$ajax.cancel('route:changed');
-  }
-
   vm.$nextTick(() => {
     vm._.some(vm.$config.get('firewall'), (data, path) => {
       const store = vm._.isObject(data) ? data.store : true;
       const state = vm._.isObject(data) ? data.state : data;
       const redirect = vm._.isObject(data) ? data.redirect : '/';
-      const matched = to.path.match(path) && (store && !vm.$store.state[state]);
+      const matched = to.path.match(path) && (store && !vm._.get(vm.$store.state, state));
       if (matched) {
         vm.$router.push(redirect);
         push = redirect;
@@ -53,6 +49,10 @@ Router.beforeEach((to, from, next) => {
     });
 
     if (!push || push !== from.path) {
+      if (vm.$ajax) {
+        vm.$ajax.cancel('route:changed');
+      }
+
       next();
     }
   });
