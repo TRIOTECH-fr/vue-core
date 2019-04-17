@@ -24,6 +24,12 @@ module.exports = {
   },
   // custom rules
   rules: {
+    // always add html self closing
+    'vue/html-self-closing': ['error', {
+      'html': {
+        'void': 'always',
+      },
+    }],
     // don't require .vue extension when importing
     'import/extensions': ['error', 'always', {
       js: 'never',
