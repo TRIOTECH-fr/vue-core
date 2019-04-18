@@ -49,7 +49,7 @@ Router.beforeEach((to, from, next) => {
     });
 
     if (!push || push !== from.path) {
-      if (vm.$ajax) {
+      if (from.name !== null && vm.$ajax) {
         vm.$ajax.cancel('route:changed');
       }
 
