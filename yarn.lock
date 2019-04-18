@@ -12574,9 +12574,9 @@ vue-slick@^1.1.12:
     slick-carousel "^1.6.0"
 
 vue-slider-component@^3.0.8:
-  version "3.0.15"
-  resolved "https://registry.yarnpkg.com/vue-slider-component/-/vue-slider-component-3.0.15.tgz#1d9f0e7c51a3c87d13c0c76aa67a4a197a9a2869"
-  integrity sha512-slqTrdokRhJvuqHODwjZ27e5fUMvFuNzPV9DIxi9CAEABfapRNEJUljifvUfqcn6M2hTAWacodBddWX05C7HfQ==
+  version "3.0.28"
+  resolved "https://registry.yarnpkg.com/vue-slider-component/-/vue-slider-component-3.0.28.tgz#4e53ef445ed267e777b97ff7074ab1299c28f64d"
+  integrity sha512-PIywUvTu1rCx5RptdtlLysl6By5gyxu3zMD8aX2LFS7/8U20+3YixeMN/Gveq4Z7SA1zAE6HSGwfIctTHz3JYw==
   dependencies:
     vue-property-decorator "^8.0.0"
 
