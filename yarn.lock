@@ -3852,7 +3852,7 @@ dom-walk@^0.1.0:
   resolved "https://registry.yarnpkg.com/dom-walk/-/dom-walk-0.1.1.tgz#672226dc74c8f799ad35307df936aba11acd6018"
   integrity sha1-ZyIm3HTI95mtNTB9+TaroRrNYBg=
 
-dom7@^2.0.6:
+dom7@^2.1.3:
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/dom7/-/dom7-2.1.3.tgz#a736f9c3bfbc4ca039a81cd095f97d1d7f3de19c"
   integrity sha512-QTxHHDox+M6ZFz1zHPAHZKI3JOHY5iY4i9BK2uctlggxKQwRhO3q3HHFq1BKsT25Bm/ySSj70K6Wk/G4bs9rMQ==
@@ -5144,15 +5144,15 @@ framework7-vue@^2.3.0:
   resolved "https://registry.yarnpkg.com/framework7-vue/-/framework7-vue-2.3.0.tgz#fa9c81ab57b1f637441e8a418a0057cc8036152f"
   integrity sha512-RGmw9UASfuc8e8hvJkqpC86pmTxn/k3B2q6mPf+SilcBD+4HP14Dgz1lFvTNNdifseKJ1eN2GEwpfsjpNYLErw==
 
-framework7@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/framework7/-/framework7-2.3.1.tgz#a50ffc18117cf5c8840dba39348304f9e984085a"
-  integrity sha512-cZvF6I+q0ZlIwrpYFeSijiINTGVNWwkg+j4ytbiflnS8EDwbwPgBXGikQO1A9cKPOC6Jr2scl+YwMfgk9BBgwQ==
+framework7@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/framework7/-/framework7-4.3.0.tgz#b0e368d00b60b65c6e3fc7880aa43304e2e05587"
+  integrity sha512-Z+jJwi/0piXFgvlpo5qHWJb9mGfWyVKSbtRCnjxOcavB5TBFBB+Lnym+Q//Aaml+hO1vhXximo2M7R9mYVhJ+g==
   dependencies:
-    dom7 "^2.0.6"
-    path-to-regexp "^2.1.0"
-    ssr-window "^1.0.0"
-    template7 "^1.3.5"
+    dom7 "^2.1.3"
+    path-to-regexp "^3.0.0"
+    ssr-window "^1.0.1"
+    template7 "^1.4.1"
 
 fresh@0.5.2:
   version "0.5.2"
@@ -9012,10 +9012,10 @@ path-to-regexp@^1.0.1, path-to-regexp@^1.7.0:
   dependencies:
     isarray "0.0.1"
 
-path-to-regexp@^2.1.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-2.4.0.tgz#35ce7f333d5616f1c1e1bfe266c3aba2e5b2e704"
-  integrity sha512-G6zHoVqC6GGTQkZwF4lkuEyMbVOjoBKAEybQUypI1WTkqinCOrq2x6U2+phkJ1XsEMTy4LjtwPI7HW+NVrRR2w==
+path-to-regexp@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-3.0.0.tgz#c981a218f3df543fa28696be2f88e0c58d2e012a"
+  integrity sha512-ZOtfhPttCrqp2M1PBBH4X13XlvnfhIwD7yCLx+GoGoXRPQyxGOTdQMpIzPSPKXAJT/JQrdfFrgdJOyAzvgpQ9A==
 
 path-type@^1.0.0:
   version "1.1.0"
@@ -11231,7 +11231,7 @@ sshpk@^1.7.0:
     safer-buffer "^2.0.2"
     tweetnacl "~0.14.0"
 
-ssr-window@^1.0.0, ssr-window@^1.0.1:
+ssr-window@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/ssr-window/-/ssr-window-1.0.1.tgz#30752a6a4666e7767f0b7e6aa6fc2fdbd0d9b369"
   integrity sha512-dgFqB+f00LJTEgb6UXhx0h+SrG50LJvti2yMKMqAgzfUmUXZrLSv2fjULF7AWGwK25EXu8+smLR3jYsJQChPsg==
@@ -11697,7 +11697,7 @@ tempfile@^2.0.0:
     temp-dir "^1.0.0"
     uuid "^3.0.1"
 
-template7@^1.3.5:
+template7@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/template7/-/template7-1.4.1.tgz#c3b2b03d6879e1c5f8a79067c961c8896ffaeec6"
   integrity sha512-sYZ9Wl5kFuNSvLcMPq8z4oenG7rDho6KnB2vWyvMJCdI1guJhxTEU0TCwr6Nd1Jx34kSOmrpJakMGxJgCc55yg==
