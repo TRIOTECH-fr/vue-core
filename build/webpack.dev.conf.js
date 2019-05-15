@@ -58,8 +58,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       filename: 'index.html',
       template: 'index.html',
       serviceWorkerLoader: `<script>${babelLoader(path.join(__dirname, 'service-worker-dev.js'))}</script>`
-    }),
-    new FriendlyErrorsPlugin()
+    })
   ]
 }, requires.root(path.join('build', path.basename(__filename))))
 
@@ -80,7 +79,7 @@ module.exports = new Promise((resolve, reject) => {
           messages: [`Your application is running here: http://${require(path.join(process.cwd(), 'package.json')).name}.localhost:${port}`]
         },
         onErrors: config.dev.notifyOnErrors
-          ? utils.createNotifierCallback() : console.log.bind(console)
+          ? utils.createNotifierCallback() : console.log
       }))
 
       resolve(devWebpackConfig)

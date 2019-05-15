@@ -85,6 +85,8 @@ exports.createNotifierCallback = function () {
   const notifier = require('node-notifier')
 
   return (severity, errors) => {
+    console.log(severity, errors)
+
     if (severity !== 'error') {
       return
     }
@@ -94,7 +96,7 @@ exports.createNotifierCallback = function () {
 
     notifier.notify({
       title: pkg.name,
-      message: `${severity}: ${error.name}`,
+      message: `${severity}: ${error.webpackError || error.name}`,
       subtitle: filename || '',
       icon: path.join(__dirname, 'logo.png')
     })
