@@ -36,7 +36,7 @@
     "@intervolga/optimize-cssnano-plugin": "^1.0.6",
     "@triotech/commitlint": "git+https://git.triotech.fr/composer/commitlint.git",
     "autoprefixer": "^9.1.1",
-    "axios": "^0.18.0",
+    "axios": "^0.19.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.0",
     "babel-plugin-istanbul": "^5.0.1",
