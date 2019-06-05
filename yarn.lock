@@ -5139,10 +5139,10 @@ framework7-icons@^0.9.1:
   resolved "https://registry.yarnpkg.com/framework7-icons/-/framework7-icons-0.9.1.tgz#01f089ce9f71eae112f516630b17009929a8b384"
   integrity sha512-UuT5GJJ3ghAT/AnFcBJHpt5re/ps+oM1+B8yUolE+EK+Ftnpw0wyOTZH+aeHR1Wd2fEkDnQUMTyvt19drBqX/g==
 
-framework7-vue@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/framework7-vue/-/framework7-vue-2.3.0.tgz#fa9c81ab57b1f637441e8a418a0057cc8036152f"
-  integrity sha512-RGmw9UASfuc8e8hvJkqpC86pmTxn/k3B2q6mPf+SilcBD+4HP14Dgz1lFvTNNdifseKJ1eN2GEwpfsjpNYLErw==
+framework7-vue@^4.4.3:
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/framework7-vue/-/framework7-vue-4.4.3.tgz#267df7d599fafdaf1cfb8c2c7c7e4303d1e3d3d9"
+  integrity sha512-cPgIDGs7cDfxy1Kx6uT3CardgRgQFyd7e5fwFcMtgInladrTthbyQLUsVFogDa06mc8hRu/N1sJK+K3x/uuM7Q==
 
 framework7@^2.3.1:
   version "2.3.1"
