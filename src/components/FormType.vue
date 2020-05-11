@@ -54,13 +54,14 @@
                   :required="part.required"
                   :pattern="part.pattern"
                   :autocomplete="part.name"
+                  :disabled="processing"
                   v-model="contact[part.name]"
                 >
                 <span v-if="part.text">{{ $t(part.text) }}</span>
               </template>
               <template v-if="part.formType === 'textearea'">
                 <!-- TODO fix eslint alert / use attribute placeholder instead ? -->
-                <textarea v-autosize="true" v-model="contact[part.name]">
+                <textarea v-autosize="true" v-model="contact[part.name]" :disabled="processing">
                   {{ $t(part.placeholder) }}
                 </textarea>
               </template>
@@ -73,6 +74,7 @@
                   :close-on-select="true"
                   :hide-selected="false"
                   :clear-on-select="true"
+                  :disabled="processing"
                   v-model="contact[part.name]"
                   label="label"
                   track-by="value"
@@ -168,6 +170,7 @@
         hasError: false,
         active: 0,
         internalButton: {},
+        processing: false,
       };
     },
     computed: {
@@ -192,16 +195,39 @@
     },
     methods: {
       send() {
+        this.processing = true;
+        const contact = this._.clone(this.contact);
+
         this.$ajax.post(this.postUri, {
-          contact: this._.clone(this.contact),
+          contact,
         }).then((data) => {
           if (data.status) {
+            this.$emit('sent', contact);
             this.$notify({ title: this.$t('flashes.contact.sent_title'), text: this.$t('flashes.contact.sent'), type: 'success' });
+
+            this.$parent.$parent.close();
+            this._.each(this.contact, (value, key) => this.$set(this.contact, key, ''));
+            // Not update props ...
+            // if (this.button) {
+            //   this.$set(this.button.next, 'text', 'actions.next');
+            // }
+
+            if (this.internalButton) {
+              this.$set(this.internalButton, 'next.text', 'action.next');
+            }
+
+            this._.each(this.parts, (part, idx) => {
+              part.isActive = idx === 0;
+            });
+            this.active = 0;
+            this.processing = false;
           } else {
             this.$notify({ title: this.$t('flashes.contact.not_sent_title'), text: this.$t('flashes.contact.not_sent'), type: 'error' });
+            this.processing = false;
           }
         }, () => {
           this.$notify({ title: this.$t('flashes.contact.server_error_title'), text: this.$t('flashes.contact.server_error'), type: 'error' });
+          this.processing = false;
         });
       },
       onPrevFormClick() {
@@ -248,21 +274,8 @@
           this.$set(this.internalButton, 'next.text', 'actions.send');
         } else if (index > parts.length || this.isSimplified) {
           this.send();
-          this.$parent.$parent.close();
-          this._.each(this.contact, (value, key) => this.$set(this.contact, key, ''));
-          // Not update props ...
-          // if (this.button) {
-          //   this.$set(this.button.next, 'text', 'actions.next');
-          // }
 
-          if (this.internalButton) {
-            this.$set(this.internalButton, 'next.text', 'action.next');
-          }
-
-          index = 0;
-          this._.each(parts, (part, idx) => {
-            part.isActive = idx === 0;
-          });
+          return;
         }
 
         if (parts[index]) {
