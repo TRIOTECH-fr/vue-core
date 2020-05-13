@@ -87,7 +87,7 @@
         <b-row>
           <template v-if="isSimplified">
             <div class="text-left">
-              <b-button type="submit" class="round-btn" @click="onNextFormClick">
+              <b-button type="button" class="round-btn" @click="onNextFormClick">
                 <span class="d-none d-sm-block float-left">{{ $t('actions.send') }}</span>
                 <!-- <i class="fa fa-paper-plane"></i> -->
                 <icon name="paper-plane"/>
@@ -105,7 +105,7 @@
             </b-col>
             <b-col>
               <div class="text-right">
-                <b-button type="submit" class="round-btn" @click="onNextFormClick">
+                <b-button type="button" class="round-btn" @click="onNextFormClick">
                   <span class="d-none d-sm-block float-left">{{ $t(button.next.text) }}</span>
                   <i class="ti ti-lg ti-arrow-right"/>
                 </b-button>
